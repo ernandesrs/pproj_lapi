@@ -7,6 +7,6 @@ Você recebeu este email pois se cadastrou no site {{config('app.url')}}. Agora 
 Verificar
 @endcomponent
 
-Thanks,<br>
+Obrigado,<br>
 {{ config('app.name') }}
 @endcomponent

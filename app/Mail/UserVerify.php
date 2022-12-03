@@ -37,6 +37,6 @@ class UserVerify extends Mailable
         return $this->markdown('emails.auth.user.verify', [
             'username' => $this->user->first_name,
             'verification_url' => config('app.url') . '/verify-account?token=' . $this->user->verification_token
-        ]);
+        ])->subject('[' . config('app.name') . '] Confirme a criação da sua conta');
     }
 }

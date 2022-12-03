@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Events\UserRegistered;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AccountRequest;
 use App\Models\User;
@@ -45,6 +46,8 @@ class AccountController extends Controller
             'verification_token' => Str::random(50),
             'password' => Hash::make($validated['password']),
         ]);
+
+        event(new UserRegistered($user));
 
         return response()->json([
             "success" => true,

@@ -1,5 +1,7 @@
 <?php
 
+use App\Mail\UserVerify;
+use App\Models\User;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,5 +16,6 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    $mail = new UserVerify(User::find(53));
+    return $mail;
 });
