@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Request;
 
+use App\Http\Requests\TraitApiRequest;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
