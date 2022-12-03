@@ -26,6 +26,12 @@ class AccountController extends Controller
         dd($request->all());
     }
 
+    /**
+     * Register an user
+     *
+     * @param AccountRequest $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function register(AccountRequest $request)
     {
         $validated = $request->validated();
