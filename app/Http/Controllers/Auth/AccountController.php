@@ -51,6 +51,7 @@ class AccountController extends Controller
             "access" => [
                 "token" => $token,
                 "type" => "Bearer",
+                "full" => "Bearer " . $token,
                 "expire_in_minutes" => config("jwt.ttl")
             ]
         ]);
@@ -86,8 +87,18 @@ class AccountController extends Controller
         ]);
     }
 
+    /**
+     * Logout
+     * 
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function logout()
     {
+        Auth::logout();
+
+        return response()->json([
+            "success" => true
+        ]);
     }
 
     public function verifyAccount()
