@@ -1,0 +1,12 @@
+@component('mail::message')
+# {{$username}}, confirme a criação da sua conta!
+
+Você recebeu este email pois se cadastrou no site {{config('app.url')}}. Agora precisamos apenas que você confirme a criação da sua conta clicando no botão 'Verificar' abaixo.
+
+@component('mail::button', ['url' => $verification_url])
+Verificar
+@endcomponent
+
+Thanks,<br>
+{{ config('app.name') }}
+@endcomponent
