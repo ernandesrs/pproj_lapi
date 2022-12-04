@@ -44,5 +44,6 @@ Route::group([
         Route::get("/", [MeController::class, "me"]);
         Route::post("/update", [MeController::class, "update"]);
         Route::post("/photo-upload", [MeController::class, "photoUpload"]);
+        Route::delete("/photo-delete", [MeController::class, "photoDelete"]);
     });
 });

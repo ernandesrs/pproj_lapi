@@ -78,4 +78,29 @@ class MeController extends Controller
             "photo" => $user->photo,
         ]);
     }
+
+    /**
+     * Photo delete
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function photoDelete()
+    {
+        /**
+         * @var User
+         */
+        $user = Auth::user();
+
+        if ($user->photo) {
+            Storage::delete("public/" . $user->photo);
+
+            $user->update([
+                "photo" => null
+            ]);
+        }
+
+        return response()->json([
+            "success" => true
+        ]);
+    }
 }
