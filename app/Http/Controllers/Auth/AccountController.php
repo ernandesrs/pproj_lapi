@@ -13,7 +13,6 @@ use App\Http\Requests\Request\AccountRequest;
 use App\Models\PasswordReset;
 use App\Models\User;
 use App\Services\Account\AccountService;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
