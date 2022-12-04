@@ -25,7 +25,7 @@ Route::group([
         Route::middleware("guest")->group(function () {
             Route::post("/login", [AccountController::class, "login"]);
             Route::post("/forget-password", [AccountController::class, "forgetPassword"]);
-            Route::post("/update-password", [AccountController::class, "updatePassword"]);
+            Route::put("/update-password", [AccountController::class, "updatePassword"]);
             Route::post("/register", [AccountController::class, "register"]);
         });
 
@@ -42,7 +42,7 @@ Route::group([
     ], function () {
 
         Route::get("/", [MeController::class, "me"]);
-        Route::post("/update", [MeController::class, "update"]);
+        Route::put("/update", [MeController::class, "update"]);
         Route::post("/photo-upload", [MeController::class, "photoUpload"]);
         Route::delete("/photo-delete", [MeController::class, "photoDelete"]);
     });
