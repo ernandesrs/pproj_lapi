@@ -6,12 +6,23 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Account\MePhotoUploadRequest;
 use App\Http\Requests\Account\MeUpdateRequest;
 use App\Http\Resources\UserResource;
+use App\Models\User;
+use App\Services\Account\AccountService;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Storage;
 
 class MeController extends Controller
 {
+    /**
+     * @var AccountService
+     */
+    private $userService;
+
+    public function __construct()
+    {
+        $this->userService = new AccountService();
+    }
+
     /**
      * Get the authenticated user
      *
@@ -62,13 +73,7 @@ class MeController extends Controller
     {
         $validated = $request->validated();
 
-        /**
-         * @var User
-         */
-        $user = Auth::user();
-        if ($user->photo) {
-            Storage::delete("public/" . $user->photo);
-        }
+        $user = $this->userService->photoDelete(Auth::user());
 
         $user->update([
             "photo" => $validated["photo"]->store("users/profile", "public")
@@ -87,18 +92,25 @@ class MeController extends Controller
      */
     public function photoDelete()
     {
-        /**
-         * @var User
-         */
-        $user = Auth::user();
+        $this->userService->photoDelete(Auth::user());
 
-        if ($user->photo) {
-            Storage::delete("public/" . $user->photo);
+        return response()->json([
+            "success" => true
+        ]);
+    }
 
-            $user->update([
-                "photo" => null
-            ]);
-        }
+    /**
+     * Me delete
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function delete()
+    {
+        $user = $this->userService->photoDelete(Auth::user());
+
+        $user->update([
+            "status" => "deleted"
+        ]);
 
         return response()->json([
             "success" => true
