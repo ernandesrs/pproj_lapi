@@ -5,10 +5,12 @@ namespace App\Http\Controllers\Auth;
 use App\Events\ForgetPassword;
 use App\Events\UserRegistered;
 use App\Exceptions\Account\LoginFailException;
+use App\Exceptions\Account\VerificationTokenInvalidException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Account\ForgetRequest;
 use App\Http\Requests\Account\LoginRequest;
 use App\Http\Requests\Account\UpdatePasswordRequest;
+use App\Http\Requests\Account\VerifyRequest;
 use App\Http\Requests\Request\AccountRequest;
 use App\Models\PasswordReset;
 use App\Models\User;
@@ -144,8 +146,43 @@ class AccountController extends Controller
         ]);
     }
 
-    public function verifyAccount()
+    /**
+     * Account verifiy
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function verifyAccount(VerifyRequest $request)
     {
+        /**
+         * @var User
+         */
+        $user = Auth::user();
+
+        if ($user->email_verified_at) {
+            if ($user->verification_token)
+                $user->update([
+                    "verification_token" => null
+                ]);
+
+            return response()->json([
+                "success" => false,
+                "message" => "Your account has already been verified"
+            ]);
+        }
+
+        $token = $request->get("token");
+        if ($token !== $user->verification_token) {
+            throw new VerificationTokenInvalidException();
+        }
+
+        $user->verification_token = null;
+        $user->email_verified_at = now();
+        $user->save();
+
+        return response()->json([
+            "success" => true,
+            "message" => "Your account has been verified."
+        ]);
     }
 
     /**
@@ -163,7 +200,7 @@ class AccountController extends Controller
         if ($user->email_verified_at) {
             return response()->json([
                 "success" => false,
-                "message" => "Your account has already been verified"
+                "message" => "Your account has already been verified."
             ]);
         }
 
@@ -177,7 +214,7 @@ class AccountController extends Controller
 
         return response()->json([
             "success" => true,
-            "message" => "A new verification link has been sent"
+            "message" => "A new verification link has been sent."
         ]);
     }
 }
