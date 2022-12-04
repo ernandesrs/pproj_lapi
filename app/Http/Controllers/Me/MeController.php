@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Me;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Account\MePhotoUploadRequest;
 use App\Http\Requests\Account\MeUpdateRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -46,6 +47,31 @@ class MeController extends Controller
         return response()->json([
             "success" => true,
             "user" => $user,
+        ]);
+    }
+
+    /**
+     * Photo upload
+     *
+     * @param MePhotoUploadRequest $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function photoUpload(MePhotoUploadRequest $request)
+    {
+        $validated = $request->validated();
+
+        /**
+         * @var User
+         */
+        $user = Auth::user();
+
+        $user->update([
+            "photo" => $validated["photo"]->store("users/profile", "public")
+        ]);
+
+        return response()->json([
+            "success" => true,
+            "photo" => $user->photo,
         ]);
     }
 }
