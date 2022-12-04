@@ -148,7 +148,36 @@ class AccountController extends Controller
     {
     }
 
+    /**
+     * Resend verification link
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function resendVerification()
     {
+        /**
+         * @var User
+         */
+        $user = Auth::user();
+
+        if ($user->email_verified_at) {
+            return response()->json([
+                "success" => false,
+                "message" => "Your account has already been verified"
+            ]);
+        }
+
+        if (!$user->verification_token) {
+            $user->update([
+                "verification_token" => Str::random(50)
+            ]);
+        }
+
+        event(new UserRegistered($user));
+
+        return response()->json([
+            "success" => true,
+            "message" => "A new verification link has been sent"
+        ]);
     }
 }
