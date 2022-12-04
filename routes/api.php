@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Auth\AccountController;
+use App\Http\Controllers\Me\MeController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -33,5 +34,15 @@ Route::group([
             Route::get("/verify-account", [AccountController::class, "verifyAccount"]);
             Route::get("/resend-verification", [AccountController::class, "resendVerification"]);
         });
+    });
+
+    Route::group([
+        "prefix" => "me",
+        "middleware" => "auth"
+    ], function () {
+
+        Route::get("/", [MeController::class, "me"]);
+        Route::post("/update", [MeController::class, "update"]);
+        Route::post("/photo-upload", [MeController::class, "photoUpload"]);
     });
 });
