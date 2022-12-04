@@ -2,14 +2,19 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Events\ForgetPassword;
 use App\Events\UserRegistered;
 use App\Exceptions\Account\LoginFailException;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Account\ForgetRequest;
 use App\Http\Requests\Account\LoginRequest;
 use App\Http\Requests\Request\AccountRequest;
+use App\Models\PasswordReset;
+use App\Models\User;
 use App\Services\Account\AccountService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 
 class AccountController extends Controller
 {
@@ -29,7 +34,7 @@ class AccountController extends Controller
     /**
      * Login
      *
-     * @param Request $request
+     * @param LoginRequest $request
      * @return \Illuminate\Http\JsonResponse
      */
     public function login(LoginRequest $request)
@@ -57,9 +62,28 @@ class AccountController extends Controller
         ]);
     }
 
-    public function forgetPassword(Request $request)
+    /**
+     * Foget password
+     *
+     * @param ForgetRequest $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function forgetPassword(ForgetRequest $request)
     {
-        dd($request->all());
+        $validated = $request->validated();
+        $user = User::where("email", $validated["email"])->firstOrFail();
+
+        $token = Str::random(60);
+        PasswordReset::create([
+            "email" => $user->email,
+            "token" => $token
+        ]);
+
+        event(new ForgetPassword($user, $token));
+
+        return response()->json([
+            "success" => true
+        ]);
     }
 
     public function updatePassword(Request $request)

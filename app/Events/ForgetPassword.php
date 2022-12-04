@@ -11,7 +11,7 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class UserRegistered
+class ForgetPassword
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
@@ -21,13 +21,19 @@ class UserRegistered
     public $user;
 
     /**
+     * @var string
+     */
+    public $token;
+
+    /**
      * Create a new event instance.
      *
      * @return void
      */
-    public function __construct(User $user)
+    public function __construct(User $user, string $token)
     {
         $this->user = $user;
+        $this->token = $token;
     }
 
     /**
