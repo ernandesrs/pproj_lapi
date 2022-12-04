@@ -37,14 +37,17 @@ Route::group([
     });
 
     Route::group([
-        "prefix" => "me",
-        "middleware" => "auth"
+        "prefix" => "me"
     ], function () {
 
-        Route::get("/", [MeController::class, "me"]);
-        Route::put("/update", [MeController::class, "update"]);
-        Route::post("/photo-upload", [MeController::class, "photoUpload"]);
-        Route::delete("/photo-delete", [MeController::class, "photoDelete"]);
-        Route::delete("/delete", [MeController::class, "delete"]);
+        Route::middleware("auth")->group(function () {
+            Route::get("/", [MeController::class, "me"]);
+            Route::put("/update", [MeController::class, "update"]);
+            Route::post("/photo-upload", [MeController::class, "photoUpload"]);
+            Route::delete("/photo-delete", [MeController::class, "photoDelete"]);
+            Route::delete("/delete", [MeController::class, "delete"]);
+        });
+
+        Route::put("/recovery", [MeController::class, "recovery"]);
     });
 });

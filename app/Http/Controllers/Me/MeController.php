@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Me;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Account\MePhotoUploadRequest;
 use App\Http\Requests\Account\MeUpdateRequest;
+use App\Http\Requests\Account\RecoveryRequest;
 use App\Http\Resources\UserResource;
 use App\Models\User;
 use App\Services\Account\AccountService;
@@ -110,6 +111,26 @@ class MeController extends Controller
 
         $user->update([
             "status" => "deleted"
+        ]);
+
+        return response()->json([
+            "success" => true
+        ]);
+    }
+
+    /**
+     * Deleted account recovery
+     *
+     * @param RecoveryRequest $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function recovery(RecoveryRequest $request)
+    {
+        $validated = $request->validated();
+
+        $user = User::where("email", $validated["email"])->first();
+        $user->update([
+            "status" => null
         ]);
 
         return response()->json([
