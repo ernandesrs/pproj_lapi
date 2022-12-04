@@ -11,11 +11,11 @@ use App\Http\Requests\Account\ForgetRequest;
 use App\Http\Requests\Account\LoginRequest;
 use App\Http\Requests\Account\UpdatePasswordRequest;
 use App\Http\Requests\Account\VerifyRequest;
-use App\Http\Requests\Request\AccountRequest;
+use App\Http\Requests\Account\AccountRequest;
 use App\Http\Resources\UserResource;
 use App\Models\PasswordReset;
 use App\Models\User;
-use App\Services\Account\AccountService;
+use App\Services\UserService;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
@@ -23,16 +23,16 @@ use Illuminate\Support\Str;
 class AccountController extends Controller
 {
     /**
-     * @var AccountService
+     * @var UserService
      */
-    private $accountService;
+    private $userService;
 
     /**
      * Constructor
      */
     public function __construct()
     {
-        $this->accountService = new AccountService();
+        $this->userService = new UserService();
     }
 
     /**
@@ -121,7 +121,7 @@ class AccountController extends Controller
      */
     public function register(AccountRequest $request)
     {
-        $user = $this->accountService->register(
+        $user = $this->userService->register(
             $request->validated()
         );
 

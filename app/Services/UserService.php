@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Services\Account;
+namespace App\Services;
 
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
-class AccountService
+class UserService
 {
     /**
      * Register user

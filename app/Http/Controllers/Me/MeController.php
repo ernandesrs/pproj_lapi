@@ -8,20 +8,20 @@ use App\Http\Requests\Account\MeUpdateRequest;
 use App\Http\Requests\Account\RecoveryRequest;
 use App\Http\Resources\UserResource;
 use App\Models\User;
-use App\Services\Account\AccountService;
+use App\Services\UserService;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
 class MeController extends Controller
 {
     /**
-     * @var AccountService
+     * @var UserService
      */
     private $userService;
 
     public function __construct()
     {
-        $this->userService = new AccountService();
+        $this->userService = new UserService();
     }
 
     /**

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests\Request;
+namespace App\Http\Requests\Account;
 
 use App\Http\Requests\TraitApiRequest;
 use Illuminate\Foundation\Http\FormRequest;
