@@ -12,6 +12,7 @@ use App\Http\Requests\Account\LoginRequest;
 use App\Http\Requests\Account\UpdatePasswordRequest;
 use App\Http\Requests\Account\VerifyRequest;
 use App\Http\Requests\Request\AccountRequest;
+use App\Http\Resources\UserResource;
 use App\Models\PasswordReset;
 use App\Models\User;
 use App\Services\Account\AccountService;
@@ -55,7 +56,7 @@ class AccountController extends Controller
 
         return response()->json([
             "success" => true,
-            "user" => Auth::user(),
+            "user" => new UserResource(Auth::user()),
             "access" => [
                 "token" => $token,
                 "type" => "Bearer",
@@ -128,7 +129,7 @@ class AccountController extends Controller
 
         return response()->json([
             "success" => true,
-            "user" => $user
+            "user" => new UserResource($user)
         ]);
     }
 

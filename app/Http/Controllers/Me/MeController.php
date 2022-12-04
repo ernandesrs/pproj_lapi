@@ -48,7 +48,7 @@ class MeController extends Controller
 
         return response()->json([
             "success" => true,
-            "user" => $user,
+            "user" => new UserResource($user),
         ]);
     }
 
@@ -76,7 +76,7 @@ class MeController extends Controller
 
         return response()->json([
             "success" => true,
-            "photo" => $user->photo,
+            "user" => new UserResource($user),
         ]);
     }
 
