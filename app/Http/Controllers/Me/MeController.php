@@ -7,6 +7,7 @@ use App\Http\Requests\Account\MePhotoUploadRequest;
 use App\Http\Requests\Account\MeUpdateRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 
 class MeController extends Controller
 {
@@ -64,6 +65,9 @@ class MeController extends Controller
          * @var User
          */
         $user = Auth::user();
+        if ($user->photo) {
+            Storage::delete("public/" . $user->photo);
+        }
 
         $user->update([
             "photo" => $validated["photo"]->store("users/profile", "public")
