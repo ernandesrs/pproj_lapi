@@ -13,6 +13,15 @@ class User extends Authenticatable implements JWTSubject
 {
     use HasApiTokens, HasFactory, Notifiable;
 
+    public const LEVEL_COMMON = 0;
+    public const LEVEL_ADMIN = 8;
+    public const LEVEL_SUPER = 9;
+    public const LEVELS = [
+        self::LEVEL_COMMON,
+        self::LEVEL_ADMIN,
+        self::LEVEL_SUPER
+    ];
+
     /**
      * The attributes that are mass assignable.
      *

@@ -50,4 +50,15 @@ Route::group([
 
         Route::put("/recovery", [MeController::class, "recovery"]);
     });
+
+    Route::group([
+        "prefix" => "admin",
+        "middleware" => ["auth", "admin"]
+    ], function () {
+        Route::get("/", function () {
+            return response()->json([
+                "success" => true
+            ]);
+        });
+    });
 });
