@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Exceptions\Admin\NotHaveAdminPanelAcessException;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\UserResource;
 use App\Models\Permission;
@@ -77,6 +78,10 @@ class UserController extends Controller
      */
     public function permissionUpdate(User $user, Permission $permission)
     {
+        if (!in_array($user->level, [User::LEVEL_ADMIN, User::LEVEL_SUPER])) {
+            throw new NotHaveAdminPanelAcessException();
+        }
+
         $user->permission_id = $permission->id;
         $user->save();
 
