@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\PermissionController as AdminPermissionController;
+use App\Http\Controllers\Admin\UserController as AdminUserController;
 use App\Http\Controllers\Auth\AccountController;
 use App\Http\Controllers\Me\MeController;
 use Illuminate\Support\Facades\Route;
@@ -66,5 +67,11 @@ Route::group([
          * PERMISSION CONTROLLER
          */
         Route::apiResource("permissions", AdminPermissionController::class);
+
+        /**
+         * USER CONTROLLER
+         */
+        Route::apiResource("users", AdminUserController::class);
+        Route::put("/users/{user}/{permission}", [AdminUserController::class, "permissionUpdate"]);
     });
 });

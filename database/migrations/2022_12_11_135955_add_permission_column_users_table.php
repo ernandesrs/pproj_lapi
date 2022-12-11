@@ -16,7 +16,7 @@ class AddPermissionColumnUsersTable extends Migration
         Schema::table('users', function (Blueprint $table) {
             $table->unsignedBigInteger('permission_id')->nullable();
 
-            $table->foreign('permission_id')->references('id')->on('permissions')->restrictOnDelete();
+            $table->foreign('permission_id')->references('id')->on('permissions')->cascadeOnDelete();
         });
     }
 

@@ -17,8 +17,11 @@ class UserResource extends JsonResource
     {
         $arr = parent::toArray($request);
 
+        $permissions = $this->resource->permissions()->first();
+
         return array_merge($arr, [
-            "photo_url" => $this->when($this->resource->photo, Storage::url($this->resource->photo))
+            "photo_url" => $this->when($this->resource->photo, Storage::url($this->resource->photo)),
+            "permissions" => $permissions ? $permissions->list : null
         ]);
     }
 }
