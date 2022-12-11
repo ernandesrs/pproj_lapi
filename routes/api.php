@@ -62,6 +62,9 @@ Route::group([
             ]);
         });
 
+        /**
+         * PERMISSION CONTROLLER
+         */
         Route::apiResource("permissions", AdminPermissionController::class);
     });
 });
