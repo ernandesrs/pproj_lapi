@@ -2,7 +2,7 @@
 
 namespace App\Http\Requests;
 
-use App\Exceptions\InvalidData;
+use App\Exceptions\InvalidDataException;
 
 trait TraitApiRequest
 {
@@ -17,7 +17,7 @@ trait TraitApiRequest
         $validator->after(function ($validator) {
             if ($validator->errors()->count()) {
                 session()->flash("validator_errors", $validator->errors());
-                throw new InvalidData();
+                throw new InvalidDataException();
             }
         });
     }

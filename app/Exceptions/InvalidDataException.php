@@ -4,7 +4,7 @@ namespace App\Exceptions;
 
 use Exception;
 
-class InvalidData extends Exception
+class InvalidDataException extends Exception
 {
     /**
      * Message
