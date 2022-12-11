@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\PermissionRequest;
 use App\Models\Permission;
 use Illuminate\Http\Request;
 
@@ -18,7 +19,7 @@ class PermissionController extends Controller
         return response()->json([
             'success' => true,
             'rulables_types' => array_keys(Permission::RULABLES),
-            'rulables_actions' => Permission::RULES,
+            'rulables_actions' => Permission::RULABLES_ACTIONS,
             'permissions' => Permission::all()
         ]);
     }
@@ -26,12 +27,21 @@ class PermissionController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  PermissionRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(PermissionRequest $request)
     {
-        //
+        $validated = $request->validated();
+
+        $permission = Permission::create($validated);
+
+        return response([
+            'success' => true,
+            'rulables_types' => array_keys(Permission::RULABLES),
+            'rulables_actions' => Permission::RULABLES_ACTIONS,
+            'permission' => $permission
+        ]);
     }
 
     /**
@@ -45,7 +55,7 @@ class PermissionController extends Controller
         return response()->json([
             'success' => true,
             'rulables' => array_keys(Permission::RULABLES),
-            'rulables_actions' => Permission::RULES,
+            'rulables_actions' => Permission::RULABLES_ACTIONS,
             'permission' => $permission
         ]);
     }
