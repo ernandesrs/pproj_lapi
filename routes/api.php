@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\PermissionController as AdminPermissionController;
 use App\Http\Controllers\Auth\AccountController;
 use App\Http\Controllers\Me\MeController;
 use Illuminate\Support\Facades\Route;
@@ -60,5 +61,7 @@ Route::group([
                 "success" => true
             ]);
         });
+
+        Route::apiResource("permissions", AdminPermissionController::class);
     });
 });

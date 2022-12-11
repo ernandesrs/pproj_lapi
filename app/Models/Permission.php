@@ -15,4 +15,11 @@ class Permission extends Model
     ];
 
     public const RULES = ['show', 'create', 'update', 'delete', 'force_delete', 'recovery'];
+
+    protected static function booted()
+    {
+        static::retrieved(function ($permission) {
+            $permission->list = json_decode($permission->list);
+        });
+    }
 }
