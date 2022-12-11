@@ -63,13 +63,22 @@ class PermissionController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param PermissionRequest $request
      * @param  \App\Models\Permission  $permission
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Permission $permission)
+    public function update(PermissionRequest $request, Permission $permission)
     {
-        //
+        $validated = $request->validated();
+
+        $permission->update([
+            'name' => $validated['name'],
+            'list' => $permission->makeList($validated)
+        ]);
+
+        return response()->json([
+            'success' => true
+        ]);
     }
 
     /**

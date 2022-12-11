@@ -57,7 +57,7 @@ class Permission extends Model
      * @param array $validated
      * @return array
      */
-    private function makeList(array $validated)
+    public function makeList(array $validated)
     {
         $rulables = self::RULABLES;
 
