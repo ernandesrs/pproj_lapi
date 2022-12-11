@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\PermissionRequest;
 use App\Models\Permission;
-use Illuminate\Http\Request;
 
 class PermissionController extends Controller
 {
@@ -32,6 +31,8 @@ class PermissionController extends Controller
      */
     public function store(PermissionRequest $request)
     {
+        $this->authorize('create', new Permission());
+
         $validated = $request->validated();
 
         $permission = Permission::create($validated);
@@ -52,6 +53,8 @@ class PermissionController extends Controller
      */
     public function show(Permission $permission)
     {
+        $this->authorize('view', $permission);
+
         return response()->json([
             'success' => true,
             'rulables' => array_keys(Permission::RULABLES),
@@ -69,6 +72,8 @@ class PermissionController extends Controller
      */
     public function update(PermissionRequest $request, Permission $permission)
     {
+        $this->authorize('update', $permission);
+
         $validated = $request->validated();
 
         $permission->update([
@@ -89,6 +94,8 @@ class PermissionController extends Controller
      */
     public function destroy(Permission $permission)
     {
+        $this->authorize('delete', $permission);
+
         $permission->delete();
 
         return response()->json([
