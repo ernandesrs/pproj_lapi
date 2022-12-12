@@ -70,6 +70,35 @@ class User extends Authenticatable implements JWTSubject
     }
 
     /**
+     * Is super admin
+     *
+     * @return boolean
+     */
+    public function isSuperadmin()
+    {
+        return $this->level === self::LEVEL_SUPER;
+    }
+
+    /**
+     * Check permission
+     *
+     * @param string $action
+     * @param string $modelClass
+     * @return boolean
+     */
+    public function hasPermission(string $action, string $modelClass)
+    {
+        $permissions = $this->permissions()->first();
+
+        if (!$permissions) return false;
+
+        $ruleName = array_keys(Permission::RULABLES, $modelClass)[0] ?? null;
+        if (!$ruleName) return false;
+
+        return in_array($action, $permissions->list->$ruleName ?? []);
+    }
+
+    /**
      * Get the identifier that will be stored in the subject claim of the JWT.
      *
      * @return mixed

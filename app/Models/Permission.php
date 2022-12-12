@@ -24,7 +24,7 @@ class Permission extends Model
      * 
      * @var array
      */
-    public const RULABLES_ACTIONS = ['show', 'create', 'update', 'delete', 'force_delete', 'recovery'];
+    public const RULABLES_ACTIONS = ['view', 'viewAny', 'create', 'update', 'delete', 'forceDelete', 'restory'];
 
     /**
      * Fillable

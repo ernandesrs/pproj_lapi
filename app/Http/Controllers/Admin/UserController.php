@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Events\UserRegistered;
 use App\Exceptions\Admin\NotHaveAdminPanelAcessException;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\UserRequest;
 use App\Http\Resources\UserResource;
 use App\Models\Permission;
 use App\Models\User;
+use App\Services\UserService;
 use Illuminate\Http\Request;
 
 class UserController extends Controller
@@ -27,12 +30,23 @@ class UserController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param UserRequest $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(UserRequest $request)
     {
-        //
+        $this->authorize("create", new User());
+
+        $validated = $request->validated();
+
+        $user = (new UserService())->register($validated);
+
+        event(new UserRegistered($user));
+
+        return response()->json([
+            "success" => true,
+            "user" => new UserResource($user)
+        ]);
     }
 
     /**
