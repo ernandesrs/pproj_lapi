@@ -11,6 +11,7 @@ use App\Models\Permission;
 use App\Models\User;
 use App\Services\UserService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
@@ -57,19 +58,35 @@ class UserController extends Controller
      */
     public function show(User $user)
     {
-        //
+        $this->authorize("view", $user);
+
+        return response()->json([
+            "success" => true,
+            "user" => new UserResource($user)
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param UserRequest $request
      * @param  \App\Models\User  $user
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, User $user)
+    public function update(UserRequest $request, User $user)
     {
-        //
+        $this->authorize("update", $user);
+
+        $validated = $request->validated();
+        if ($validated["password"] ?? null)
+            $validated["password"] = Hash::make($validated["password"]);
+
+        $user->update($validated);
+
+        return response()->json([
+            "success" => true,
+            "user" => new UserResource($user)
+        ]);
     }
 
     /**
