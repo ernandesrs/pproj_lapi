@@ -10,8 +10,6 @@ use App\Http\Resources\UserResource;
 use App\Models\Permission;
 use App\Models\User;
 use App\Services\UserService;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
