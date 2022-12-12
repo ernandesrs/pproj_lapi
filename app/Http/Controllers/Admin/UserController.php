@@ -93,7 +93,13 @@ class UserController extends Controller
      */
     public function destroy(User $user)
     {
-        //
+        $this->authorize("delete", $user);
+
+        (new UserService())->delete($user);
+
+        return response()->json([
+            "success" => true
+        ]);
     }
 
     /**
