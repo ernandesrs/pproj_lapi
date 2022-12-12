@@ -96,11 +96,7 @@ class MeController extends Controller
      */
     public function delete()
     {
-        $user = $this->userService->photoDelete(Auth::user());
-
-        $user->update([
-            "status" => "deleted"
-        ]);
+        $this->userService->delete(Auth::user());
 
         return response()->json([
             "success" => true
@@ -118,9 +114,8 @@ class MeController extends Controller
         $validated = $request->validated();
 
         $user = User::where("email", $validated["email"])->first();
-        $user->update([
-            "status" => null
-        ]);
+
+        $this->userService->recovery($user);
 
         return response()->json([
             "success" => true

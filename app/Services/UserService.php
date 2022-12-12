@@ -48,6 +48,33 @@ class UserService
     }
 
     /**
+     * Set status deleted to user
+     *
+     * @param User $user
+     * @return bool
+     */
+    public function remove(User $user)
+    {
+        $user = $this->photoDelete($user);
+
+        return $user->update([
+            "status" => "deleted"
+        ]);
+    }
+
+    /**
+     * Delete user
+     *
+     * @param User $user
+     * @return boolean
+     */
+    public function delete(User $user)
+    {
+        $user = $this->photoDelete($user);
+        return $user->delete();
+    }
+
+    /**
      * Delete user foto from disk and save user with null in photo field
      *
      * @param User $user
@@ -63,5 +90,18 @@ class UserService
         }
 
         return $user;
+    }
+
+    /**
+     * Remove status deleted to user
+     *
+     * @param User $user
+     * @return bool
+     */
+    public function recovery(User $user)
+    {
+        return $user->update([
+            "status" => null
+        ]);
     }
 }
