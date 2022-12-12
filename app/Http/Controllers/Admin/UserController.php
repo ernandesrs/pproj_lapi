@@ -77,11 +77,7 @@ class UserController extends Controller
     {
         $this->authorize("update", $user);
 
-        $validated = $request->validated();
-        if ($validated["password"] ?? null)
-            $validated["password"] = Hash::make($validated["password"]);
-
-        $user->update($validated);
+        $user = (new UserService())->update($user, $request->validated());
 
         return response()->json([
             "success" => true,

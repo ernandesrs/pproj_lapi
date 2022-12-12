@@ -31,6 +31,23 @@ class UserService
     }
 
     /**
+     * Update user
+     *
+     * @param User $user
+     * @param array $validated
+     * @return User
+     */
+    public function update(User $user, array $validated)
+    {
+        if ($validated['password'] ?? null)
+            $validated['password'] = Hash::make($validated['password']);
+
+        $user->update($validated);
+
+        return $user;
+    }
+
+    /**
      * Delete user foto from disk and save user with null in photo field
      *
      * @param User $user

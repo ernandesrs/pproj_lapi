@@ -45,18 +45,7 @@ class MeController extends Controller
      */
     public function update(MeUpdateRequest $request)
     {
-        /**
-         * @var User
-         */
-        $user = Auth::user();
-
-        $validated = $request->validated();
-        if ($validated["password"] ?? null)
-            $validated["password"] = Hash::make($validated["password"]);
-
-        $user->update(
-            $validated
-        );
+        $user = $this->userService->update(Auth::user(), $request->validated());
 
         return response()->json([
             "success" => true,
