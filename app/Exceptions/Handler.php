@@ -8,6 +8,7 @@ use App\Exceptions\Admin\NotHaveAdminPanelAcessException;
 use App\Exceptions\Admin\UnauthorizedActionException;
 use App\Exceptions\Auth\UnauthenticatedException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Throwable;
 
@@ -53,6 +54,12 @@ class Handler extends ExceptionHandler
         $this->renderable(function (NotFoundHttpException $e, $request) {
             if ($request->is('api/*')) {
                 throw new NotFoundException();
+            }
+        });
+
+        $this->renderable(function (AccessDeniedHttpException $e, $request) {
+            if ($request->is('api/*')) {
+                throw new UnauthorizedActionException();
             }
         });
 
