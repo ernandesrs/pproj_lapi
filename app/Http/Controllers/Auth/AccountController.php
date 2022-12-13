@@ -121,11 +121,7 @@ class AccountController extends Controller
      */
     public function register(AccountRequest $request)
     {
-        $user = $this->userService->register(
-            $request->validated()
-        );
-
-        event(new UserRegistered($user));
+        $user = $this->userService->register($request->validated());
 
         return response()->json([
             "success" => true,

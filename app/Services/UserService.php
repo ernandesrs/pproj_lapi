@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Events\UserRegistered;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
@@ -26,6 +27,8 @@ class UserService
             'verification_token' => Str::random(50),
             'password' => Hash::make($validated['password']),
         ]);
+
+        event(new UserRegistered($user));
 
         return $user;
     }

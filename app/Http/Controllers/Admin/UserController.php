@@ -38,11 +38,7 @@ class UserController extends Controller
     {
         $this->authorize("create", new User());
 
-        $validated = $request->validated();
-
-        $user = (new UserService())->register($validated);
-
-        event(new UserRegistered($user));
+        $user = (new UserService())->register($request->validated());
 
         return response()->json([
             "success" => true,
