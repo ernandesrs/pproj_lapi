@@ -72,6 +72,7 @@ Route::group([
          * USER CONTROLLER
          */
         Route::apiResource("users", AdminUserController::class);
+        Route::delete("/users/{user}/photo-delete", [AdminUserController::class, "photoDelete"]);
         Route::put("/users/{user}/promote", [AdminUserController::class, "promote"]);
         Route::put("/users/{user}/demote", [AdminUserController::class, "demote"]);
     });
