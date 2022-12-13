@@ -2,7 +2,13 @@
 
 namespace App\Exceptions;
 
+use App\Exceptions\Account\LoginFailException;
+use App\Exceptions\Account\VerificationTokenInvalidException;
+use App\Exceptions\Admin\NotHaveAdminPanelAcessException;
+use App\Exceptions\Admin\UnauthorizedActionException;
+use App\Exceptions\Auth\UnauthenticatedException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Throwable;
 
 class Handler extends ExceptionHandler
@@ -13,7 +19,17 @@ class Handler extends ExceptionHandler
      * @var array<int, class-string<Throwable>>
      */
     protected $dontReport = [
-        //
+        VerificationTokenInvalidException::class,
+        LoginFailException::class,
+
+        NotHaveAdminPanelAcessException::class,
+        UnauthorizedActionException::class,
+
+        UnauthenticatedException::class,
+
+        InvalidDataException::class,
+        NotFoundException::class,
+        UnauthorizedException::class,
     ];
 
     /**
@@ -34,8 +50,10 @@ class Handler extends ExceptionHandler
      */
     public function register()
     {
-        $this->renderable(function (\Symfony\Component\HttpKernel\Exception\NotFoundHttpException $e, $request) {
-            throw new NotFoundException();
+        $this->renderable(function (NotFoundHttpException $e, $request) {
+            if ($request->is('api/*')) {
+                throw new NotFoundException();
+            }
         });
 
         $this->reportable(function (Throwable $e) {
