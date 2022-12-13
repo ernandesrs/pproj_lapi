@@ -72,6 +72,7 @@ Route::group([
          * USER CONTROLLER
          */
         Route::apiResource("users", AdminUserController::class);
-        Route::put("/users/{user}/{permission}", [AdminUserController::class, "permissionUpdate"]);
+        Route::put("/users/{user}/promote", [AdminUserController::class, "promote"]);
+        Route::put("/users/{user}/demote", [AdminUserController::class, "demote"]);
     });
 });

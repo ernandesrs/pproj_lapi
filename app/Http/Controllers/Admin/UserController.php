@@ -4,12 +4,14 @@ namespace App\Http\Controllers\Admin;
 
 use App\Events\UserRegistered;
 use App\Exceptions\Admin\NotHaveAdminPanelAcessException;
+use App\Exceptions\Admin\UnauthorizedActionException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\UserRequest;
 use App\Http\Resources\UserResource;
 use App\Models\Permission;
 use App\Models\User;
 use App\Services\UserService;
+use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
@@ -118,6 +120,76 @@ class UserController extends Controller
 
         return response()->json([
             "success" => true
+        ]);
+    }
+
+    /**
+     * Promote user to next level
+     *
+     * @param User $user
+     * @return void
+     */
+    public function promote(User $user)
+    {
+        /**
+         * @var User
+         */
+        $logged = Auth::user();
+
+        if (!$logged->isSuperadmin()) {
+            throw new UnauthorizedActionException();
+        }
+
+        switch ($user->level) {
+            case User::LEVEL_COMMON:
+                $user->level = User::LEVEL_ADMIN;
+                break;
+
+            case User::LEVEL_ADMIN:
+                $user->level = User::LEVEL_SUPER;
+                break;
+        }
+
+        $user->save();
+
+        return response()->json([
+            "success" => true,
+            "user" => new UserResource($user)
+        ]);
+    }
+
+    /**
+     * Demote user to previous level
+     *
+     * @param User $user
+     * @return void
+     */
+    public function demote(User $user)
+    {
+        /**
+         * @var User
+         */
+        $logged = Auth::user();
+
+        if (!$logged->isSuperadmin()) {
+            throw new UnauthorizedActionException();
+        }
+
+        switch ($user->level) {
+            case User::LEVEL_SUPER:
+                $user->level = User::LEVEL_ADMIN;
+                break;
+
+            case User::LEVEL_ADMIN:
+                $user->level = User::LEVEL_COMMON;
+                break;
+        }
+
+        $user->save();
+
+        return response()->json([
+            "success" => true,
+            "user" => new UserResource($user)
         ]);
     }
 }
