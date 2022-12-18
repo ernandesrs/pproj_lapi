@@ -42,7 +42,7 @@ class ResetPassword extends Mailable
     {
         return $this->markdown('emails.auth.reset-password', [
             'username' => $this->user->first_name,
-            'reset_url' => config('app.url') . '/update-password?token=' . $this->token
+            'reset_url' => config('app.url_front') . '/update-password?token=' . $this->token
         ])->subject('[' . config('app.name') . '] Seu link de recuperação de senha');
     }
 }
