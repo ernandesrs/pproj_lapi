@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Events\ForgetPassword;
 use App\Events\UserRegistered;
 use App\Exceptions\Account\LoginFailException;
+use App\Exceptions\Account\UpdatePasswordTokenInvalidException;
 use App\Exceptions\Account\VerificationTokenInvalidException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Account\ForgetRequest;
@@ -100,7 +101,10 @@ class AccountController extends Controller
     {
         $validated = $request->validated();
 
-        $resetPassword = PasswordReset::where("token", $validated["token"])->firstOrFail();
+        $resetPassword = PasswordReset::where("token", $validated["token"])->first();
+        if (!$resetPassword)
+            throw new UpdatePasswordTokenInvalidException();
+
         $user = User::where("email", $resetPassword->email)->firstOrFail();
         $user->update([
             "password" => Hash::make($validated["password"])

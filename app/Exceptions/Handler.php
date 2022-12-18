@@ -3,6 +3,7 @@
 namespace App\Exceptions;
 
 use App\Exceptions\Account\LoginFailException;
+use App\Exceptions\Account\UpdatePasswordTokenInvalidException;
 use App\Exceptions\Account\VerificationTokenInvalidException;
 use App\Exceptions\Admin\NotHaveAdminPanelAcessException;
 use App\Exceptions\Admin\UnauthorizedActionException;
@@ -22,6 +23,7 @@ class Handler extends ExceptionHandler
     protected $dontReport = [
         VerificationTokenInvalidException::class,
         LoginFailException::class,
+        UpdatePasswordTokenInvalidException::class,
 
         NotHaveAdminPanelAcessException::class,
         UnauthorizedActionException::class,
