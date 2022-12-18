@@ -154,25 +154,10 @@ class AccountController extends Controller
      */
     public function verifyAccount(VerifyRequest $request)
     {
-        /**
-         * @var User
-         */
-        $user = Auth::user();
-
-        if ($user->email_verified_at) {
-            if ($user->verification_token)
-                $user->update([
-                    "verification_token" => null
-                ]);
-
-            return response()->json([
-                "success" => false,
-                "message" => "Your account has already been verified"
-            ]);
-        }
-
         $token = $request->get("token");
-        if ($token !== $user->verification_token) {
+        $user = User::where("verification_token", $token)->first();
+
+        if (!$user) {
             throw new VerificationTokenInvalidException();
         }
 

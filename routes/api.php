@@ -29,11 +29,11 @@ Route::group([
             Route::post("/forget-password", [AccountController::class, "forgetPassword"]);
             Route::put("/update-password", [AccountController::class, "updatePassword"]);
             Route::post("/register", [AccountController::class, "register"]);
+            Route::get("/verify-account", [AccountController::class, "verifyAccount"]);
         });
 
         Route::middleware("auth")->group(function () {
             Route::get("/logout", [AccountController::class, "logout"]);
-            Route::get("/verify-account", [AccountController::class, "verifyAccount"]);
             Route::get("/resend-verification", [AccountController::class, "resendVerification"]);
         });
     });
