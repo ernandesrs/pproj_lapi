@@ -82,6 +82,8 @@ class UserPolicy
      */
     public function delete(User $user, User $model)
     {
+        if ($user->id === $model->id) return false;
+
         // superadmin have all permissions
         if ($user->isSuperadmin())
             return true;
