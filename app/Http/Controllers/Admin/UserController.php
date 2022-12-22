@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Events\UserRegistered;
 use App\Exceptions\Admin\NotHaveAdminPanelAcessException;
 use App\Exceptions\Admin\UnauthorizedActionException;
 use App\Http\Controllers\Controller;
@@ -11,20 +10,23 @@ use App\Http\Resources\UserResource;
 use App\Models\Permission;
 use App\Models\User;
 use App\Services\UserService;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
+    use TraitFilter;
+
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         return response()->json([
             "success" => true,
-            "users" => UserResource::collection(User::whereNotNull("id")->paginate(10))
+            "users" => UserResource::collection($this->filter($request, new User()))
         ]);
     }
 
