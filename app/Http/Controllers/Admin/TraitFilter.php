@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Models\Permission;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 trait TraitFilter
@@ -13,6 +15,16 @@ trait TraitFilter
      */
     protected $filters = 20;
 
+    protected $filterablesFields = [
+        User::class => [
+            "search" => "first_name,last_name,username,email"
+        ],
+
+        Permission::class => [
+            "search" => "name"
+        ],
+    ];
+
     /**
      * Get/filter
      *
@@ -22,9 +34,17 @@ trait TraitFilter
      */
     protected function filter(Request $request, $model)
     {
+        $modelClass = get_class($model);
+
         $this->validateFilters($request);
 
         $model = $model->whereNotNull("id");
+        if ($search = $this->search) {
+            $fields = $this->filterablesFields[$modelClass]["search"] ?? null;
+
+            if ($fields)
+                $model->whereRaw("MATCH(" . $fields . ") AGAINST('" . $search . "')");
+        }
 
         return $model->paginate($this->limit);
     }
@@ -38,7 +58,8 @@ trait TraitFilter
     private function validateFilters(Request $request)
     {
         $this->filters = $request->validate([
-            "limit" => ["numeric"]
+            "limit" => ["nullable", "numeric", "min:1", "max:20"],
+            "search" => ["nullable", "string", "min:1", "max:25"],
         ]);
     }
 

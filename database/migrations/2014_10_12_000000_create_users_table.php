@@ -25,6 +25,7 @@ class CreateUsersTable extends Migration
             $table->string('verification_token', 50)->nullable()->default(null);
             $table->string('photo')->nullable()->default(null);
             $table->integer('level')->default(0);
+            $table->fullText(["first_name", "last_name", "username", "email"]);
 
             $table->timestamp('email_verified_at')->nullable();
             $table->rememberToken();

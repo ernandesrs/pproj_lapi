@@ -18,6 +18,7 @@ class CreatePermissionsTable extends Migration
 
             $table->string('name', 50)->unique();
             $table->json('list')->default(json_encode([]));
+            $table->fullText(["name"]);
 
             $table->timestamps();
         });
