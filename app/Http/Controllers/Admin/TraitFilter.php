@@ -16,6 +16,11 @@ trait TraitFilter
      */
     protected $filters = 20;
 
+    /**
+     * Filterables classes
+     *
+     * @var array
+     */
     protected $filterablesFields = [
         User::class => [
             "search" => "first_name,last_name,username,email",
@@ -36,6 +41,11 @@ trait TraitFilter
         ],
     ];
 
+    /**
+     * Current filterable class
+     *
+     * @var string
+     */
     protected $modelClass;
 
     /**
