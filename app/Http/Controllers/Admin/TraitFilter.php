@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Models\Permission;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 trait TraitFilter
 {
@@ -17,13 +18,25 @@ trait TraitFilter
 
     protected $filterablesFields = [
         User::class => [
-            "search" => "first_name,last_name,username,email"
+            "search" => "first_name,last_name,username,email",
+
+            // specific rules
+            "rules" => [
+                "orderby-first_name" => ["nullable", "string"]
+            ]
         ],
 
         Permission::class => [
-            "search" => "name"
+            "search" => "name",
+
+            // specific rules
+            "rules" => [
+                "orderby-name" => ["nullable", "string"]
+            ]
         ],
     ];
+
+    protected $modelClass;
 
     /**
      * Get/filter
@@ -34,16 +47,23 @@ trait TraitFilter
      */
     protected function filter(Request $request, $model)
     {
-        $modelClass = get_class($model);
+        $this->modelClass = get_class($model);
 
         $this->validateFilters($request);
 
-        $model = $model->whereNotNull("id");
+        $model = $model->whereNotNull("id")->orderBy("level", "desc");
         if ($search = $this->search) {
-            $fields = $this->filterablesFields[$modelClass]["search"] ?? null;
+            $fields = $this->filterablesFields[$this->modelClass]["search"] ?? null;
 
             if ($fields)
                 $model->whereRaw("MATCH(" . $fields . ") AGAINST('" . $search . "')");
+        }
+
+        $orderBy = $this->orderBy;
+        if ($orderBy) {
+            foreach ($orderBy as $field => $order) {
+                $model->orderBy($field, $order);
+            }
         }
 
         return $model->paginate($this->limit);
@@ -60,7 +80,19 @@ trait TraitFilter
         $this->filters = $request->validate([
             "limit" => ["nullable", "numeric", "min:1", "max:20"],
             "search" => ["nullable", "string", "min:1", "max:25"],
-        ]);
+            "orderby-created_at" => ["nullable", "string", Rule::in(["asc", "desc"])],
+        ] + $this->filterablesFields[$this->modelClass]["rules"] ?? []);
+
+        $this->filters["orderBy"] = [
+            "created_at" => "desc",
+            "first_name" => "asc"
+        ];
+        foreach ($this->filters as $key => $filter) {
+            $keyArr = explode("-", $key);
+            if ($keyArr[0] === "orderby") {
+                $this->filters["orderBy"][$keyArr[1]] = $filter;
+            }
+        }
     }
 
     /**
