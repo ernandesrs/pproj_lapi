@@ -53,7 +53,7 @@ trait TraitFilter
      *
      * @param Request $request
      * @param [type] $model
-     * @return [type]
+     * @return \Illuminate\Database\Eloquent\Builder
      */
     protected function filter(Request $request, $model)
     {
@@ -61,7 +61,6 @@ trait TraitFilter
 
         $this->validateFilters($request);
 
-        $model = $model->whereNotNull("id")->orderBy("level", "desc");
         if ($search = $this->search) {
             $fields = $this->filterablesFields[$this->modelClass]["search"] ?? null;
 
@@ -76,7 +75,7 @@ trait TraitFilter
             }
         }
 
-        return $model->paginate($this->limit);
+        return $model;
     }
 
     /**
@@ -94,8 +93,7 @@ trait TraitFilter
         ] + $this->filterablesFields[$this->modelClass]["rules"] ?? []);
 
         $this->filters["orderBy"] = [
-            "created_at" => "desc",
-            "first_name" => "asc"
+            "created_at" => "desc"
         ];
         foreach ($this->filters as $key => $filter) {
             $keyArr = explode("-", $key);

@@ -20,13 +20,16 @@ class UserController extends Controller
     /**
      * Display a listing of the resource.
      *
+     * @param Request $request
      * @return \Illuminate\Http\Response
      */
     public function index(Request $request)
     {
+        $users = $this->filter($request, new User())->orderBy("level", "desc");
+
         return response()->json([
             "success" => true,
-            "users" => UserResource::collection($this->filter($request, new User()))
+            "users" => UserResource::collection($users->paginate($this->limit))
         ]);
     }
 

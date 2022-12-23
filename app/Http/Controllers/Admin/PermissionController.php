@@ -5,21 +5,26 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\PermissionRequest;
 use App\Models\Permission;
+use Illuminate\Http\Request;
 
 class PermissionController extends Controller
 {
+    use TraitFilter;
+
     /**
      * Display a listing of the resource.
      *
+     * @param Request $request
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
+        $permissions = $this->filter($request, new Permission());
         return response()->json([
             'success' => true,
             'rulables_types' => array_keys(Permission::RULABLES),
             'rulables_actions' => Permission::RULABLES_ACTIONS,
-            'permissions' => Permission::all()
+            'permissions' => $permissions->paginate($this->limit)
         ]);
     }
 
