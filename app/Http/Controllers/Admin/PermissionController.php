@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\PermissionRequest;
+use App\Http\Resources\PermissionResource;
 use App\Models\Permission;
 use Illuminate\Http\Request;
 
@@ -20,11 +21,12 @@ class PermissionController extends Controller
     public function index(Request $request)
     {
         $permissions = $this->filter($request, new Permission());
+
         return response()->json([
             'success' => true,
             'rulables_types' => array_keys(Permission::RULABLES),
             'rulables_actions' => Permission::RULABLES_ACTIONS,
-            'permissions' => $permissions->paginate($this->limit)
+            'permissions' => PermissionResource::collection($permissions->paginate($this->limit))
         ]);
     }
 
