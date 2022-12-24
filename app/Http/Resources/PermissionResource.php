@@ -18,6 +18,7 @@ class PermissionResource extends JsonResource
     {
         $arr = parent::toArray($request);
         return array_merge($arr, [
+            "users_count" => $this->resource->users()->count(),
             "auth_user_can" => [
                 "view" => (new PermissionPolicy)->view(Auth::user(), $this->resource),
                 "update" => (new PermissionPolicy)->update(Auth::user(), $this->resource),

@@ -5,6 +5,7 @@ namespace App\Exceptions;
 use App\Exceptions\Account\LoginFailException;
 use App\Exceptions\Account\UpdatePasswordTokenInvalidException;
 use App\Exceptions\Account\VerificationTokenInvalidException;
+use App\Exceptions\Admin\HasDependentsException;
 use App\Exceptions\Admin\NotHaveAdminPanelAcessException;
 use App\Exceptions\Admin\UnauthorizedActionException;
 use App\Exceptions\Auth\UnauthenticatedException;
@@ -27,6 +28,7 @@ class Handler extends ExceptionHandler
 
         NotHaveAdminPanelAcessException::class,
         UnauthorizedActionException::class,
+        HasDependentsException::class,
 
         UnauthenticatedException::class,
 

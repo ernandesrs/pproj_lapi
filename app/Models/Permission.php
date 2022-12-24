@@ -83,4 +83,14 @@ class Permission extends Model
             $permission->list = json_decode($permission->list);
         });
     }
+
+    /**
+     * Users using this permission
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function users()
+    {
+        return $this->hasMany(User::class);
+    }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Exceptions\Admin\HasDependentsException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\PermissionRequest;
 use App\Http\Resources\PermissionResource;
@@ -102,6 +103,10 @@ class PermissionController extends Controller
     public function destroy(Permission $permission)
     {
         $this->authorize('delete', $permission);
+
+        if($permission->users()->count()){
+            throw new HasDependentsException();
+        }
 
         $permission->delete();
 
