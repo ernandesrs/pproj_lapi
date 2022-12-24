@@ -20,13 +20,13 @@ class PermissionController extends Controller
      */
     public function index(Request $request)
     {
-        $permissions = $this->filter($request, new Permission());
+        $permissions = $this->filter($request, new Permission())->paginate($this->limit);
 
         return response()->json([
             'success' => true,
             'rulables_types' => array_keys(Permission::RULABLES),
             'rulables_actions' => Permission::RULABLES_ACTIONS,
-            'permissions' => PermissionResource::collection($permissions->paginate($this->limit))
+            'data' => PermissionResource::collection($permissions)->response()->getData()
         ]);
     }
 
