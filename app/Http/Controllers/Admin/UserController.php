@@ -26,7 +26,7 @@ class UserController extends Controller
      */
     public function index(Request $request)
     {
-        $users = $this->filter($request, new User())->orderBy("level", "desc")->paginate($this->limit);
+        $users = $this->filter($request, new User())->paginate($this->limit);
 
         return response()->json([
             "success" => true,

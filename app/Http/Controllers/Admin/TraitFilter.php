@@ -25,14 +25,27 @@ trait TraitFilter
         User::class => [
             "search" => "first_name,last_name,username,email",
 
+            "orderBy" => [
+                // orderField => default value
+                "level" => "desc",
+                "created_at" => "desc",
+            ],
+
             // specific rules
             "rules" => [
+                "orderby-level" => ["nullable", "string"],
                 "orderby-first_name" => ["nullable", "string"]
             ]
         ],
 
         Permission::class => [
             "search" => "name",
+
+            "orderBy" => [
+                // orderField => default value
+                "name" => null,
+                "created_at" => "desc",
+            ],
 
             // specific rules
             "rules" => [
@@ -65,13 +78,14 @@ trait TraitFilter
             $fields = $this->filterablesFields[$this->modelClass]["search"] ?? null;
 
             if ($fields)
-                $model->whereRaw("MATCH(" . $fields . ") AGAINST('" . $search . "')");
+                $model = $model->whereRaw("MATCH(" . $fields . ") AGAINST('" . $search . "')");
         }
 
         $orderBy = $this->orderBy;
         if ($orderBy) {
             foreach ($orderBy as $field => $order) {
-                $model->orderBy($field, $order);
+                if ($order)
+                    $model =  $model->orderBy($field, $order);
             }
         }
 
@@ -92,9 +106,8 @@ trait TraitFilter
             "orderby-created_at" => ["nullable", "string", Rule::in(["asc", "desc"])],
         ] + $this->filterablesFields[$this->modelClass]["rules"] ?? []);
 
-        $this->filters["orderBy"] = [
-            "created_at" => "desc"
-        ];
+        $this->filters["orderBy"] = $this->filterablesFields[$this->modelClass]["orderBy"] ?? [];
+
         foreach ($this->filters as $key => $filter) {
             $keyArr = explode("-", $key);
             if ($keyArr[0] === "orderby") {
