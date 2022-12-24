@@ -2,7 +2,9 @@
 
 namespace App\Http\Resources;
 
+use App\Policies\UserPolicy;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
 class UserResource extends JsonResource
@@ -17,11 +19,13 @@ class UserResource extends JsonResource
     {
         $arr = parent::toArray($request);
 
-        $permissions = $this->resource->permissions()->first();
-
         return array_merge($arr, [
             "photo_url" => $this->when($this->resource->photo, Storage::url($this->resource->photo)),
-            "permissions" => $permissions ? $permissions->list : null
+            "auth_user_can" => [
+                "view" => (new UserPolicy)->view(Auth::user(), $this->resource),
+                "update" => (new UserPolicy)->create(Auth::user(), $this->resource),
+                "delete" => (new UserPolicy)->delete(Auth::user(), $this->resource),
+            ]
         ]);
     }
 }
