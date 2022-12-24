@@ -28,6 +28,7 @@ trait TraitFilter
             "orderBy" => [
                 // orderField => default value
                 "level" => "desc",
+                "first_name" => null,
                 "created_at" => "desc",
             ],
 
