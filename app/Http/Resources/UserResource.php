@@ -23,7 +23,7 @@ class UserResource extends JsonResource
             "photo_url" => $this->when($this->resource->photo, Storage::url($this->resource->photo)),
             "auth_user_can" => [
                 "view" => (new UserPolicy)->view(Auth::user(), $this->resource),
-                "update" => (new UserPolicy)->create(Auth::user(), $this->resource),
+                "update" => (new UserPolicy)->update(Auth::user(), $this->resource),
                 "delete" => (new UserPolicy)->delete(Auth::user(), $this->resource),
             ]
         ]);
