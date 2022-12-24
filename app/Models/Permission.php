@@ -62,10 +62,12 @@ class Permission extends Model
         $rulables = self::RULABLES;
 
         foreach ($rulables as $name => $rulable) {
-            if (key_exists($name, $validated['list'])) {
-                $rulables[$name] = $validated['list'][$name];
-            } else {
-                $rulables[$name] = [];
+            $rulables[$name] = array_fill_keys(self::RULABLES_ACTIONS, false);
+
+            if ($validated['list'][$name] ?? null) {
+                foreach ($validated['list'][$name] as $actionName => $actionActive) {
+                    $rulables[$name][$actionName] = $actionActive;
+                }
             }
         }
 
