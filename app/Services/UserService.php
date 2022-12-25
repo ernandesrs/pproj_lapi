@@ -86,7 +86,7 @@ class UserService
     public function photoDelete(User $user)
     {
         if ($user->photo) {
-            Storage::delete("public/" . $user->photo);
+            Storage::delete("" . $user->photo);
 
             $user->photo = null;
             $user->save();
