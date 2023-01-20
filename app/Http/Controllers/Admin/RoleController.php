@@ -80,8 +80,12 @@ class RoleController extends Controller
      * @param  Role  $role
      * @return \Illuminate\Http\Response
      */
-    public function destroy($role)
+    public function destroy(Role $role)
     {
-        //
+        $role->delete();
+
+        return response()->json([
+            'success' => true
+        ]);
     }
 }
