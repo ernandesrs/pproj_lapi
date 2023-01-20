@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Exceptions\Admin\HasDependentsException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\RoleRequest;
 use App\Http\Resources\RoleResource;
@@ -16,6 +17,8 @@ class RoleController extends Controller
      */
     public function index()
     {
+        $this->authorize("viewAny", Role::class);
+
         return response()->json([
             "success" => true,
             "roles" => RoleResource::collection(Role::whereNotNull("id")->paginate(18)),
@@ -31,6 +34,8 @@ class RoleController extends Controller
      */
     public function store(RoleRequest $request)
     {
+        $this->authorize("create", Role::class);
+
         $role = Role::create($request->validated());
         $role->permissibles = json_decode($role->permissibles);
 
@@ -48,6 +53,8 @@ class RoleController extends Controller
      */
     public function show(Role $role)
     {
+        $this->authorize("view", $role);
+
         return response()->json([
             'success' => true,
             'role' => new RoleResource($role),
@@ -64,6 +71,8 @@ class RoleController extends Controller
      */
     public function update(RoleRequest $request, Role $role)
     {
+        $this->authorize("update", $role);
+
         $role->update($request->validated());
         $role->permissibles = json_decode($role->permissibles);
 
@@ -82,6 +91,12 @@ class RoleController extends Controller
      */
     public function destroy(Role $role)
     {
+        $this->authorize("delete", $role);
+
+        if ($role->users()->count()) {
+            throw new HasDependentsException();
+        }
+
         $role->delete();
 
         return response()->json([
