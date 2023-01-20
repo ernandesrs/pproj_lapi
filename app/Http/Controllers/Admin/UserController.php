@@ -7,7 +7,6 @@ use App\Exceptions\Admin\UnauthorizedActionException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\UserRequest;
 use App\Http\Resources\UserResource;
-use App\Http\Resources\UserResourceCollection;
 use App\Models\Permission;
 use App\Models\User;
 use App\Services\UserService;
@@ -26,7 +25,7 @@ class UserController extends Controller
      */
     public function index(Request $request)
     {
-        $users = $this->filter($request, new User())->paginate($this->limit);
+        $users = $this->filter($request, new User())->paginate($this->limit)->withQueryString();
 
         return response()->json([
             "success" => true,

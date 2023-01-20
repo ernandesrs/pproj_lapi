@@ -21,7 +21,7 @@ class PermissionController extends Controller
      */
     public function index(Request $request)
     {
-        $permissions = $this->filter($request, new Permission())->paginate($this->limit);
+        $permissions = $this->filter($request, new Permission())->paginate($this->limit)->withQueryString();
 
         return response()->json([
             'success' => true,
