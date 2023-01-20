@@ -49,13 +49,27 @@ class Role extends Model
      */
     public static function create(array $attributes)
     {
-        $attributes['name'] = \Illuminate\Support\Str::slug($attributes['display_name']);
+        $attributes['name'] = \Illuminate\Support\Str::slug($attributes['display_name'], '_');
         $attributes['permissibles'] = json_encode($attributes['permissibles']);
 
         $new = new Role($attributes);
         $new->save();
 
         return $new;
+    }
+
+    /**
+     * Update
+     *
+     * @param array $attributes
+     * @param array $options
+     * @return bool
+     */
+    public function update(array $attributes = [], array $options = [])
+    {
+        $attributes['name'] = \Illuminate\Support\Str::slug($attributes['display_name'], '_');
+        $attributes['permissibles'] = json_encode($attributes['permissibles']);
+        return parent::update($attributes, $options);
     }
 
     /**
@@ -70,6 +84,11 @@ class Role extends Model
         });
     }
 
+    /**
+     * Allowed permissions
+     *
+     * @return array
+     */
     public static function allowedPermissibles()
     {
         $p = [];

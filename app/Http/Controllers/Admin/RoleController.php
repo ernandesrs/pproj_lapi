@@ -60,7 +60,14 @@ class RoleController extends Controller
      */
     public function update(RoleRequest $request, Role $role)
     {
-        //
+        $role->update($request->validated());
+        $role->permissibles = json_decode($role->permissibles);
+
+        return response()->json([
+            'success' => true,
+            'role' => new RoleResource($role),
+            'permissibles' => Role::allowedPermissibles(),
+        ]);
     }
 
     /**

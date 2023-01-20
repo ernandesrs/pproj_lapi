@@ -45,6 +45,11 @@ class RoleRequest extends FormRequest
                     $fail("This permission is inválid.");
                     return;
                 }
+
+                if (!is_bool($val)) {
+                    $fail("Only boolean values has accept.");
+                    return;
+                }
             }]
         ];
     }
