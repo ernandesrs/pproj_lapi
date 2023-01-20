@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\Admin\PermissionController as AdminPermissionController;
+use App\Http\Controllers\Admin\RoleController as AdminRoleController;
 use App\Http\Controllers\Admin\UserController as AdminUserController;
 use App\Http\Controllers\Auth\AccountController;
 use App\Http\Controllers\Me\MeController;
@@ -66,7 +66,7 @@ Route::group([
         /**
          * PERMISSION CONTROLLER
          */
-        Route::apiResource("permissions", AdminPermissionController::class);
+        Route::apiResource("roles", AdminRoleController::class);
 
         /**
          * USER CONTROLLER
