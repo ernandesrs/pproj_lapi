@@ -64,7 +64,7 @@ Route::group([
         });
 
         /**
-         * PERMISSION CONTROLLER
+         * ROLE CONTROLLER
          */
         Route::apiResource("roles", AdminRoleController::class);
 
@@ -75,5 +75,7 @@ Route::group([
         Route::delete("/users/{user}/photo-delete", [AdminUserController::class, "photoDelete"]);
         Route::put("/users/{user}/promote", [AdminUserController::class, "promote"]);
         Route::put("/users/{user}/demote", [AdminUserController::class, "demote"]);
+        Route::put("/users/{user}/{role}", [AdminUserController::class, "roleUpdate"]);
+        Route::delete("/users/{user}/{role}", [AdminUserController::class, "roleDelete"]);
     });
 });

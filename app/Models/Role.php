@@ -107,4 +107,14 @@ class Role extends Model
 
         return $p;
     }
+
+    /**
+     * Users
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function users()
+    {
+        return $this->belongsToMany(User::class, 'role_user', 'role_id', 'user_id');
+    }
 }

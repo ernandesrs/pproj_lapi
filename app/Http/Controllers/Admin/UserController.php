@@ -7,7 +7,7 @@ use App\Exceptions\Admin\UnauthorizedActionException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\UserRequest;
 use App\Http\Resources\UserResource;
-use App\Models\Permission;
+use App\Models\Role;
 use App\Models\User;
 use App\Services\UserService;
 use Illuminate\Http\Request;
@@ -121,20 +121,37 @@ class UserController extends Controller
     }
 
     /**
-     * User permission update
+     * User roles update
      *
      * @param User $user
-     * @param Permission $permission
+     * @param Role $role
      * @return \Illuminate\Http\Response
      */
-    public function permissionUpdate(User $user, Permission $permission)
+    public function roleUpdate(User $user, Role $role)
     {
         if (!in_array($user->level, [User::LEVEL_ADMIN, User::LEVEL_SUPER])) {
             throw new NotHaveAdminPanelAcessException();
         }
 
-        $user->permission_id = $permission->id;
-        $user->save();
+        if (!$user->roles()->where('id', $role->id)->count())
+            $user->roles()->attach($role->id);
+
+        return response()->json([
+            "success" => true
+        ]);
+    }
+
+    /**
+     * User roles delete
+     *
+     * @param User $user
+     * @param Role $role
+     * @return \Illuminate\Http\Response
+     */
+    public function roleDelete(User $user, Role $role)
+    {
+        if ($user->roles()->where('id', $role->id)->count())
+            $user->roles()->detach($role->id);
 
         return response()->json([
             "success" => true

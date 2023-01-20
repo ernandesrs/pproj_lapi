@@ -60,13 +60,35 @@ class User extends Authenticatable implements JWTSubject
     ];
 
     /**
+     * Delete
+     *
+     * @return bool|null
+     */
+    public function delete()
+    {
+        $this->roles()->detach();
+
+        return parent::delete();
+    }
+
+    /**
      * Permissions
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasOne
      */
     public function permissions()
     {
-        return $this->belongsTo(Permission::class, "permission_id", "id");
+        return  $this->roles();
+    }
+
+    /**
+     * Roles
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function roles()
+    {
+        return $this->belongsToMany(Role::class, 'role_user', 'user_id', 'role_id');
     }
 
     /**
