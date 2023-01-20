@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\RoleRequest;
 use App\Http\Resources\RoleResource;
 use App\Models\Role;
-use Illuminate\Http\Request;
 
 class RoleController extends Controller
 {
@@ -17,7 +16,11 @@ class RoleController extends Controller
      */
     public function index()
     {
-        //
+        return response()->json([
+            "success" => true,
+            "roles" => RoleResource::collection(Role::whereNotNull("id")->paginate(18)),
+            'permissibles' => Role::allowedPermissibles(),
+        ]);
     }
 
     /**
@@ -29,6 +32,7 @@ class RoleController extends Controller
     public function store(RoleRequest $request)
     {
         $role = Role::create($request->validated());
+        $role->permissibles = json_decode($role->permissibles);
 
         return response()->json([
             'success' => true,
