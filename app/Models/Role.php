@@ -67,8 +67,15 @@ class Role extends Model
      */
     public function update(array $attributes = [], array $options = [])
     {
+        // merges existing permissibles with new permissibles and permissions
+        $attributes['permissibles'] = array_merge((array) $this->permissibles, $attributes['permissibles']);
+
+        // name
         $attributes['name'] = \Illuminate\Support\Str::slug($attributes['display_name'], '_');
+
+        // permissibles
         $attributes['permissibles'] = json_encode($attributes['permissibles']);
+
         return parent::update($attributes, $options);
     }
 
