@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use stdClass;
 
 class Role extends Model
 {
@@ -116,5 +117,23 @@ class Role extends Model
     public function users()
     {
         return $this->belongsToMany(User::class, 'role_user', 'role_id', 'user_id');
+    }
+
+    /**
+     * Has permission
+     *
+     * @param string $action
+     * @param string $modelClass
+     * @return boolean
+     */
+    public function hasAction(string $action, string $modelClass)
+    {
+        $modelClass = str_replace('\\', '_', $modelClass);
+
+        $permissible = $this->permissibles->$modelClass ?? null;
+        if (!$permissible || ($permissible->$action ?? null) === null)
+            return false;
+
+        return $permissible->$action;
     }
 }

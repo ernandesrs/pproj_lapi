@@ -25,6 +25,8 @@ class UserController extends Controller
      */
     public function index(Request $request)
     {
+        $this->authorize("viewAny", User::class);
+
         $users = $this->filter($request, new User())->paginate($this->limit)->withQueryString();
 
         return response()->json([
@@ -129,6 +131,8 @@ class UserController extends Controller
      */
     public function roleUpdate(User $user, Role $role)
     {
+        $this->authorize("update", $user);
+
         if (!in_array($user->level, [User::LEVEL_ADMIN, User::LEVEL_SUPER])) {
             throw new NotHaveAdminPanelAcessException();
         }
@@ -150,6 +154,8 @@ class UserController extends Controller
      */
     public function roleDelete(User $user, Role $role)
     {
+        $this->authorize("update", $user);
+
         if ($user->roles()->where('id', $role->id)->count())
             $user->roles()->detach($role->id);
 
@@ -166,6 +172,8 @@ class UserController extends Controller
      */
     public function promote(User $user)
     {
+        $this->authorize("update", $user);
+
         /**
          * @var User
          */
@@ -201,6 +209,8 @@ class UserController extends Controller
      */
     public function demote(User $user)
     {
+        $this->authorize("update", $user);
+
         /**
          * @var User
          */
