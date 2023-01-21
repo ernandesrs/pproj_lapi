@@ -14,9 +14,10 @@ class UserService
      * Register user
      *
      * @param array $validated the validated new user data
+     * @param boolean $emitRegisteredEvent
      * @return User
      */
-    public function register(array $validated)
+    public function register(array $validated, bool $emitRegisteredEvent = true)
     {
         $user = User::create([
             'first_name' => $validated['first_name'],
@@ -28,7 +29,8 @@ class UserService
             'password' => Hash::make($validated['password']),
         ]);
 
-        event(new UserRegistered($user));
+        if ($emitRegisteredEvent)
+            event(new UserRegistered($user));
 
         return $user;
     }
