@@ -1,5 +1,5 @@
 # LAPI - (Laravel Api)
-Um projeto para práticas de criação de APIs com Laravel 8.
+Um projeto para práticas de criação de APIs com Laravel 9.
 
 ## Recursos implementados
 ### Autenticação
