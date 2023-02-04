@@ -21,61 +21,79 @@ Route::group([
     "prefix" => "v1"
 ], function () {
 
-    Route::group([
-        "prefix" => "auth"
-    ], function () {
-        Route::middleware("guest")->group(function () {
-            Route::post("/login", [AccountController::class, "login"]);
-            Route::post("/forget-password", [AccountController::class, "forgetPassword"]);
-            Route::put("/update-password", [AccountController::class, "updatePassword"]);
-            Route::post("/register", [AccountController::class, "register"]);
-            Route::get("/verify-account", [AccountController::class, "verifyAccount"]);
-        });
+    Route::group(
+        [
+            "prefix" => "auth"
+        ],
+        function () {
+            Route::middleware("guest")->group(
+                function () {
+                        Route::post("/login", [AccountController::class, "login"]);
+                        Route::post("/forget-password", [AccountController::class, "forgetPassword"]);
+                        Route::put("/update-password", [AccountController::class, "updatePassword"]);
+                        Route::post("/register", [AccountController::class, "register"]);
+                        Route::get("/verify-account", [AccountController::class, "verifyAccount"]);
+                    }
+            );
 
-        Route::middleware("auth")->group(function () {
-            Route::get("/logout", [AccountController::class, "logout"]);
-            Route::get("/resend-verification", [AccountController::class, "resendVerification"]);
-        });
-    });
+            Route::middleware("auth")->group(
+                function () {
+                        Route::get("/logout", [AccountController::class, "logout"]);
+                        Route::get("/resend-verification", [AccountController::class, "resendVerification"]);
+                    }
+            );
+        }
+    );
 
-    Route::group([
-        "prefix" => "me"
-    ], function () {
+    Route::group(
+        [
+            "prefix" => "me"
+        ],
+        function () {
 
-        Route::middleware("auth")->group(function () {
-            Route::get("/", [MeController::class, "me"]);
-            Route::put("/update", [MeController::class, "update"]);
-            Route::post("/photo-upload", [MeController::class, "photoUpload"]);
-            Route::delete("/photo-delete", [MeController::class, "photoDelete"]);
-            Route::delete("/delete", [MeController::class, "delete"]);
-        });
+            Route::middleware("auth")->group(
+                function () {
+                        Route::get("/", [MeController::class, "me"]);
+                        Route::put("/update", [MeController::class, "update"]);
+                        Route::post("/photo-upload", [MeController::class, "photoUpload"]);
+                        Route::delete("/photo-delete", [MeController::class, "photoDelete"]);
+                        Route::delete("/delete", [MeController::class, "delete"]);
+                    }
+            );
 
-        Route::put("/recovery", [MeController::class, "recovery"]);
-    });
+            Route::put("/recovery", [MeController::class, "recovery"]);
+        }
+    );
 
-    Route::group([
-        "prefix" => "admin",
-        "middleware" => ["auth", "admin"]
-    ], function () {
-        Route::get("/", function () {
-            return response()->json([
-                "success" => true
-            ]);
-        });
+    Route::group(
+        [
+            "prefix" => "admin",
+            "middleware" => ["auth", "admin"]
+        ],
+        function () {
+            Route::get(
+                "/",
+                function () {
+                        return response()->json([
+                            "success" => true
+                        ]);
+                    }
+            );
 
-        /**
-         * ROLE CONTROLLER
-         */
-        Route::apiResource("roles", AdminRoleController::class);
+            /**
+             * ROLE CONTROLLER
+             */
+            Route::apiResource("roles", AdminRoleController::class);
 
-        /**
-         * USER CONTROLLER
-         */
-        Route::apiResource("users", AdminUserController::class);
-        Route::delete("/users/{user}/photo-delete", [AdminUserController::class, "photoDelete"]);
-        Route::put("/users/{user}/promote", [AdminUserController::class, "promote"]);
-        Route::put("/users/{user}/demote", [AdminUserController::class, "demote"]);
-        Route::put("/users/{user}/{role}", [AdminUserController::class, "roleUpdate"]);
-        Route::delete("/users/{user}/{role}", [AdminUserController::class, "roleDelete"]);
-    });
+            /**
+             * USER CONTROLLER
+             */
+            Route::apiResource("users", AdminUserController::class);
+            Route::delete("/users/{user}/photo-delete", [AdminUserController::class, "photoDelete"]);
+            Route::put("/users/{user}/promote", [AdminUserController::class, "promote"]);
+            Route::put("/users/{user}/demote", [AdminUserController::class, "demote"]);
+            Route::put("/users/{user}/{role}", [AdminUserController::class, "roleUpdate"]);
+            Route::delete("/users/{user}/{role}", [AdminUserController::class, "roleDelete"]);
+        }
+    );
 });

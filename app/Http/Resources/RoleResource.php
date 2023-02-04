@@ -5,7 +5,6 @@ namespace App\Http\Resources;
 use App\Policies\RolePolicy;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Storage;
 
 class RoleResource extends JsonResource
 {
