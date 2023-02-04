@@ -9,13 +9,23 @@ use App\Http\Requests\Admin\UserRequest;
 use App\Http\Resources\UserResource;
 use App\Models\Role;
 use App\Models\User;
+use App\Services\FilterService;
 use App\Services\UserService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
-    use TraitFilter;
+    /**
+     * Filter
+     * @var FilterService
+     */
+    private $filter;
+
+    public function __construct()
+    {
+        $this->filter = new FilterService(new User());
+    }
 
     /**
      * Display a listing of the resource.
@@ -27,11 +37,11 @@ class UserController extends Controller
     {
         $this->authorize("viewAny", User::class);
 
-        $users = $this->filter($request, new User())->paginate($this->limit)->withQueryString();
+        $users = $this->filter->filter($request);
 
         return response()->json([
             "success" => true,
-            "data" => UserResource::collection($users)->response()->getData()
+            "data" => UserResource::collection($users->withQueryString())->response()->getData()
         ]);
     }
 

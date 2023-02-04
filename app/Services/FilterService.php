@@ -1,21 +1,14 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Services;
 
 use App\Models\Permission;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
-trait TraitFilter
+class FilterService
 {
-    /**
-     * Filter
-     *
-     * @var int
-     */
-    protected $filters = 20;
-
     /**
      * Filterables classes
      *
@@ -56,22 +49,46 @@ trait TraitFilter
     ];
 
     /**
+     * Limit
+     *
+     * @var int
+     */
+    protected $defaultLimit = 20;
+
+    /**
+     * Model
+     * @var \Illuminate\Database\Eloquent\Builder
+     */
+    public $model;
+
+    /**
+     * Filters
+     * @var array
+     */
+    private $filters;
+
+    /**
      * Current filterable class
      *
      * @var string
      */
     protected $modelClass;
 
+    public function __construct($model, ?int $limit = null)
+    {
+        $this->model = $model;
+        $this->defaultLimit = $limit ?? $this->defaultLimit;
+    }
+
     /**
      * Get/filter
      *
      * @param Request $request
-     * @param [type] $model
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
      */
-    protected function filter(Request $request, $model)
+    public function filter(Request $request)
     {
-        $this->modelClass = get_class($model);
+        $this->modelClass = get_class($this->model);
 
         $this->validateFilters($request);
 
@@ -79,18 +96,18 @@ trait TraitFilter
             $fields = $this->filterablesFields[$this->modelClass]["search"] ?? null;
 
             if ($fields)
-                $model = $model->whereRaw("MATCH(" . $fields . ") AGAINST('" . $search . "')");
+                $this->model = $this->model->whereRaw("MATCH(" . $fields . ") AGAINST('" . $search . "')");
         }
 
         $orderBy = $this->orderBy;
         if ($orderBy) {
             foreach ($orderBy as $field => $order) {
                 if ($order)
-                    $model =  $model->orderBy($field, $order);
+                    $this->model = $this->model->orderBy($field, $order);
             }
         }
 
-        return $model;
+        return $this->model->paginate($this->limit ?? $this->defaultLimit);
     }
 
     /**
