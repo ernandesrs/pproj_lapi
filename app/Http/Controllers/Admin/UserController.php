@@ -17,14 +17,21 @@ use Illuminate\Support\Facades\Auth;
 class UserController extends Controller
 {
     /**
-     * Filter
+     * Filter Service
      * @var FilterService
      */
-    private $filter;
+    private $filterService;
+
+    /**
+     * User Service
+     * @var UserService
+     */
+    private $userService;
 
     public function __construct()
     {
-        $this->filter = new FilterService(new User());
+        $this->filterService = new FilterService(new User());
+        $this->userService = new UserService();
     }
 
     /**
@@ -37,7 +44,7 @@ class UserController extends Controller
     {
         $this->authorize("viewAny", User::class);
 
-        $users = $this->filter->filter($request);
+        $users = $this->filterService->filter($request);
 
         return response()->json([
             "success" => true,
@@ -55,7 +62,7 @@ class UserController extends Controller
     {
         $this->authorize("create", new User());
 
-        $user = (new UserService())->register($request->validated());
+        $user = $this->userService->register($request->validated());
 
         return response()->json([
             "success" => true,
@@ -90,7 +97,7 @@ class UserController extends Controller
     {
         $this->authorize("update", $user);
 
-        $user = (new UserService())->update($user, $request->validated());
+        $user = $this->userService->update($user, $request->validated());
 
         return response()->json([
             "success" => true,
@@ -108,7 +115,7 @@ class UserController extends Controller
     {
         $this->authorize("delete", $user);
 
-        (new UserService())->delete($user);
+        $this->userService->delete($user);
 
         return response()->json([
             "success" => true
