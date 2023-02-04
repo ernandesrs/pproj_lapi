@@ -21,7 +21,7 @@ class UserController extends Controller
      * Display a listing of the resource.
      *
      * @param Request $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function index(Request $request)
     {
@@ -39,7 +39,7 @@ class UserController extends Controller
      * Store a newly created resource in storage.
      *
      * @param UserRequest $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function store(UserRequest $request)
     {
@@ -57,7 +57,7 @@ class UserController extends Controller
      * Display the specified resource.
      *
      * @param  \App\Models\User  $user
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function show(User $user)
     {
@@ -74,7 +74,7 @@ class UserController extends Controller
      *
      * @param UserRequest $request
      * @param  \App\Models\User  $user
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function update(UserRequest $request, User $user)
     {
@@ -92,7 +92,7 @@ class UserController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  \App\Models\User  $user
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function destroy(User $user)
     {
@@ -109,7 +109,7 @@ class UserController extends Controller
      * Photo delete
      *
      * @param User $user
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function photoDelete(User $user)
     {
@@ -127,7 +127,7 @@ class UserController extends Controller
      *
      * @param User $user
      * @param Role $role
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function roleUpdate(User $user, Role $role)
     {
@@ -150,7 +150,7 @@ class UserController extends Controller
      *
      * @param User $user
      * @param Role $role
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function roleDelete(User $user, Role $role)
     {
