@@ -185,7 +185,7 @@ class UserController extends Controller
      * Promote user to next level
      *
      * @param User $user
-     * @return void
+     * @return \Illuminate\Http\JsonResponse
      */
     public function promote(User $user)
     {
@@ -222,7 +222,7 @@ class UserController extends Controller
      * Demote user to previous level
      *
      * @param User $user
-     * @return void
+     * @return \Illuminate\Http\JsonResponse
      */
     public function demote(User $user)
     {
