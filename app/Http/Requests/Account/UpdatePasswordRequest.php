@@ -2,10 +2,15 @@
 
 namespace App\Http\Requests\Account;
 
+use App\Exceptions\Account\UpdatePasswordTokenInvalidException;
+use App\Http\Requests\TraitApiRequest;
+use App\Models\PasswordReset;
 use Illuminate\Foundation\Http\FormRequest;
 
 class UpdatePasswordRequest extends FormRequest
 {
+    use TraitApiRequest;
+
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -24,7 +29,12 @@ class UpdatePasswordRequest extends FormRequest
     public function rules()
     {
         return [
-            "token" => ["nullable"],
+            "token" => [
+                function ($attr, $val, $fail) {
+                    if (PasswordReset::where("token", $val ?? "")->count() === 0)
+                        throw new UpdatePasswordTokenInvalidException();
+                }
+            ],
             "password" => ["required", "min:6", "max:12", "confirmed"]
         ];
     }

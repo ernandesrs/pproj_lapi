@@ -2,7 +2,9 @@
 
 namespace App\Http\Requests\Account;
 
+use App\Exceptions\Account\VerificationTokenInvalidException;
 use App\Http\Requests\TraitApiRequest;
+use App\Models\User;
 use Illuminate\Foundation\Http\FormRequest;
 
 class VerifyRequest extends FormRequest
@@ -38,8 +40,18 @@ class VerifyRequest extends FormRequest
      */
     public function rules()
     {
+        if (empty($this->token)) {
+            throw new VerificationTokenInvalidException();
+        }
+
         return [
-            "token" => ["required", "string"]
+            "token" => [
+                function ($attr, $val, $fail) {
+                    if (User::where("verification_token", $val ?? "")->count() === 0) {
+                        throw new VerificationTokenInvalidException();
+                    }
+                }
+            ]
         ];
     }
 }

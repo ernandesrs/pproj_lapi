@@ -102,8 +102,6 @@ class AccountController extends Controller
         $validated = $request->validated();
 
         $resetPassword = PasswordReset::where("token", $validated["token"])->first();
-        if (!$resetPassword)
-            throw new UpdatePasswordTokenInvalidException();
 
         $user = User::where("email", $resetPassword->email)->firstOrFail();
         $user->update([
@@ -153,12 +151,7 @@ class AccountController extends Controller
      */
     public function verifyAccount(VerifyRequest $request)
     {
-        $token = $request->get("token");
-        $user = User::where("verification_token", $token)->first();
-
-        if (!$user) {
-            throw new VerificationTokenInvalidException();
-        }
+        $user = User::where("verification_token", $request->get("token"))->first();
 
         $user->verification_token = null;
         $user->email_verified_at = now();
