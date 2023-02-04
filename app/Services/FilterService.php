@@ -2,7 +2,7 @@
 
 namespace App\Services;
 
-use App\Models\Permission;
+use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -26,24 +26,24 @@ class FilterService
             ],
 
             // specific rules
-            "rules" => [
+            "validationRules" => [
                 "orderby-level" => ["nullable", "string"],
                 "orderby-first_name" => ["nullable", "string"]
             ]
         ],
 
-        Permission::class => [
-            "search" => "name",
+        Role::class => [
+            "search" => "display_name",
 
             "orderBy" => [
                 // orderField => default value
-                "name" => null,
+                "display_name" => null,
                 "created_at" => "desc",
             ],
 
             // specific rules
-            "rules" => [
-                "orderby-name" => ["nullable", "string"]
+            "validationRules" => [
+                "orderby-display_name" => ["nullable", "string"]
             ]
         ],
     ];
@@ -120,9 +120,8 @@ class FilterService
     {
         $this->filters = $request->validate([
             "limit" => ["nullable", "numeric", "min:1", "max:20"],
-            "search" => ["nullable", "string", "min:1", "max:25"],
-            "orderby-created_at" => ["nullable", "string", Rule::in(["asc", "desc"])],
-        ] + $this->filterablesFields[$this->modelClass]["rules"] ?? []);
+            "search" => ["nullable", "string", "min:1", "max:25"]
+        ] + $this->filterablesFields[$this->modelClass]["validationRules"] ?? []);
 
         $this->filters["orderBy"] = $this->filterablesFields[$this->modelClass]["orderBy"] ?? [];
 

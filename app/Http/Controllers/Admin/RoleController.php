@@ -7,21 +7,36 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\RoleRequest;
 use App\Http\Resources\RoleResource;
 use App\Models\Role;
+use App\Services\FilterService;
+use Illuminate\Http\Request;
 
 class RoleController extends Controller
 {
+    /**
+     * Filter Service
+     * @var FilterService
+     */
+    private $filterService;
+
+    public function __construct()
+    {
+        $this->filterService = new FilterService(new Role());
+    }
+
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function index()
+    public function index(Request $request)
     {
         $this->authorize("viewAny", Role::class);
 
+        $roles = $this->filterService->filter($request);
+
         return response()->json([
             "success" => true,
-            "roles" => RoleResource::collection(Role::whereNotNull("id")->paginate(18)),
+            "roles" => RoleResource::collection($roles->withQueryString())->response()->getData(),
             'permissibles' => Role::allowedPermissibles(),
         ]);
     }
