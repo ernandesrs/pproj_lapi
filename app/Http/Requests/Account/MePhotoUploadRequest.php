@@ -2,10 +2,13 @@
 
 namespace App\Http\Requests\Account;
 
+use App\Http\Requests\TraitApiRequest;
 use Illuminate\Foundation\Http\FormRequest;
 
 class MePhotoUploadRequest extends FormRequest
 {
+    use TraitApiRequest;
+
     /**
      * Determine if the user is authorized to make this request.
      *
