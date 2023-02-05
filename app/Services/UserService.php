@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Events\UserRegistered;
+use App\Exceptions\Admin\UnauthorizedActionException;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
@@ -60,6 +61,10 @@ class UserService
      */
     public function remove(User $user)
     {
+        if ($user->isSuperadmin() && User::where("level", User::LEVEL_SUPER)->count() === 1) {
+            throw new UnauthorizedActionException("You are the last super administrator of the system");
+        }
+
         $user = $this->photoDelete($user);
 
         return $user->update([
