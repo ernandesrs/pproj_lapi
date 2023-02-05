@@ -95,7 +95,7 @@ class MeController extends Controller
      */
     public function delete()
     {
-        $this->userService->delete(Auth::user());
+        $this->userService->remove(Auth::user());
 
         return response()->json([
             "success" => true
