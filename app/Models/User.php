@@ -91,9 +91,22 @@ class User extends Authenticatable implements JWTSubject
         return $this->belongsToMany(Role::class, 'role_user', 'user_id', 'role_id');
     }
 
+    /**
+     * Credit cards
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     public function creditCards()
     {
         return $this->hasMany(CreditCard::class);
+    }
+
+    /**
+     * Subscriptions
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function subscriptions()
+    {
+        return $this->hasMany(Subscription::class);
     }
 
     /**
