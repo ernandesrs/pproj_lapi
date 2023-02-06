@@ -50,14 +50,16 @@ class CreditCardController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\CreditCard  $creditCard
+     * @param  int  $id
      * @return \Illuminate\Http\JsonResponse
      */
-    public function show(CreditCard $creditCard)
+    public function show(int $id)
     {
+        $card = \Auth::user()->creditCards()->where("id", $id)->first();
+
         return response()->json([
             "success" => true,
-            "card" => $creditCard
+            "card" => $card
         ]);
     }
 
@@ -65,22 +67,29 @@ class CreditCardController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\CreditCard  $creditCard
+     * @param  int  $id
      * @return \Illuminate\Http\JsonResponse
      */
-    public function update(Request $request, CreditCard $creditCard)
+    public function update(Request $request, int $id)
     {
-        //
+        return response()->json([]);
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\CreditCard  $creditCard
+     * @param  int  $id
      * @return \Illuminate\Http\JsonResponse
      */
-    public function destroy(CreditCard $creditCard)
+    public function destroy(int $id)
     {
-        //
+        $card = \Auth::user()->creditCards()->where("id", $id)->first();
+
+        if ($card)
+            $card->delete();
+
+        return response()->json([
+            "success" => true,
+        ]);
     }
 }
