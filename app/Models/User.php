@@ -78,7 +78,7 @@ class User extends Authenticatable implements JWTSubject
      */
     public function permissions()
     {
-        return  $this->roles();
+        return $this->roles();
     }
 
     /**
@@ -89,6 +89,11 @@ class User extends Authenticatable implements JWTSubject
     public function roles()
     {
         return $this->belongsToMany(Role::class, 'role_user', 'user_id', 'role_id');
+    }
+
+    public function creditCards()
+    {
+        return $this->hasMany(CreditCard::class);
     }
 
     /**
@@ -111,12 +116,14 @@ class User extends Authenticatable implements JWTSubject
     public function hasPermission(string $action, string $modelClass)
     {
         $roles = $this->roles()->get();
-        if (!$roles->count()) return false;
+        if (!$roles->count())
+            return false;
 
         $return = false;
         $roles->each(function ($role) use ($action, $modelClass, &$return) {
             $return = $role->hasAction($action, $modelClass);
-            if ($return) return;
+            if ($return)
+                return;
         });
 
         return $return;

@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\RoleController as AdminRoleController;
 use App\Http\Controllers\Admin\UserController as AdminUserController;
 use App\Http\Controllers\Auth\AccountController;
+use App\Http\Controllers\Dash\CreditCardController as DashCreditCardController;
 use App\Http\Controllers\Me\MeController;
 use Illuminate\Support\Facades\Route;
 
@@ -94,6 +95,16 @@ Route::group([
             Route::put("/users/{user}/demote", [AdminUserController::class, "demote"]);
             Route::put("/users/{user}/{role}", [AdminUserController::class, "roleUpdate"]);
             Route::delete("/users/{user}/{role}", [AdminUserController::class, "roleDelete"]);
+        }
+    );
+
+    Route::group(
+        [
+            "prefix" => "dash",
+            "middleware" => ["auth"]
+        ],
+        function () {
+            Route::apiResource("credit-cards", DashCreditCardController::class);
         }
     );
 });
