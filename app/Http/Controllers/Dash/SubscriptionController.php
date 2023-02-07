@@ -54,7 +54,7 @@ class SubscriptionController extends Controller
             "transaction_id" => $response["transaction_id"],
             "gateway" => $response["gateway"],
             "starts_in" => now(),
-            "ends_in" => now()->addMonth($data["period"]),
+            "ends_in" => now()->addMonths($data["period"]),
             "type" => Subscription::TYPE_NEW,
             "status" => in_array($response["status"], ["processing", "waiting_payment"]) ? Subscription::STATUS_PENDING : Subscription::STATUS_ACTIVE
         ]);
