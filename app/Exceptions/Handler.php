@@ -9,6 +9,11 @@ use App\Exceptions\Admin\HasDependentsException;
 use App\Exceptions\Admin\NotHaveAdminPanelAcessException;
 use App\Exceptions\Admin\UnauthorizedActionException;
 use App\Exceptions\Auth\UnauthenticatedException;
+use App\Exceptions\Dash\HasActiveSubscriptionException;
+use App\Exceptions\Dash\Pagarme\ChargebackPaymentException;
+use App\Exceptions\Dash\Pagarme\RefundedPaymentException;
+use App\Exceptions\Dash\Pagarme\RefusedPaymentException;
+use App\Exceptions\Dash\PaymentFailException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -35,6 +40,12 @@ class Handler extends ExceptionHandler
         InvalidDataException::class,
         NotFoundException::class,
         UnauthorizedException::class,
+
+        ChargebackPaymentException::class,
+        RefundedPaymentException::class,
+        RefusedPaymentException::class,
+        HasActiveSubscriptionException::class,
+        PaymentFailException::class
     ];
 
     /**

@@ -68,7 +68,7 @@ class PagarMe
     /**
      * Create transaction
      * @param array $validated
-     * @return array|null
+     * @return array
      */
     public function createTransaction(CreditCard $card, int $amount, int $installments = 1)
     {
@@ -84,15 +84,13 @@ class PagarMe
             throw new PaymentFailException();
         }
 
-        $arr = match ($response->status) {
+        return match ($response->status) {
             "processing", "authorized", "paid", "waiting_payment" => [
                 "success" => true,
                 "status" => $response->status,
             ],
             default => $this->throwException($response->status)
         };
-
-        return $arr;
     }
 
     /**
