@@ -2,10 +2,17 @@
 
 namespace App\Http\Controllers\Dash;
 
+use App\Exceptions\Dash\PaymentFailException;
 use App\Models\CreditCard;
 
 class PagarMe
 {
+    private const STATUS_MESSAGES = [
+        "RefundedPaymentException" => "Refunded Payment",
+        "RefusedPaymentException" => "Refused Payment",
+        "ChargedbackPaymentException" => "Chargedback Payment"
+    ];
+
     /**
      * Api base
      * @var string
@@ -59,6 +66,36 @@ class PagarMe
     }
 
     /**
+     * Create transaction
+     * @param array $validated
+     * @return array|null
+     */
+    public function createTransaction(CreditCard $card, int $amount, int $installments = 1)
+    {
+        $this->data = [
+            "amount" => $amount,
+            "installments" => $installments,
+            "card_id" => $card->hash,
+            "payment_method" => "credit_card",
+        ];
+
+        $response = $this->call("/transactions", "post");
+        if (!$response->id ?? false) {
+            throw new PaymentFailException();
+        }
+
+        $arr = match ($response->status) {
+            "processing", "authorized", "paid", "waiting_payment" => [
+                "success" => true,
+                "status" => $response->status,
+            ],
+            default => $this->throwException($response->status)
+        };
+
+        return $arr;
+    }
+
+    /**
      * Request
      * @param string $endpoint
      * @param string|null $method
@@ -80,5 +117,15 @@ class PagarMe
         }
 
         return (object) $response;
+    }
+
+    /**
+     * Throw exception
+     * @param string $status
+     * @return void
+     */
+    private function throwException(string $status)
+    {
+        throw new ("App\\Exceptions\\Dash\\Pagarme\\" . ucfirst($status) . "PaymentException")();
     }
 }

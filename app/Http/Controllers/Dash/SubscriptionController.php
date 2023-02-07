@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers\Dash;
 
+use App\Exceptions\Dash\HasActiveSubscriptionException;
+use App\Exceptions\Dash\PaymentFailException;
+use App\Exceptions\NotFoundException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\SubscriptionRequest;
 use App\Models\Subscription;
@@ -30,25 +33,28 @@ class SubscriptionController extends Controller
      */
     public function store(SubscriptionRequest $request)
     {
-        $period = $request->get("period", 1);
-        $installments = $request->get("installments", 1);
-
-        $creditCard = $request->user()->creditCards()->where("id", $request->get("card_id"))->first();
-        if (!$creditCard) {
-            return response()->json([
-                "success" => false,
-                "message" => "Credit card not found.",
-            ]);
+        if (
+            $request->user()->subscriptions()
+                ->where("ends_in", ">=", now())
+                ->where("status", "!=", Subscription::STATUS_ENDED)
+                ->where("status", "!=", Subscription::STATUS_CANCELED)->count()
+        ) {
+            throw new HasActiveSubscriptionException();
         }
 
+        $price = 10000;
+        $data = $request->validated();
+
+        $creditCard = $request->user()->creditCards()->where("id", $data["card_id"])->first();
+
         // faça uma cobrança no cartão
-        // ...
+        $response = (new PagarMe())->createTransaction($creditCard, ($price * $data["period"]), $data["installments"]);
 
         $subscription = \Auth::user()->subscriptions()->create([
             "starts_in" => now(),
-            "ends_in" => now()->addMonth($period),
+            "ends_in" => now()->addMonth($data["period"]),
             "type" => Subscription::TYPE_NEW,
-            "status" => Subscription::STATUS_ACTIVE
+            "status" => in_array($response["status"], ["processing", "waiting_payment"]) ? Subscription::STATUS_PENDING : Subscription::STATUS_ACTIVE
         ]);
 
         return response()->json([

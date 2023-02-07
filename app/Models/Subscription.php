@@ -19,6 +19,7 @@ class Subscription extends Model
     public const STATUS_CANCELED = 'canceled';
     public const STATUS_ACTIVE = 'active';
     public const STATUS_PENDING = 'pending';
+    public const STATUS_ENDED = 'ended';
     public const STATUS = [
         self::STATUS_CANCELED,
         self::STATUS_ACTIVE,
