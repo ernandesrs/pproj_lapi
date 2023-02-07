@@ -51,6 +51,8 @@ class SubscriptionController extends Controller
         $response = (new PagarMe())->createTransaction($creditCard, ($price * $data["period"]), $data["installments"]);
 
         $subscription = \Auth::user()->subscriptions()->create([
+            "transaction_id" => $response["transaction_id"],
+            "gateway" => $response["gateway"],
             "starts_in" => now(),
             "ends_in" => now()->addMonth($data["period"]),
             "type" => Subscription::TYPE_NEW,

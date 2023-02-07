@@ -88,6 +88,8 @@ class PagarMe
             "processing", "authorized", "paid", "waiting_payment" => [
                 "success" => true,
                 "status" => $response->status,
+                "gateway" => "pagarme",
+                "transaction_id" => $response->id
             ],
             default => $this->throwException($response->status)
         };

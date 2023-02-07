@@ -31,6 +31,8 @@ class Subscription extends Model
      * @var array
      */
     protected $fillable = [
+        'transaction_id',
+        'gateway',
         'starts_in',
         'ends_in',
         'type',

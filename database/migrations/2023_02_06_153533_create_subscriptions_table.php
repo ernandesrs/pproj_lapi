@@ -17,6 +17,8 @@ return new class extends Migration {
 
             $table->unsignedBigInteger('user_id');
 
+            $table->string('gateway');
+            $table->string('transaction_id');
             $table->date('starts_in');
             $table->date('ends_in');
             $table->string('type', 8)->default('new');
