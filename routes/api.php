@@ -19,10 +19,16 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+/**
+ * APP ENDPOINTS - VERSION 1
+ */
 Route::group([
     "prefix" => "v1"
 ], function () {
 
+    /**
+     * AUTH ENDPOINTS
+     */
     Route::group(
         [
             "prefix" => "auth"
@@ -48,6 +54,9 @@ Route::group([
         }
     );
 
+    /**
+     * ME(profile) ENDPOINTS
+     */
     Route::group(
         [
             "prefix" => "me"
@@ -68,6 +77,9 @@ Route::group([
         }
     );
 
+    /**
+     * ADMIN ENDPOINTS
+     */
     Route::group(
         [
             "prefix" => "admin",
@@ -100,6 +112,9 @@ Route::group([
         }
     );
 
+    /**
+     * DASH(user/client area) ENDPOINTS
+     */
     Route::group(
         [
             "prefix" => "dash",
