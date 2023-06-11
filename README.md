@@ -44,3 +44,6 @@ Execute o seguinte comando para criar um usuário principal juntamente com algun
 
 #### Execute o servidor
 > php artisan serve
+
+# A documentação da API
+Documentação criada com Postman, acesse em: https://documenter.getpostman.com/view/15369452/2s935oL4Dv
