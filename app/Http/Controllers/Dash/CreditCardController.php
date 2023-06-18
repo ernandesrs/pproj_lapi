@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Dash;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CreditCardRequest;
 use App\Models\CreditCard;
+use App\Services\Payments\Pagarme;
 use Illuminate\Http\Request;
 
 class CreditCardController extends Controller
@@ -39,7 +40,7 @@ class CreditCardController extends Controller
          * Validate credit card with Paga.me and save credit card hash
          * @var CreditCard
          **/
-        $creditCard = (new PagarMe())->createCreditCard($request->validated());
+        $creditCard = (new Pagarme())->createCreditCard($request->validated());
 
         return response()->json([
             "success" => true,
