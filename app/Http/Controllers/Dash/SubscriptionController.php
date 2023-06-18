@@ -3,11 +3,10 @@
 namespace App\Http\Controllers\Dash;
 
 use App\Exceptions\Dash\HasActiveSubscriptionException;
-use App\Exceptions\Dash\PaymentFailException;
-use App\Exceptions\NotFoundException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\SubscriptionRequest;
 use App\Models\Subscription;
+use App\Services\Payments\Pagarme;
 use Illuminate\Http\Request;
 
 class SubscriptionController extends Controller
@@ -42,13 +41,19 @@ class SubscriptionController extends Controller
             throw new HasActiveSubscriptionException();
         }
 
-        $price = 10000;
+        $price = 150.89;
         $data = $request->validated();
 
         $creditCard = $request->user()->creditCards()->where("id", $data["card_id"])->first();
 
-        // faça uma cobrança no cartão
-        $response = (new PagarMe())->createTransaction($creditCard, ($price * $data["period"]), $data["installments"]);
+        $response = (new Pagarme())->createTransaction(
+            $creditCard,
+            $price,
+            $data["installments"],
+            [
+                "desc" => "Assinatura Premium " . $data["period"] . " mêses."
+            ]
+        );
 
         $subscription = \Auth::user()->subscriptions()->create([
             "transaction_id" => $response["transaction_id"],

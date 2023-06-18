@@ -2,6 +2,7 @@
 
 namespace App\Services\Payments;
 
+use App\Exceptions\Dash\PaymentFailException;
 use App\Exceptions\Dash\Payments\InvalidCreditCardException;
 use App\Models\CreditCard;
 
@@ -49,5 +50,41 @@ class Pagarme
             "last_digits" => $response->last_digits,
             "brand" => $response->brand,
         ]);
+    }
+
+    /**
+     * Create a transaction
+     *
+     * @param CreditCard $card
+     * @param float $amount
+     * @param int $installments
+     * @param array $metadata
+     * @return array
+     */
+    public function createTransaction(CreditCard $card, float $amount, int $installments = 1, array $metadata = [])
+    {
+        $data = [
+            "amount" => round($amount * 100, 0),
+            "installments" => $installments,
+            "card_id" => $card->hash,
+            "payment_method" => "credit_card",
+            "metadata" => $metadata
+        ];
+
+        $response = $this->pagarme->transactions()->create($data);
+        if (!$response->id ?? false) {
+            throw new PaymentFailException();
+        }
+
+        if (!in_array($response->status, ["processing", "authorized", "paid", "waiting_payment"])) {
+            throw new("App\\Exceptions\\Dash\\Pagarme\\" . ucfirst($response->status) . "PaymentException")();
+        }
+
+        return [
+            "success" => true,
+            "status" => $response->status,
+            "gateway" => "pagarme",
+            "transaction_id" => $response->id
+        ];
     }
 }
