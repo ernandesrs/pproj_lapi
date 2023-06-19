@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\RoleController as AdminRoleController;
 use App\Http\Controllers\Admin\UserController as AdminUserController;
+use App\Http\Controllers\Admin\PackageController as AdminPackageController;
 use App\Http\Controllers\Auth\AccountController;
 use App\Http\Controllers\Dash\CreditCardController as DashCreditCardController;
 use App\Http\Controllers\Dash\SubscriptionController as DashSubscriptionController;
@@ -109,6 +110,11 @@ Route::group([
             Route::put("/users/{user}/demote", [AdminUserController::class, "demote"]);
             Route::put("/users/{user}/{role}", [AdminUserController::class, "roleUpdate"]);
             Route::delete("/users/{user}/{role}", [AdminUserController::class, "roleDelete"]);
+
+            /**
+             * PACKAGE CONTROLLER
+             */
+            Route::apiResource("packages", AdminPackageController::class);
         }
     );
 
