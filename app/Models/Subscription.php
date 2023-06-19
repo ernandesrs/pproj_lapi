@@ -32,6 +32,8 @@ class Subscription extends Model
      */
     protected $fillable = [
         'transaction_id',
+        'package_id',
+        'package_metadata',
         'gateway',
         'starts_in',
         'ends_in',
@@ -46,5 +48,17 @@ class Subscription extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    /**
+     * Booted
+     *
+     * @return void
+     */
+    protected static function booted()
+    {
+        static::retrieved(function ($subscription) {
+            $subscription->package_metadata = json_decode($subscription->package_metadata);
+        });
     }
 }

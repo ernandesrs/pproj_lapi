@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Package;
 use Illuminate\Foundation\Http\FormRequest;
 
 class SubscriptionRequest extends FormRequest
@@ -37,7 +38,16 @@ class SubscriptionRequest extends FormRequest
                     }
                 }
             ],
-            "period" => ["required", "numeric", "min:1", "max:12"],
+            "package_id" => [
+                "required",
+                "numeric",
+                function ($attr, $val, $fail) {
+                    if (!Package::where("id", $val)->count()) {
+                        $fail("Pacote não encontrado.");
+                        return;
+                    }
+                }
+            ],
             "installments" => ["required", "numeric", "min:1", "max:12"]
         ];
     }

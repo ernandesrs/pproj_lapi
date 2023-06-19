@@ -17,6 +17,7 @@ class Package extends Model
         'name',
         'description',
         'price',
+        'expiration_month',
         'show'
     ];
 }

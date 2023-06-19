@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Dash;
 use App\Exceptions\Dash\HasActiveSubscriptionException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\SubscriptionRequest;
+use App\Models\Package;
 use App\Models\Subscription;
 use App\Services\Payments\Pagarme;
 use Illuminate\Http\Request;
@@ -41,32 +42,34 @@ class SubscriptionController extends Controller
             throw new HasActiveSubscriptionException();
         }
 
-        $price = 150.89;
         $data = $request->validated();
 
+        $package = Package::where("id", $data["package_id"])->first();
         $creditCard = $request->user()->creditCards()->where("id", $data["card_id"])->first();
-
         $response = (new Pagarme())->createTransaction(
             $creditCard,
-            $price,
+            $package->price,
             $data["installments"],
-            [
-                "desc" => "Assinatura Premium " . $data["period"] . " mêses."
-            ]
+            $package->toArray()
         );
 
         $subscription = \Auth::user()->subscriptions()->create([
+            "package_id" => $package->id,
+            "package_metadata" => $package->toJson(),
             "transaction_id" => $response["transaction_id"],
             "gateway" => $response["gateway"],
             "starts_in" => now(),
-            "ends_in" => now()->addMonths($data["period"]),
+            "ends_in" => now()->addMonths($package->expiration_month),
             "type" => Subscription::TYPE_NEW,
             "status" => in_array($response["status"], ["processing", "waiting_payment"]) ? Subscription::STATUS_PENDING : Subscription::STATUS_ACTIVE
         ]);
 
+        $subscription->package_metadata = json_decode($subscription->package_metadata);
+
         return response()->json([
             "success" => true,
-            "subscription" => $subscription
+            "subscription" => $subscription,
+            "package" => $package
         ]);
     }
 

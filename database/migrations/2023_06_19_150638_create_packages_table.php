@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      *
@@ -19,6 +18,7 @@ return new class extends Migration
             $table->string("name", 75)->nullable(false)->unique();
             $table->text("description");
             $table->float("price", 8, 2)->nullable(false);
+            $table->integer("expiration_month")->nullable(false)->default(1);
             $table->boolean("show")->nullable(false)->default(false);
 
             $table->timestamps();
