@@ -31,7 +31,8 @@ class Role extends Model
         User::class => self::DEFAULT_PERMISSIONS + [
             'promote' => false,
             'demote' => false
-        ]
+        ],
+        Package::class => self::DEFAULT_PERMISSIONS
     ];
 
     /**

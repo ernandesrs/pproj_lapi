@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\PackageRequest;
 use App\Models\Package;
-use Illuminate\Http\Request;
 
 class PackageController extends Controller
 {
@@ -16,6 +15,8 @@ class PackageController extends Controller
      */
     public function index()
     {
+        $this->authorize("viewAny", Package::class);
+
         return response()->json([
             "success" => true,
             "packages" => Package::all()
@@ -30,6 +31,8 @@ class PackageController extends Controller
      */
     public function store(PackageRequest $request)
     {
+        $this->authorize("create", Package::class);
+
         $package = Package::create($request->validated());
 
         return response()->json([
@@ -46,6 +49,8 @@ class PackageController extends Controller
      */
     public function show(Package $package)
     {
+        $this->authorize("view", $package);
+
         return response()->json([
             "success" => true,
             "package" => $package
@@ -61,6 +66,8 @@ class PackageController extends Controller
      */
     public function update(PackageRequest $request, Package $package)
     {
+        $this->authorize("update", $package);
+
         $package->update($request->validated());
 
         return response()->json([
@@ -77,6 +84,8 @@ class PackageController extends Controller
      */
     public function destroy(Package $package)
     {
+        $this->authorize("delete", $package);
+
         $package->delete();
 
         return response()->json([
