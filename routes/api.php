@@ -37,20 +37,20 @@ Route::group([
         function () {
             Route::middleware("guest")->group(
                 function () {
-                        Route::post("/login", [AccountController::class, "login"]);
-                        Route::post("/forget-password", [AccountController::class, "forgetPassword"]);
-                        Route::put("/update-password", [AccountController::class, "updatePassword"]);
-                        Route::post("/register", [AccountController::class, "register"]);
-                    }
+                    Route::post("/login", [AccountController::class, "login"]);
+                    Route::post("/forget-password", [AccountController::class, "forgetPassword"]);
+                    Route::put("/update-password", [AccountController::class, "updatePassword"]);
+                    Route::post("/register", [AccountController::class, "register"]);
+                }
             );
 
             Route::get("/verify-account", [AccountController::class, "verifyAccount"]);
 
             Route::middleware("auth")->group(
                 function () {
-                        Route::get("/logout", [AccountController::class, "logout"]);
-                        Route::get("/resend-verification", [AccountController::class, "resendVerification"]);
-                    }
+                    Route::get("/logout", [AccountController::class, "logout"]);
+                    Route::get("/resend-verification", [AccountController::class, "resendVerification"]);
+                }
             );
         }
     );
@@ -66,12 +66,12 @@ Route::group([
 
             Route::middleware("auth")->group(
                 function () {
-                        Route::get("/", [MeController::class, "me"]);
-                        Route::put("/update", [MeController::class, "update"]);
-                        Route::post("/photo-upload", [MeController::class, "photoUpload"]);
-                        Route::delete("/photo-delete", [MeController::class, "photoDelete"]);
-                        Route::delete("/delete", [MeController::class, "delete"]);
-                    }
+                    Route::get("/", [MeController::class, "me"]);
+                    Route::put("/update", [MeController::class, "update"]);
+                    Route::post("/photo-upload", [MeController::class, "photoUpload"]);
+                    Route::delete("/photo-delete", [MeController::class, "photoDelete"]);
+                    Route::delete("/delete", [MeController::class, "delete"]);
+                }
             );
 
             Route::put("/recovery", [MeController::class, "recovery"]);
@@ -90,10 +90,10 @@ Route::group([
             Route::get(
                 "/",
                 function () {
-                        return response()->json([
-                            "success" => true
-                        ]);
-                    }
+                    return response()->json([
+                        "success" => true
+                    ]);
+                }
             );
 
             /**
@@ -130,6 +130,7 @@ Route::group([
             Route::apiResource("credit-cards", DashCreditCardController::class);
 
             Route::apiResource("subscriptions", DashSubscriptionController::class);
+            Route::patch("/subscriptions/{subscription_id}/cancel", [DashSubscriptionController::class, "cancel"]);
         }
     );
 });

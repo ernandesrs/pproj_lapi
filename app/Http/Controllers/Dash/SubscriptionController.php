@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Dash;
 
 use App\Exceptions\Dash\HasActiveSubscriptionException;
+use App\Exceptions\NotFoundException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\SubscriptionRequest;
 use App\Models\Package;
@@ -82,6 +83,28 @@ class SubscriptionController extends Controller
     public function show($id)
     {
         $subscription = \Auth::user()->subscriptions()->where("id", $id)->first();
+
+        return response()->json([
+            "success" => true,
+            "subscription" => $subscription
+        ]);
+    }
+
+    /**
+     * Cancel subscription
+     *
+     * @param int $id
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function cancel($id)
+    {
+        $subscription = \Auth::user()->subscriptions()->where("id", $id)->first();
+        if (!$subscription) {
+            throw new NotFoundException();
+        }
+
+        $subscription->cancel();
+        $subscription->package_metadata = json_decode($subscription->package_metadata);
 
         return response()->json([
             "success" => true,

@@ -61,4 +61,16 @@ class Subscription extends Model
             $subscription->package_metadata = json_decode($subscription->package_metadata);
         });
     }
+
+    /**
+     * Set status canceled
+     *
+     * @return bool
+     */
+    public function cancel()
+    {
+        $this->status = self::STATUS_CANCELED;
+        $this->package_metadata = json_encode($this->package_metadata);
+        return $this->save();
+    }
 }
