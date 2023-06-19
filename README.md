@@ -23,6 +23,7 @@ Algumas configurações deverão ser feitas e alguns comandos deverão ser execu
 
 ## Configurações do .env
 Copie e renomeie o arquivo .env.example para .env e então faça as seguintes configurações:
+
     * Informações para acesso ao banco de dados,
     * Dados para envio de e-mails,
     * Chave de api da Pagar.me,
