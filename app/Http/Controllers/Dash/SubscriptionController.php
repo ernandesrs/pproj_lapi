@@ -99,11 +99,14 @@ class SubscriptionController extends Controller
     public function cancel($id)
     {
         $subscription = \Auth::user()->subscriptions()->where("id", $id)->first();
-        if (!$subscription) {
+
+        if (!$subscription || in_array($subscription->status, [Subscription::STATUS_CANCELED, Subscription::STATUS_ENDED])) {
             throw new NotFoundException();
         }
 
-        $subscription->cancel();
+        $response = (new Pagarme())->fullRefund($subscription->transaction_id);
+
+        $subscription->cancel($response["transaction_id"]);
         $subscription->package_metadata = json_decode($subscription->package_metadata);
 
         return response()->json([

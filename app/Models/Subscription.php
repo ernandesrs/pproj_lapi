@@ -65,11 +65,13 @@ class Subscription extends Model
     /**
      * Set status canceled
      *
+     * @param string $refundTransactionId
      * @return bool
      */
-    public function cancel()
+    public function cancel(string $refundTransactionId)
     {
         $this->status = self::STATUS_CANCELED;
+        $this->package_metadata->refund_transaction_id = $refundTransactionId;
         $this->package_metadata = json_encode($this->package_metadata);
         return $this->save();
     }
