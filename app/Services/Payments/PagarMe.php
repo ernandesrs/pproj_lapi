@@ -2,6 +2,7 @@
 
 namespace App\Services\Payments;
 
+use App\Exceptions\Dash\Pagarme\RefundPaymentFailException;
 use App\Exceptions\Dash\PaymentFailException;
 use App\Exceptions\Dash\Payments\InvalidCreditCardException;
 use App\Models\CreditCard;
@@ -78,6 +79,33 @@ class Pagarme
 
         if (!in_array($response->status, ["processing", "authorized", "paid", "waiting_payment"])) {
             throw new("App\\Exceptions\\Dash\\Pagarme\\" . ucfirst($response->status) . "PaymentException")();
+        }
+
+        return [
+            "success" => true,
+            "status" => $response->status,
+            "gateway" => "pagarme",
+            "transaction_id" => $response->id
+        ];
+    }
+
+    /**
+     * Full refund
+     *
+     * @param string $transactionId
+     * @param array $metadata
+     * @return array
+     */
+    public function fullRefund(string $transactionId, array $metadata = [])
+    {
+        $data = [
+            'id' => $transactionId,
+            'metadata' => $metadata
+        ];
+
+        $response = $this->pagarme->transactions()->refund($data);
+        if (!in_array($response->status, ["refunded", "pending_refund"])) {
+            throw new RefundPaymentFailException();
         }
 
         return [
