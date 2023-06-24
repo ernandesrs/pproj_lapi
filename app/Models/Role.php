@@ -32,7 +32,8 @@ class Role extends Model
             'promote' => false,
             'demote' => false
         ],
-        Package::class => self::DEFAULT_PERMISSIONS
+        Package::class => self::DEFAULT_PERMISSIONS,
+        Subscription::class => self::DEFAULT_PERMISSIONS
     ];
 
     /**
@@ -51,7 +52,7 @@ class Role extends Model
     public static function create(array $attributes)
     {
         $attributes['name'] = \Illuminate\Support\Str::slug($attributes['display_name'], '_');
-        $attributes['permissibles'] = json_encode($attributes['permissibles']);
+        $attributes['permissibles'] = json_encode(self::allowedPermissibles());
 
         $new = new Role($attributes);
         $new->save();
@@ -88,7 +89,15 @@ class Role extends Model
     protected static function booted()
     {
         static::retrieved(function ($role) {
-            $role->permissibles = json_decode($role->permissibles);
+            $permissibles = (array) json_decode($role->permissibles);
+
+            foreach (self::allowedPermissibles() as $key => $perm) {
+                if (!key_exists($key, $permissibles)) {
+                    $permissibles[$key] = $perm;
+                }
+            }
+
+            $role->permissibles = (object) $permissibles;
         });
     }
 
