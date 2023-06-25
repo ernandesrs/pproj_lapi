@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\SubscriptionController as AdminSubscriptionContro
 use App\Http\Controllers\Auth\AccountController;
 use App\Http\Controllers\Dash\CreditCardController as DashCreditCardController;
 use App\Http\Controllers\Dash\SubscriptionController as DashSubscriptionController;
+use App\Http\Controllers\Dash\PackageController as DashPackageController;
 use App\Http\Controllers\Me\MeController;
 use Illuminate\Support\Facades\Route;
 
@@ -138,6 +139,8 @@ Route::group([
             Route::apiResource("subscriptions", DashSubscriptionController::class);
             Route::patch("/subscriptions/{subscription_id}/cancel", [DashSubscriptionController::class, "cancel"]);
             Route::get("/subscriptions/show/active", [DashSubscriptionController::class, "active"]);
+
+            Route::apiResource("packages", DashPackageController::class);
         }
     );
 });
