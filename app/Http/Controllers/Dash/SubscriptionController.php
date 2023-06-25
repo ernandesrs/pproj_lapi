@@ -94,6 +94,24 @@ class SubscriptionController extends Controller
     }
 
     /**
+     * Display the specified resource.
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function active()
+    {
+        $subscription = \Auth::user()->subscriptions()
+            ->where("status", "active")
+            ->where("ends_in", ">=", now())
+            ->first();
+
+        return response()->json([
+            "success" => true,
+            "subscription" => $subscription
+        ]);
+    }
+
+    /**
      * Cancel subscription
      *
      * @param int $id

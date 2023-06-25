@@ -137,6 +137,7 @@ Route::group([
 
             Route::apiResource("subscriptions", DashSubscriptionController::class);
             Route::patch("/subscriptions/{subscription_id}/cancel", [DashSubscriptionController::class, "cancel"]);
+            Route::get("/subscriptions/show/active", [DashSubscriptionController::class, "active"]);
         }
     );
 });
