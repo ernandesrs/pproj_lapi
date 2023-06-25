@@ -5,21 +5,24 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\PackageRequest;
 use App\Models\Package;
+use App\Services\FilterService;
+use Illuminate\Http\Request;
 
 class PackageController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
+     * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function index()
+    public function index(Request $request)
     {
         $this->authorize("viewAny", Package::class);
 
         return response()->json([
             "success" => true,
-            "packages" => Package::all()
+            "packages" => (new FilterService(new Package()))->filter($request)
         ]);
     }
 

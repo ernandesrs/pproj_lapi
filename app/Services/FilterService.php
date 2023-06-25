@@ -2,10 +2,10 @@
 
 namespace App\Services;
 
+use App\Models\Package;
 use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Validation\Rule;
 
 class FilterService
 {
@@ -46,6 +46,17 @@ class FilterService
                 "orderby-display_name" => ["nullable", "string"]
             ]
         ],
+
+        Package::class => [
+            "search" => "name, description",
+            "orderBy" => [
+                "name" => null,
+                "created_at" => "desc"
+            ],
+            "validationRules" => [
+                "orderby-name" => ["nullable", "string"]
+            ]
+        ]
     ];
 
     /**
