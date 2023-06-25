@@ -4,21 +4,26 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Subscription;
+use App\Services\FilterService;
+use Illuminate\Http\Request;
 
 class SubscriptionController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
+     * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function index()
+    public function index(Request $request)
     {
         $this->authorize("viewAny", Subscription::class);
 
+        $subscriptions = (new FilterService(new Subscription))->filter($request);
+
         return response()->json([
             "success" => true,
-            "subscriptions" => (new Subscription())->all()->map(function ($subscription) {
+            "subscriptions" => $subscriptions->map(function ($subscription) {
                 $subscription->user = $subscription->user()->first();
                 return $subscription;
             })

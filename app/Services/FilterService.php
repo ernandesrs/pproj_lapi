@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\Package;
 use App\Models\Role;
+use App\Models\Subscription;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -56,6 +57,15 @@ class FilterService
             "validationRules" => [
                 "orderby-name" => ["nullable", "string"]
             ]
+        ],
+
+        Subscription::class => [
+            "orderBy" => [
+                "created_at" => "desc"
+            ],
+            "validationRules" => [
+
+            ]
         ]
     ];
 
@@ -95,9 +105,10 @@ class FilterService
      * Get/filter
      *
      * @param Request $request
+     * @param array $columns
      * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
      */
-    public function filter(Request $request)
+    public function filter(Request $request, array $columns = [])
     {
         $this->modelClass = get_class($this->model);
 
@@ -118,7 +129,7 @@ class FilterService
             }
         }
 
-        return $this->model->paginate($this->limit ?? $this->defaultLimit);
+        return $this->model->paginate($this->limit ?? $this->defaultLimit, $columns);
     }
 
     /**
