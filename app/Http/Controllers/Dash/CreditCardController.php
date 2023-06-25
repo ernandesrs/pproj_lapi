@@ -17,7 +17,7 @@ class CreditCardController extends Controller
      */
     public function index()
     {
-        $cards = \Auth::user()->creditCards()->get();
+        $cards = \Auth::user()->creditCards()->orderBy("created_at", "desc")->get();
 
         return response()->json([
             "success" => true,

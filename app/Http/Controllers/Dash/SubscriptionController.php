@@ -22,7 +22,10 @@ class SubscriptionController extends Controller
     {
         return response()->json([
             "success" => true,
-            "subscriptions" => \Auth::user()->subscriptions()->get()
+            "subscriptions" => \Auth::user()
+                ->subscriptions()
+                ->orderBy("created_at", "desc")
+                ->get()
         ]);
     }
 
