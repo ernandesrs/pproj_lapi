@@ -20,4 +20,14 @@ class Package extends Model
         'expiration_month',
         'show'
     ];
+
+    /**
+     * Subscriptions
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function subscriptions()
+    {
+        return $this->hasMany(Subscription::class);
+    }
 }

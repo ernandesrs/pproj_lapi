@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Exceptions\Admin\HasDependentsException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\PackageRequest;
 use App\Models\Package;
@@ -88,6 +89,10 @@ class PackageController extends Controller
     public function destroy(Package $package)
     {
         $this->authorize("delete", $package);
+
+        if ($count = $package->subscriptions()->get()->count()) {
+            throw new HasDependentsException("This package has {$count} subscriptions");
+        }
 
         $package->delete();
 
