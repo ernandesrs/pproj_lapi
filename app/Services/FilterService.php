@@ -129,7 +129,10 @@ class FilterService
             }
         }
 
-        return $this->model->paginate($this->limit ?? $this->defaultLimit, $columns);
+        if (count($columns))
+            return $this->model->paginate($this->limit ?? $this->defaultLimit, $columns);
+
+        return $this->model->paginate($this->limit ?? $this->defaultLimit);
     }
 
     /**
