@@ -17,10 +17,7 @@ class CreditCardController extends Controller
      */
     public function index()
     {
-        $cards = \Auth::user()->creditCards()->get()->map(function ($card) {
-            $card->number = "**** **** **** " . $card->last_digits;
-            return $card;
-        });
+        $cards = \Auth::user()->creditCards()->get();
 
         return response()->json([
             "success" => true,

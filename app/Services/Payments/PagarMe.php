@@ -44,13 +44,17 @@ class Pagarme
             throw new InvalidCreditCardException();
         }
 
-        return \Auth::user()->creditCards()->create([
+        $newCreditCard = \Auth::user()->creditCards()->create([
             "holder_name" => $response->holder_name,
             "expiration_date" => $response->expiration_date,
             "hash" => $response->id,
             "last_digits" => $response->last_digits,
-            "brand" => $response->brand,
+            "brand" => $response->brand
         ]);
+
+        $newCreditCard->number = "**** **** **** " . $response->last_digits;
+
+        return $newCreditCard;
     }
 
     /**

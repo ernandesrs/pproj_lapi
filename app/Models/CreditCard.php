@@ -36,4 +36,11 @@ class CreditCard extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    protected static function booted()
+    {
+        static::retrieved(function ($creditCard) {
+            $creditCard->number = "**** **** **** " . $creditCard->last_digits;
+        });
+    }
 }
