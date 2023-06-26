@@ -16,7 +16,7 @@ class PackageController extends Controller
     {
         return response()->json([
             "success" => true,
-            "packages" => Package::where("show", "=", true)->get()
+            "packages" => Package::where("show", "=", true)->orderBy('expiration_month', 'asc')->get()
         ]);
     }
 
