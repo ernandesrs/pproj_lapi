@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Dash;
 
+use App\Exceptions\NotFoundException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CreditCardRequest;
 use App\Models\CreditCard;
@@ -64,13 +65,25 @@ class CreditCardController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  Request  $request
      * @param  int  $id
      * @return \Illuminate\Http\JsonResponse
      */
     public function update(Request $request, int $id)
     {
-        return response()->json([]);
+        $card = \Auth::user()->creditCards()->where("id", "=", $id)->first();
+        if (!$card) {
+            throw new NotFoundException("Credit card not found.");
+        }
+
+        unset($card->number);
+        $card->name = $request->validate(["name" => ["required", "string", "max:50"]])['name'];
+        $card->save();
+
+        return response()->json([
+            "success" => true,
+            "card" => $card
+        ]);
     }
 
     /**
