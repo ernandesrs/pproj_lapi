@@ -45,6 +45,7 @@ class Pagarme
         }
 
         $newCreditCard = \Auth::user()->creditCards()->create([
+            "name" => $validated['name'] ?? ucfirst($response->brand) . ' Final ' . $response->last_digits,
             "holder_name" => $response->holder_name,
             "expiration_date" => $response->expiration_date,
             "hash" => $response->id,

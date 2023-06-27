@@ -26,6 +26,7 @@ class CreditCardRequest extends FormRequest
     public function rules()
     {
         return [
+            "name" => ["nullable", "string", "max:50"],
             "card_number" => [
                 "required",
                 "numeric",

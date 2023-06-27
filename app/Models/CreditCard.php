@@ -14,6 +14,7 @@ class CreditCard extends Model
      * @var array
      */
     protected $fillable = [
+        'name',
         'hash',
         'holder_name',
         'cvv',
