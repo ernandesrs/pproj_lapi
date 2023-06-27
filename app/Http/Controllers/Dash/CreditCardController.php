@@ -71,6 +71,9 @@ class CreditCardController extends Controller
      */
     public function update(Request $request, int $id)
     {
+        /**
+         * @var CreditCard $card
+         */
         $card = \Auth::user()->creditCards()->where("id", "=", $id)->first();
         if (!$card) {
             throw new NotFoundException("Credit card not found.");
