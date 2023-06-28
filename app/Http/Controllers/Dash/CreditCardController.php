@@ -79,9 +79,7 @@ class CreditCardController extends Controller
             throw new NotFoundException("Credit card not found.");
         }
 
-        unset($card->number);
-        $card->name = $request->validate(["name" => ["required", "string", "max:50"]])['name'];
-        $card->save();
+        $card->update(['name' => $request->validate(["name" => ["required", "string", "max:50"]])['name']]);
 
         return response()->json([
             "success" => true,

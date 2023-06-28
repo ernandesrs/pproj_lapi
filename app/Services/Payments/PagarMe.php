@@ -33,10 +33,10 @@ class Pagarme
     public function createCreditCard(array $validated)
     {
         $data = [
-            "card_holder_name" => $validated["card_holder_name"],
-            "card_number" => $validated["card_number"],
-            "card_expiration_date" => $validated["card_expiration_date"],
-            "card_cvv" => $validated["card_cvv"]
+            "card_holder_name" => $validated["holder_name"],
+            "card_number" => $validated["number"],
+            "card_expiration_date" => $validated["expiration_date"],
+            "card_cvv" => $validated["cvv"]
         ];
 
         $response = $this->pagarme->cards()->create($data);
@@ -53,9 +53,7 @@ class Pagarme
             "brand" => $response->brand
         ]);
 
-        $newCreditCard->number = "**** **** **** " . $response->last_digits;
-
-        return $newCreditCard;
+        return CreditCard::where("id", $newCreditCard->id)->first();
     }
 
     /**

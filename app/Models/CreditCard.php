@@ -27,7 +27,21 @@ class CreditCard extends Model
      * Hidden fiedls
      * @var array
      */
-    protected $hidden = ['hash'];
+    protected $hidden = ['hash', 'cvv'];
+
+    /**
+     * Update
+     *
+     * @param array $attributes
+     * @param array $options
+     * @return bool
+     */
+    public function update(array $attributes = [], array $options = [])
+    {
+        unset($this->secure_number);
+        unset($this->secure_cvv);
+        return parent::update($attributes, $options);
+    }
 
     /**
      * User
@@ -38,10 +52,16 @@ class CreditCard extends Model
         return $this->belongsTo(User::class);
     }
 
+    /**
+     * Booted
+     *
+     * @return void
+     */
     protected static function booted()
     {
         static::retrieved(function ($creditCard) {
-            $creditCard->number = "**** **** **** " . $creditCard->last_digits;
+            $creditCard->secure_number = "**** **** **** " . $creditCard->last_digits;
+            $creditCard->secure_cvv = "***" . $creditCard->cvv;
         });
     }
 }

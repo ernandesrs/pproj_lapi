@@ -27,7 +27,7 @@ class CreditCardRequest extends FormRequest
     {
         return [
             "name" => ["nullable", "string", "max:50"],
-            "card_number" => [
+            "number" => [
                 "required",
                 "numeric",
                 "digits:16",
@@ -40,9 +40,9 @@ class CreditCardRequest extends FormRequest
                     }
                 }
             ],
-            "card_holder_name" => ["required"],
-            "card_expiration_date" => ["required", "numeric", "digits:4"],
-            "card_cvv" => ["required", "numeric", "digits:3"],
+            "holder_name" => ["required"],
+            "expiration_date" => ["required", "numeric", "digits:4"],
+            "cvv" => ["required", "numeric", "digits:3"],
         ];
     }
 }
