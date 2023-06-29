@@ -6,6 +6,7 @@ use App\Exceptions\NotFoundException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CreditCardRequest;
 use App\Models\CreditCard;
+use App\Services\FilterService;
 use App\Services\Payments\Pagarme;
 use Illuminate\Http\Request;
 
@@ -16,13 +17,13 @@ class CreditCardController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function index()
+    public function index(Request $request)
     {
-        $cards = \Auth::user()->creditCards()->orderBy("created_at", "desc")->get();
+        $cards = \Auth::user()->creditCards();
 
         return response()->json([
             "success" => true,
-            "cards" => $cards
+            "data" => (new FilterService($cards, true))->filter($request)->withQueryString()
         ]);
     }
 

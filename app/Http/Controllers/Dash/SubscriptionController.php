@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\SubscriptionRequest;
 use App\Models\Package;
 use App\Models\Subscription;
+use App\Services\FilterService;
 use App\Services\Payments\Pagarme;
 use Illuminate\Http\Request;
 
@@ -16,16 +17,17 @@ class SubscriptionController extends Controller
     /**
      * Display a listing of the resource.
      *
+     * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function index()
+    public function index(Request $request)
     {
+        $subscriptions = \Auth::user()
+            ->subscriptions();
+
         return response()->json([
             "success" => true,
-            "subscriptions" => \Auth::user()
-                ->subscriptions()
-                ->orderBy("created_at", "desc")
-                ->get()
+            "data" => (new FilterService($subscriptions, true))->filter($request)->withQueryString()
         ]);
     }
 

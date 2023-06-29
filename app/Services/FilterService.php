@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\CreditCard;
 use App\Models\Package;
 use App\Models\Role;
 use App\Models\Subscription;
@@ -66,6 +67,15 @@ class FilterService
             "validationRules" => [
 
             ]
+        ],
+
+        CreditCard::class => [
+            "orderBy" => [
+                "created_at" => "desc"
+            ],
+            "validationRules" => [
+
+            ]
         ]
     ];
 
@@ -83,6 +93,13 @@ class FilterService
     public $model;
 
     /**
+     * Is Related
+     *
+     * @var bool
+     */
+    public $isRelated;
+
+    /**
      * Filters
      * @var array
      */
@@ -95,10 +112,16 @@ class FilterService
      */
     protected $modelClass;
 
-    public function __construct($model, ?int $limit = null)
+    /**
+     * Constructor
+     *
+     * @param mixed $model
+     * @param boolean $isRelated signals if it is filtering a relation(Example: filtering logged user credit cards)
+     */
+    public function __construct($model, bool $isRelated = false)
     {
         $this->model = $model;
-        $this->defaultLimit = $limit ?? $this->defaultLimit;
+        $this->isRelated = $isRelated;
     }
 
     /**
@@ -110,7 +133,7 @@ class FilterService
      */
     public function filter(Request $request, array $columns = [])
     {
-        $this->modelClass = get_class($this->model);
+        $this->modelClass = $this->isRelated ? $this->model->getRelated()::class : get_class($this->model);
 
         $this->validateFilters($request);
 
