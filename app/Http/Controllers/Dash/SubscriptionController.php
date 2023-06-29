@@ -6,6 +6,7 @@ use App\Exceptions\Dash\HasActiveSubscriptionException;
 use App\Exceptions\NotFoundException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\SubscriptionRequest;
+use App\Http\Resources\SubscriptionResource;
 use App\Models\Package;
 use App\Models\Subscription;
 use App\Services\FilterService;
@@ -27,7 +28,8 @@ class SubscriptionController extends Controller
 
         return response()->json([
             "success" => true,
-            "data" => (new FilterService($subscriptions, true))->filter($request)->withQueryString()
+            "data" => SubscriptionResource::collection((new FilterService($subscriptions, true))->filter($request)->withQueryString())
+                ->response()->getData()
         ]);
     }
 

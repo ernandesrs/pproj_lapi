@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Dash;
 use App\Exceptions\NotFoundException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CreditCardRequest;
+use App\Http\Resources\CreditCardResource;
 use App\Models\CreditCard;
 use App\Services\FilterService;
 use App\Services\Payments\Pagarme;
@@ -23,7 +24,8 @@ class CreditCardController extends Controller
 
         return response()->json([
             "success" => true,
-            "data" => (new FilterService($cards, true))->filter($request)->withQueryString()
+            "data" => CreditCardResource::collection((new FilterService($cards, true))->filter($request)->withQueryString())
+                ->response()->getData()
         ]);
     }
 
