@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Exceptions\Admin\HasDependentsException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\PackageRequest;
+use App\Http\Resources\PackageResource;
 use App\Models\Package;
 use App\Services\FilterService;
 use Illuminate\Http\Request;
@@ -23,7 +24,9 @@ class PackageController extends Controller
 
         return response()->json([
             "success" => true,
-            "packages" => (new FilterService(new Package()))->filter($request)
+            "data" => PackageResource::collection((new FilterService(new Package()))->filter($request)->withQueryString())
+                ->response()
+                ->getData()
         ]);
     }
 
