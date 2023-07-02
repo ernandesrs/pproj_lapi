@@ -22,11 +22,12 @@ class PackageController extends Controller
     {
         $this->authorize("viewAny", Package::class);
 
+        $packages = (new FilterService(new Package()))->filter($request);
+
         return response()->json([
             "success" => true,
-            "data" => PackageResource::collection((new FilterService(new Package()))->filter($request)->withQueryString())
-                ->response()
-                ->getData()
+            "packages" => PackageResource::collection($packages->withQueryString())
+                ->response()->getData()
         ]);
     }
 

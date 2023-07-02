@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\SubscriptionResource;
 use App\Models\Subscription;
 use App\Services\FilterService;
 use Illuminate\Http\Request;
@@ -23,10 +24,8 @@ class SubscriptionController extends Controller
 
         return response()->json([
             "success" => true,
-            "subscriptions" => $subscriptions->map(function ($subscription) {
-                $subscription->user = $subscription->user()->first();
-                return $subscription;
-            })
+            "subscriptions" => SubscriptionResource::collection($subscriptions->withQueryString())
+                ->response()->getData()
         ]);
     }
 

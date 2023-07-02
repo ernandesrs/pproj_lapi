@@ -48,7 +48,8 @@ class UserController extends Controller
 
         return response()->json([
             "success" => true,
-            "data" => UserResource::collection($users->withQueryString())->response()->getData()
+            "users" => UserResource::collection($users->withQueryString())
+                ->response()->getData()
         ]);
     }
 
