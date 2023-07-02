@@ -23,12 +23,11 @@ class SubscriptionController extends Controller
      */
     public function index(Request $request)
     {
-        $subscriptions = \Auth::user()
-            ->subscriptions();
+        $subscriptions = (new FilterService(\Auth::user()->subscriptions(), true))->filter($request);
 
         return response()->json([
             "success" => true,
-            "data" => SubscriptionResource::collection((new FilterService($subscriptions, true))->filter($request)->withQueryString())
+            "subscriptions" => SubscriptionResource::collection($subscriptions->withQueryString())
                 ->response()->getData()
         ]);
     }

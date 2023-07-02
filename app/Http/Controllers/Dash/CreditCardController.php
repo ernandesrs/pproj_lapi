@@ -22,9 +22,11 @@ class CreditCardController extends Controller
     {
         $cards = \Auth::user()->creditCards();
 
+        $cards = (new FilterService($cards, true))->filter($request);
+
         return response()->json([
             "success" => true,
-            "data" => CreditCardResource::collection((new FilterService($cards, true))->filter($request)->withQueryString())
+            "cards" => CreditCardResource::collection($cards->withQueryString())
                 ->response()->getData()
         ]);
     }

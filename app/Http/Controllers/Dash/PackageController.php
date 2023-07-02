@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Dash;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\PackageResource;
 use App\Models\Package;
 
 class PackageController extends Controller
@@ -14,9 +15,11 @@ class PackageController extends Controller
      */
     public function index()
     {
+        $packages = Package::where("show", "=", true)->orderBy('expiration_month', 'asc')->get();
+
         return response()->json([
             "success" => true,
-            "packages" => Package::where("show", "=", true)->orderBy('expiration_month', 'asc')->get()
+            "packages" => PackageResource::collection($packages)->response()->getData()
         ]);
     }
 
