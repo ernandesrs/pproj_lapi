@@ -22,6 +22,8 @@ class User extends Authenticatable implements JWTSubject
         self::LEVEL_SUPER
     ];
 
+    public const STATUS_DELETED = 'deleted';
+
     /**
      * The attributes that are mass assignable.
      *

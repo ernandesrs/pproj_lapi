@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\AdminController as AdminAdminController;
 use App\Http\Controllers\Admin\RoleController as AdminRoleController;
 use App\Http\Controllers\Admin\UserController as AdminUserController;
 use App\Http\Controllers\Admin\PackageController as AdminPackageController;
@@ -89,14 +90,7 @@ Route::group([
             "middleware" => ["auth", "admin"]
         ],
         function () {
-            Route::get(
-                "/",
-                function () {
-                    return response()->json([
-                        "success" => true
-                    ]);
-                }
-            );
+            Route::get('/', [AdminAdminController::class, "index"]);
 
             /**
              * ROLE CONTROLLER
