@@ -14,6 +14,14 @@ class SubscriptionResource extends JsonResource
      */
     public function toArray($request)
     {
-        return parent::toArray($request);
+        $adminArr = [];
+
+        if (in_array('admin', $request->route()->middleware())) {
+            $adminArr = [
+                'user' => $this->resource->user()->first()
+            ];
+        }
+
+        return array_merge(parent::toArray($request), $adminArr);
     }
 }

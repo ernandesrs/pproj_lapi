@@ -30,7 +30,7 @@ class PackageRequest extends FormRequest
             "name" => ["required", "string", "max:75", "min:3", "unique:packages,name" . ($this->package?->id ? "," . $this->package->id : "")],
             "description" => ["nullable", "string"],
             "price" => ["required", "numeric"],
-            "expiration month" => ["required", "numeric", "min:1"],
+            "expiration_month" => ["required", "numeric", "min:1"],
             "show" => ["required", "boolean"]
         ];
     }
