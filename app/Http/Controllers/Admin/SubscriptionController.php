@@ -37,7 +37,7 @@ class SubscriptionController extends Controller
      */
     public function show(Subscription $subscription)
     {
-        $this->authorize("view", Subscription::class);
+        $this->authorize("view", $subscription);
 
         $subscription->user = $subscription->user()->first();
         return response()->json([
