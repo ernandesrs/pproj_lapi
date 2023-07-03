@@ -23,6 +23,9 @@ class User extends Authenticatable implements JWTSubject
     ];
 
     public const STATUS_DELETED = 'deleted';
+    public const STATUS = [
+        self::STATUS_DELETED
+    ];
 
     /**
      * The attributes that are mass assignable.
@@ -76,7 +79,7 @@ class User extends Authenticatable implements JWTSubject
     /**
      * Permissions
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
     public function permissions()
     {
