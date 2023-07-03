@@ -45,7 +45,7 @@ class StartUser
             'username' => 'adminuser',
             'email' => 'admin@mail.com',
             'gender' => 'n',
-            'password' => 'adminpassword'
+            'password' => 'admin'
         ], false);
 
         $user->level = User::LEVEL_ADMIN;
@@ -69,7 +69,7 @@ class StartUser
             'username' => 'visitoruser',
             'email' => 'visitor@mail.com',
             'gender' => 'n',
-            'password' => 'visitorpassword'
+            'password' => 'visitor'
         ], false);
 
         $user->level = User::LEVEL_ADMIN;
