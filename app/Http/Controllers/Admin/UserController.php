@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Exceptions\Admin\NotHaveAdminPanelAcessException;
 use App\Exceptions\Admin\UnauthorizedActionException;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\UserLevelRequest;
 use App\Http\Requests\Admin\UserRequest;
 use App\Http\Resources\UserResource;
 use App\Models\Role;
@@ -159,7 +160,8 @@ class UserController extends Controller
             $user->roles()->attach($role->id);
 
         return response()->json([
-            "success" => true
+            "success" => true,
+            "user" => new UserResource($user)
         ]);
     }
 
@@ -178,54 +180,19 @@ class UserController extends Controller
             $user->roles()->detach($role->id);
 
         return response()->json([
-            "success" => true
-        ]);
-    }
-
-    /**
-     * Promote user to next level
-     *
-     * @param User $user
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function promote(User $user)
-    {
-        $this->authorize("update", $user);
-
-        /**
-         * @var User
-         */
-        $logged = Auth::user();
-
-        if (!$logged->isSuperadmin()) {
-            throw new UnauthorizedActionException();
-        }
-
-        switch ($user->level) {
-            case User::LEVEL_COMMON:
-                $user->level = User::LEVEL_ADMIN;
-                break;
-
-            case User::LEVEL_ADMIN:
-                $user->level = User::LEVEL_SUPER;
-                break;
-        }
-
-        $user->save();
-
-        return response()->json([
             "success" => true,
             "user" => new UserResource($user)
         ]);
     }
 
     /**
-     * Demote user to previous level
+     * Update user level
      *
-     * @param User $user
+     * @param UserLevelRequest $request
+     * @param \App\Models\User $user
      * @return \Illuminate\Http\JsonResponse
      */
-    public function demote(User $user)
+    public function updateLevel(UserLevelRequest $request, User $user)
     {
         $this->authorize("update", $user);
 
@@ -234,21 +201,16 @@ class UserController extends Controller
          */
         $logged = Auth::user();
 
-        if (!$logged->isSuperadmin()) {
+        if (!$logged->isSuperadmin() || $logged->id == $user->id) {
             throw new UnauthorizedActionException();
         }
 
-        switch ($user->level) {
-            case User::LEVEL_SUPER:
-                $user->level = User::LEVEL_ADMIN;
-                break;
-
-            case User::LEVEL_ADMIN:
-                $user->level = User::LEVEL_COMMON;
-                break;
-        }
-
+        $user->level = $request->validated('level');
         $user->save();
+
+        if (!in_array($user->level, [User::LEVEL_SUPER, User::LEVEL_ADMIN])) {
+            $user->roles()->detach();
+        }
 
         return response()->json([
             "success" => true,
