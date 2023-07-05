@@ -31,7 +31,9 @@ class SubscriptionRequest extends FormRequest
                 "required",
                 "numeric",
                 function ($attr, $val, $fail) {
-                    $card = \Auth::user()->cards()->where("id", $val)->count();
+                    $card = \Auth::user()
+                        ->paymentMethods()->firstOrFail()
+                        ->cards()->where("id", $val)->count();
                     if ($card === 0) {
                         $fail("Cartão de crédito inválido ou inexistente.");
                         return;

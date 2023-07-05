@@ -52,7 +52,9 @@ class SubscriptionController extends Controller
         $data = $request->validated();
 
         $package = Package::where("id", $data["package_id"])->first();
-        $card = $request->user()->cards()->where("id", $data["card_id"])->first();
+        $card = $request->user()
+            ->paymentMethods()->firstOrFail()
+            ->cards()->where("id", $data["card_id"])->first();
         $response = (new Pagarme())->createTransaction(
             $card,
             $package->price,
@@ -137,28 +139,5 @@ class SubscriptionController extends Controller
             "success" => true,
             "subscription" => $subscription
         ]);
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function update(Request $request, $id)
-    {
-        return response()->json([]);
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function destroy($id)
-    {
-        return response()->json([]);
     }
 }

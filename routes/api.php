@@ -135,7 +135,7 @@ Route::group([
             Route::put("/payment-methods/cards/{id}", [DashCardController::class, "update"]);
             Route::delete("/payment-methods/cards/{id}", [DashCardController::class, "destroy"]);
 
-            Route::apiResource("subscriptions", DashSubscriptionController::class);
+            Route::apiResource("subscriptions", DashSubscriptionController::class)->except(["update", "destroy"]);
             Route::patch("/subscriptions/{subscription_id}/cancel", [DashSubscriptionController::class, "cancel"]);
             Route::get("/subscriptions/show/active", [DashSubscriptionController::class, "active"]);
 
