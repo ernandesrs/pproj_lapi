@@ -21,6 +21,15 @@ class PaymentMethod extends Model
     ];
 
     /**
+     * Fillable
+     * @var array
+     */
+    protected $fillable = [
+        'method_preferred',
+        'preferred_card_id'
+    ];
+
+    /**
      * User
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
@@ -48,21 +57,5 @@ class PaymentMethod extends Model
     public function preferredCard()
     {
         return $this->preferred_card_id ? $this->cards()->where("preferred_card_id", $this->preferred_card_id) : null;
-    }
-
-    /**
-     * Booted
-     *
-     * @return void
-     */
-    protected static function booted()
-    {
-        static::retrieved(function ($paym) {
-            $paym->cards = $paym->cards()->get();
-        });
-
-        static::created(function ($paym) {
-            $paym->cards = $paym->cards()->get();
-        });
     }
 }

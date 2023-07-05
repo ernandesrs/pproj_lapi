@@ -128,10 +128,12 @@ Route::group([
             "middleware" => ["auth"]
         ],
         function () {
-            Route::apiResource("payment-methods", DashPaymentMethodController::class)->except("index", "store", "update", "destroy");
-            Route::apiResource("payment-methods/cards", DashCardController::class)->except("index", "store", "show");
+            Route::get("/payment-methods", [DashPaymentMethodController::class, "index"]);
+            Route::put("/payment-methods", [DashPaymentMethodController::class, "update"]);
             Route::middleware(["throttle:card_registration_attempt_limit"])
-                        ->post("/payment-methods/cards", [DashCardController::class, "store"]);
+                ->post("/payment-methods/cards", [DashCardController::class, "store"]);
+            Route::put("/payment-methods/cards/{id}", [DashCardController::class, "update"]);
+            Route::delete("/payment-methods/cards/{id}", [DashCardController::class, "destroy"]);
 
             Route::apiResource("subscriptions", DashSubscriptionController::class);
             Route::patch("/subscriptions/{subscription_id}/cancel", [DashSubscriptionController::class, "cancel"]);

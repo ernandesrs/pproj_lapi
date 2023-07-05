@@ -17,7 +17,6 @@ class Card extends Model
         'name',
         'hash',
         'holder_name',
-        'cvv',
         'brand',
         'expiration_date',
         'last_digits'
