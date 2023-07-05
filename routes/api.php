@@ -102,7 +102,7 @@ Route::group([
              */
             Route::apiResource("users", AdminUserController::class);
             Route::delete("/users/{user}/photo-delete", [AdminUserController::class, "photoDelete"]);
-            Route::put("/users/{user}/update-level",[AdminUserController::class, "updateLevel"]);
+            Route::put("/users/{user}/update-level", [AdminUserController::class, "updateLevel"]);
             Route::put("/users/roles/{user}/{role}", [AdminUserController::class, "roleUpdate"]);
             Route::delete("/users/roles/{user}/{role}", [AdminUserController::class, "roleDelete"]);
 
@@ -127,7 +127,8 @@ Route::group([
             "middleware" => ["auth"]
         ],
         function () {
-            Route::apiResource("cards", DashCardController::class);
+            Route::apiResource("cards", DashCardController::class)->except(["store"]);
+            Route::middleware(["throttle:card_registration_attempt_limit"])->post("/cards", [DashCardController::class, "store"]);
 
             Route::apiResource("subscriptions", DashSubscriptionController::class);
             Route::patch("/subscriptions/{subscription_id}/cancel", [DashSubscriptionController::class, "cancel"]);
