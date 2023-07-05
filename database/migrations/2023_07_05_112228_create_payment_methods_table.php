@@ -12,16 +12,11 @@ return new class extends Migration {
      */
     public function up()
     {
-        Schema::create('cards', function (Blueprint $table) {
+        Schema::create('payment_methods', function (Blueprint $table) {
             $table->id();
 
             $table->foreignId("user_id")->constrained("users", "id")->cascadeOnDelete();
-        
-            $table->string('hash', 255);
-            $table->string('brand');
-            $table->string('holder_name');
-            $table->string('last_digits');
-            $table->string('expiration_date', 5);
+            $table->string("method_preferred", 12)->default(\App\Models\Payment\PaymentMethod::PAY_METHOD_UNDEFINED);
 
             $table->timestamps();
         });
@@ -34,6 +29,6 @@ return new class extends Migration {
      */
     public function down()
     {
-        Schema::dropIfExists('cards');
+        Schema::dropIfExists('payment_methods');
     }
 };

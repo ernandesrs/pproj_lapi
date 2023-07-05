@@ -6,7 +6,8 @@ use App\Http\Controllers\Admin\UserController as AdminUserController;
 use App\Http\Controllers\Admin\PackageController as AdminPackageController;
 use App\Http\Controllers\Admin\SubscriptionController as AdminSubscriptionController;
 use App\Http\Controllers\Auth\AccountController;
-use App\Http\Controllers\Dash\CardController as DashCardController;
+use App\Http\Controllers\Dash\Payment\PaymentMethodController as DashPaymentMethodController;
+use App\Http\Controllers\Dash\Payment\CardController as DashCardController;
 use App\Http\Controllers\Dash\SubscriptionController as DashSubscriptionController;
 use App\Http\Controllers\Dash\PackageController as DashPackageController;
 use App\Http\Controllers\Me\MeController;
@@ -127,8 +128,10 @@ Route::group([
             "middleware" => ["auth"]
         ],
         function () {
-            Route::apiResource("cards", DashCardController::class)->except(["store"]);
-            Route::middleware(["throttle:card_registration_attempt_limit"])->post("/cards", [DashCardController::class, "store"]);
+            Route::apiResource("payment-methods", DashPaymentMethodController::class)->except("index", "store", "update", "destroy");
+            Route::apiResource("payment-methods/cards", DashCardController::class)->except("index", "store", "show");
+            Route::middleware(["throttle:card_registration_attempt_limit"])
+                        ->post("/payment-methods/cards", [DashCardController::class, "store"]);
 
             Route::apiResource("subscriptions", DashSubscriptionController::class);
             Route::patch("/subscriptions/{subscription_id}/cancel", [DashSubscriptionController::class, "cancel"]);

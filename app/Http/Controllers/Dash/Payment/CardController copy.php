@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Dash;
+namespace App\Http\Controllers\Dash\Payment;
 
 use App\Exceptions\NotFoundException;
 use App\Http\Controllers\Controller;

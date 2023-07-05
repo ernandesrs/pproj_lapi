@@ -14,7 +14,7 @@ class AlterTableUsersAddStatusColumn extends Migration
     public function up()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->enum('status', ['deleted', 'banned', 'active', 'inactive'])->nullable();
+            $table->enum('status', ['deleted', 'banned', 'active', 'inactive'])->after("email")->nullable();
         });
     }
 

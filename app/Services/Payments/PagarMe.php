@@ -32,19 +32,18 @@ class Pagarme
      */
     public function createCard(array $validated)
     {
-        $data = [
+        $response = $this->pagarme->cards()->create([
             "card_holder_name" => $validated["holder_name"],
             "card_number" => $validated["number"],
             "card_expiration_date" => $validated["expiration_date"],
             "card_cvv" => $validated["cvv"]
-        ];
+        ]);
 
-        $response = $this->pagarme->cards()->create($data);
         if (!($response->valid ?? null)) {
             throw new InvalidCardException();
         }
 
-        $newCard = \Auth::user()->cards()->create([
+        return \Auth::user()->paymentMethods()->firstOrCreate()->cards()->create([
             "name" => $validated['name'] ?? ucfirst($response->brand) . ' Final ' . $response->last_digits,
             "holder_name" => $response->holder_name,
             "expiration_date" => $response->expiration_date,
@@ -52,8 +51,6 @@ class Pagarme
             "last_digits" => $response->last_digits,
             "brand" => $response->brand
         ]);
-
-        return Card::where("id", $newCard->id)->first();
     }
 
     /**

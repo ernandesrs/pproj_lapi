@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class CreditCardRequest extends FormRequest
+class CardRequest extends FormRequest
 {
     use TraitApiRequest;
 
@@ -34,7 +34,8 @@ class CreditCardRequest extends FormRequest
                 function ($attr, $val, $fail) {
                     $last = substr($val, 12, 4);
 
-                    if ($this->user()->cards()->where("last_digits", $last)->count()) {
+                    $paymentMethods = $this->user()->paymentMethods()->firstOrCreate();
+                    if ($paymentMethods->cards()->where("last_digits", $last)->count()) {
                         $fail("Cartão já cadastrado");
                         return;
                     }
