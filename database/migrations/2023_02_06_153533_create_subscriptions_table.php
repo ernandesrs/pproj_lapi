@@ -15,7 +15,8 @@ return new class extends Migration {
         Schema::create('subscriptions', function (Blueprint $table) {
             $table->id();
 
-            $table->unsignedBigInteger('user_id');
+            // $table->unsignedBigInteger('user_id');
+            $table->foreignId("user_id")->constrained("users", "id")->cascadeOnDelete();
 
             $table->string('gateway');
             $table->string('transaction_id');
@@ -24,7 +25,7 @@ return new class extends Migration {
             $table->string('type', 8)->default('new');
             $table->string('status', 8)->default('pending');
 
-            $table->foreign('user_id')->references('id')->on('users')->cascadeOnDelete();
+            // $table->foreign('user_id')->references('id')->on('users')->cascadeOnDelete();
 
             $table->timestamps();
         });

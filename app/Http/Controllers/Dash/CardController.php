@@ -5,13 +5,13 @@ namespace App\Http\Controllers\Dash;
 use App\Exceptions\NotFoundException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CreditCardRequest;
-use App\Http\Resources\CreditCardResource;
-use App\Models\CreditCard;
+use App\Http\Resources\CardResource;
+use App\Models\Payment\Card;
 use App\Services\FilterService;
 use App\Services\Payments\Pagarme;
 use Illuminate\Http\Request;
 
-class CreditCardController extends Controller
+class CardController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -20,13 +20,13 @@ class CreditCardController extends Controller
      */
     public function index(Request $request)
     {
-        $cards = \Auth::user()->creditCards();
+        $cards = \Auth::user()->cards();
 
         $cards = (new FilterService($cards, true))->filter($request);
 
         return response()->json([
             "success" => true,
-            "cards" => CreditCardResource::collection($cards->withQueryString())
+            "cards" => CardResource::collection($cards->withQueryString())
                 ->response()->getData()
         ]);
     }
@@ -41,13 +41,13 @@ class CreditCardController extends Controller
     {
         /**
          * Validate credit card with Paga.me and save credit card hash
-         * @var CreditCard
+         * @var Card
          **/
-        $creditCard = (new Pagarme())->createCreditCard($request->validated());
+        $card = (new Pagarme())->createCard($request->validated());
 
         return response()->json([
             "success" => true,
-            "card" => $creditCard
+            "card" => $card
         ]);
     }
 
@@ -59,7 +59,7 @@ class CreditCardController extends Controller
      */
     public function show(int $id)
     {
-        $card = \Auth::user()->creditCards()->where("id", $id)->first();
+        $card = \Auth::user()->cards()->where("id", $id)->first();
 
         return response()->json([
             "success" => true,
@@ -77,11 +77,11 @@ class CreditCardController extends Controller
     public function update(Request $request, int $id)
     {
         /**
-         * @var CreditCard $card
+         * @var Card $card
          */
-        $card = \Auth::user()->creditCards()->where("id", "=", $id)->first();
+        $card = \Auth::user()->cards()->where("id", "=", $id)->first();
         if (!$card) {
-            throw new NotFoundException("Credit card not found.");
+            throw new NotFoundException("Card not found.");
         }
 
         $card->update(['name' => $request->validate(["name" => ["required", "string", "max:50"]])['name']]);
@@ -100,7 +100,7 @@ class CreditCardController extends Controller
      */
     public function destroy(int $id)
     {
-        $card = \Auth::user()->creditCards()->where("id", $id)->first();
+        $card = \Auth::user()->cards()->where("id", $id)->first();
 
         if ($card)
             $card->delete();

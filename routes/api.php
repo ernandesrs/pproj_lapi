@@ -6,7 +6,7 @@ use App\Http\Controllers\Admin\UserController as AdminUserController;
 use App\Http\Controllers\Admin\PackageController as AdminPackageController;
 use App\Http\Controllers\Admin\SubscriptionController as AdminSubscriptionController;
 use App\Http\Controllers\Auth\AccountController;
-use App\Http\Controllers\Dash\CreditCardController as DashCreditCardController;
+use App\Http\Controllers\Dash\CardController as DashCardController;
 use App\Http\Controllers\Dash\SubscriptionController as DashSubscriptionController;
 use App\Http\Controllers\Dash\PackageController as DashPackageController;
 use App\Http\Controllers\Me\MeController;
@@ -127,7 +127,7 @@ Route::group([
             "middleware" => ["auth"]
         ],
         function () {
-            Route::apiResource("credit-cards", DashCreditCardController::class);
+            Route::apiResource("cards", DashCardController::class);
 
             Route::apiResource("subscriptions", DashSubscriptionController::class);
             Route::patch("/subscriptions/{subscription_id}/cancel", [DashSubscriptionController::class, "cancel"]);

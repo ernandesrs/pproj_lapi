@@ -2,12 +2,12 @@
 
 namespace Database\Seeders;
 
-use App\Models\CreditCard;
+use App\Models\Payment\Card;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
-class CreditCardSeeder extends Seeder
+class CardSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -17,8 +17,8 @@ class CreditCardSeeder extends Seeder
     public function run()
     {
         User::where("id", "<", 4)->get()->each(function ($user) {
-            $user->creditCards()->saveMany(
-                CreditCard::factory([5, 7, 9][rand(0, 2)])->make([
+            $user->cards()->saveMany(
+                Card::factory([5, 7, 9][rand(0, 2)])->make([
                     "holder_name" => $user->first_name . " " . $user->last_name
                 ])
             );

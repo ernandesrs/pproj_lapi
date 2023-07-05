@@ -12,17 +12,19 @@ return new class extends Migration {
      */
     public function up()
     {
-        Schema::create('credit_cards', function (Blueprint $table) {
+        Schema::create('cards', function (Blueprint $table) {
             $table->id();
 
-            $table->unsignedBigInteger('user_id');
+            
+            $table->foreignId("user_id")->constrained("users", "id")->cascadeOnDelete();
+            // $table->unsignedBigInteger('user_id');
             $table->string('hash', 255);
             $table->string('brand');
             $table->string('holder_name');
             $table->string('last_digits');
             $table->string('expiration_date', 5);
 
-            $table->foreign('user_id')->references('id')->on('users')->cascadeOnDelete();
+            // $table->foreign('user_id')->references('id')->on('users')->cascadeOnDelete();
 
             $table->timestamps();
         });
@@ -35,6 +37,6 @@ return new class extends Migration {
      */
     public function down()
     {
-        Schema::dropIfExists('credit_cards');
+        Schema::dropIfExists('cards');
     }
 };

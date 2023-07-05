@@ -52,9 +52,9 @@ class SubscriptionController extends Controller
         $data = $request->validated();
 
         $package = Package::where("id", $data["package_id"])->first();
-        $creditCard = $request->user()->creditCards()->where("id", $data["card_id"])->first();
+        $card = $request->user()->cards()->where("id", $data["card_id"])->first();
         $response = (new Pagarme())->createTransaction(
-            $creditCard,
+            $card,
             $package->price,
             $data["installments"],
             $package->toArray()

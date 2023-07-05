@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Payment\Card;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -97,12 +98,12 @@ class User extends Authenticatable implements JWTSubject
     }
 
     /**
-     * Credit cards
+     * Cards
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function creditCards()
+    public function cards()
     {
-        return $this->hasMany(CreditCard::class);
+        return $this->hasMany(Card::class);
     }
 
     /**

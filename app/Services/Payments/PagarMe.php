@@ -4,8 +4,8 @@ namespace App\Services\Payments;
 
 use App\Exceptions\Dash\Pagarme\RefundPaymentFailException;
 use App\Exceptions\Dash\PaymentFailException;
-use App\Exceptions\Dash\Payments\InvalidCreditCardException;
-use App\Models\CreditCard;
+use App\Exceptions\Dash\Payments\InvalidCardException;
+use App\Models\Payment\Card;
 
 class Pagarme
 {
@@ -28,9 +28,9 @@ class Pagarme
      * Create a credit: validate card and save on data base
      *
      * @param array $validated
-     * @return CreditCard|null
+     * @return Card|null
      */
-    public function createCreditCard(array $validated)
+    public function createCard(array $validated)
     {
         $data = [
             "card_holder_name" => $validated["holder_name"],
@@ -41,10 +41,10 @@ class Pagarme
 
         $response = $this->pagarme->cards()->create($data);
         if (!($response->valid ?? null)) {
-            throw new InvalidCreditCardException();
+            throw new InvalidCardException();
         }
 
-        $newCreditCard = \Auth::user()->creditCards()->create([
+        $newCard = \Auth::user()->cards()->create([
             "name" => $validated['name'] ?? ucfirst($response->brand) . ' Final ' . $response->last_digits,
             "holder_name" => $response->holder_name,
             "expiration_date" => $response->expiration_date,
@@ -53,19 +53,19 @@ class Pagarme
             "brand" => $response->brand
         ]);
 
-        return CreditCard::where("id", $newCreditCard->id)->first();
+        return Card::where("id", $newCard->id)->first();
     }
 
     /**
      * Create a transaction
      *
-     * @param CreditCard $card
+     * @param Card $card
      * @param float $amount
      * @param int $installments
      * @param array $metadata
      * @return array
      */
-    public function createTransaction(CreditCard $card, float $amount, int $installments = 1, array $metadata = [])
+    public function createTransaction(Card $card, float $amount, int $installments = 1, array $metadata = [])
     {
         $data = [
             "amount" => round($amount * 100, 0),

@@ -34,7 +34,7 @@ class CreditCardRequest extends FormRequest
                 function ($attr, $val, $fail) {
                     $last = substr($val, 12, 4);
 
-                    if ($this->user()->creditCards()->where("last_digits", $last)->count()) {
+                    if ($this->user()->cards()->where("last_digits", $last)->count()) {
                         $fail("Cartão já cadastrado");
                         return;
                     }

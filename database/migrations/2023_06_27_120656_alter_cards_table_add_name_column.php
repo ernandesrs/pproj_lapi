@@ -12,7 +12,7 @@ return new class extends Migration {
      */
     public function up()
     {
-        Schema::table('credit_cards', function (Blueprint $table) {
+        Schema::table('cards', function (Blueprint $table) {
             $table->string('name', '50')->after('id');
         });
     }
@@ -24,7 +24,7 @@ return new class extends Migration {
      */
     public function down()
     {
-        Schema::table('credit_cards', function (Blueprint $table) {
+        Schema::table('cards', function (Blueprint $table) {
             $table->dropColumn('name');
         });
     }

@@ -2,7 +2,7 @@
 
 namespace App\Services;
 
-use App\Models\CreditCard;
+use App\Models\Payment\Card;
 use App\Models\Package;
 use App\Models\Role;
 use App\Models\Subscription;
@@ -69,7 +69,7 @@ class FilterService
             ]
         ],
 
-        CreditCard::class => [
+        Card::class => [
             "orderBy" => [
                 "created_at" => "desc"
             ],

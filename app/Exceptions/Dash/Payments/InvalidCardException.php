@@ -4,7 +4,7 @@ namespace App\Exceptions\Dash\Payments;
 
 use Exception;
 
-class InvalidCreditCardException extends Exception
+class InvalidCardException extends Exception
 {
     /**
      * Message

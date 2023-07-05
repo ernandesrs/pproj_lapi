@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Payment;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class CreditCard extends Model
+class Card extends Model
 {
     use HasFactory;
 
@@ -59,9 +59,9 @@ class CreditCard extends Model
      */
     protected static function booted()
     {
-        static::retrieved(function ($creditCard) {
-            $creditCard->secure_number = "**** **** **** " . $creditCard->last_digits;
-            $creditCard->secure_cvv = "***" . $creditCard->cvv;
+        static::retrieved(function ($card) {
+            $card->secure_number = "**** **** **** " . $card->last_digits;
+            $card->secure_cvv = "***" . $card->cvv;
         });
     }
 }
