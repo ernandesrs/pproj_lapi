@@ -41,6 +41,16 @@ class PaymentMethod extends Model
     }
 
     /**
+     * Get the preferred card
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany|null
+     */
+    public function preferredCard()
+    {
+        return $this->preferred_card_id ? $this->cards()->where("preferred_card_id", $this->preferred_card_id) : null;
+    }
+
+    /**
      * Booted
      *
      * @return void

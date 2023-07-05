@@ -15,14 +15,9 @@ class PaymentMethodController extends Controller
      */
     public function show()
     {
-        $paym = \Auth::user()->paymentMethods()->first();
-        if (!$paym) {
-            \Auth::user()->paymentMethods()->create();
-        }
-
         return response()->json([
             "success" => true,
-            "payment_methods" => $paym
+            "payment_methods" => \Auth::user()->paymentMethods()->firstOrCreate()
         ]);
     }
 }
