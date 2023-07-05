@@ -4,8 +4,7 @@ namespace App\Http\Controllers\Dash\Payment;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Dash\Payment\PaymentMethodRequest;
-use App\Models\Payment\PaymentMethod;
-use Illuminate\Http\Request;
+use App\Http\Resources\Payment\PaymentMethodResource;
 
 class PaymentMethodController extends Controller
 {
@@ -18,7 +17,7 @@ class PaymentMethodController extends Controller
     {
         return response()->json([
             "success" => true,
-            "payment_methods" => \Auth::user()->paymentMethods()->firstOrCreate()
+            "payment_methods" => new PaymentMethodResource(\Auth::user()->paymentMethods()->firstOrCreate())
         ]);
     }
 
@@ -37,7 +36,7 @@ class PaymentMethodController extends Controller
 
         return response()->json([
             "success" => true,
-            "payment_method" => $paym
+            "payment_method" => new PaymentMethodResource($paym)
         ]);
     }
 }
