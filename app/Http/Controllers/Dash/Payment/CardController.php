@@ -20,6 +20,10 @@ class CardController extends Controller
      */
     public function store(CardRequest $request)
     {
+        if ($request->user()->paymentMethods()->firstOrFail()->cards()->count() >= 2) {
+            throw new \Exception("Apenas dois cartões são permitidos");
+        }
+
         /**
          * Validate credit card with Paga.me and save credit card hash
          * @var Card
