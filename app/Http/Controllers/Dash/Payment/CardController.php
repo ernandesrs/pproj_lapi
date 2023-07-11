@@ -21,7 +21,9 @@ class CardController extends Controller
     public function store(CardRequest $request)
     {
         if ($request->user()->paymentMethods()->firstOrFail()->cards()->count() >= 2) {
-            throw new \Exception("Apenas dois cartões são permitidos");
+            return response()->json([
+                "success" => false
+            ]);
         }
 
         /**
