@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\RoleController as AdminRoleController;
 use App\Http\Controllers\Admin\UserController as AdminUserController;
 use App\Http\Controllers\Admin\PackageController as AdminPackageController;
 use App\Http\Controllers\Admin\SubscriptionController as AdminSubscriptionController;
+use App\Http\Controllers\Admin\SettingController as AdminSettingController;
 use App\Http\Controllers\Auth\AccountController;
 use App\Http\Controllers\Dash\Payment\PaymentMethodController as DashPaymentMethodController;
 use App\Http\Controllers\Dash\Payment\CardController as DashCardController;
@@ -122,6 +123,14 @@ Route::group([
              * SUBSCRIPTION CONTROLLER
              */
             Route::apiResource("subscriptions", AdminSubscriptionController::class);
+
+            /**
+             * SETTING CONTROLLER
+             */
+            Route::get("settings", [AdminSettingController::class, "index"]);
+            Route::post("settings", [AdminSettingController::class, "store"]);
+            Route::get("settings/{id}", [AdminSettingController::class, "show"]);
+            Route::put("settings/{id}", [AdminSettingController::class, "update"]);
         }
     );
 
