@@ -8,6 +8,8 @@ use App\Http\Requests\Admin\SettingRequest;
 use App\Http\Resources\Admin\SettingResource;
 use App\Models\Admin\Setting;
 use App\Models\Admin\SettingAll;
+use App\Models\Admin\SettingAdmin;
+use App\Models\Admin\SettingDash;
 
 class SettingController extends Controller
 {
@@ -23,7 +25,9 @@ class SettingController extends Controller
         return response()->json([
             "success" => true,
             "settings" => [
-                "all" => new SettingResource(SettingAll::first())
+                "all" => new SettingResource(SettingAll::where('name', 'SettingAll')->first()),
+                "admin" => new SettingResource(SettingAdmin::where('name', 'SettingAdmin')->first()),
+                "dash" => new SettingResource(SettingDash::where('name', 'SettingDash')->first())
             ]
         ]);
     }
@@ -37,12 +41,14 @@ class SettingController extends Controller
     {
         $this->authorize('create', Setting::class);
 
-        $settingAll = SettingAll::create([
-            'app_name' => 'LAPI'
-        ]);
+        $settingAll = SettingAll::create();
+        $settingAdmin = SettingAdmin::create();
+        $settingDash = SettingDash::create();
         return response()->json([
-            "success" => "true",
-            "SettingAll" => $settingAll
+            "success" => true,
+            "SettingAll" => $settingAll,
+            "SettingAdmin" => $settingAdmin,
+            "SettingDash" => $settingDash
         ]);
     }
 
@@ -73,14 +79,14 @@ class SettingController extends Controller
      */
     public function update(SettingRequest $request, int $id)
     {
-        $model = "\\App\\Models\\Admin\\" . $request->validated('name');
-
         try {
-            $model = (new $model)->where("id", $id)->firstOrFail();
+            $setting = (new Setting)->where("id", $id)->firstOrFail();
+
+            $model = (new("\\App\\Models\\Admin\\" . $setting->name))->where("id", $setting->id)->firstOrFail();
 
             $this->authorize('update', $model);
 
-            $model->update($request->all());
+            $model->update($request->validated());
         } catch (\Exception $e) {
             throw new NotFoundException;
         }

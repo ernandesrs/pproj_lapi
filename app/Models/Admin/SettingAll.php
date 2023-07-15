@@ -30,7 +30,7 @@ class SettingAll extends Setting
     /**
      * Setting Name
      */
-    protected const NAME = 'SettingAll';
+    public const NAME = 'SettingAll';
 
     /**
      * Create
@@ -38,11 +38,19 @@ class SettingAll extends Setting
      * @param array $attributes
      * @return SettingAll
      */
-    public static function create(array $attributes)
+    public static function create(array $attributes = [])
     {
+        $attributes['app_name'] = env('APP_NAME');
         $attributes['name'] = self::NAME;
         $attributes['data'] = json_encode([
-            'smtp' => $attributes['smtp'] ?? []
+            'smtp' => [
+                'host' => env('MAIL_HOST'),
+                'port' => env('MAIL_PORT'),
+                'username' => env('MAIL_USERNAME'),
+                'password' => env('MAIL_PASSWORD'),
+                'encryption' => env('MAIL_ENCRYPTION'),
+                'from' => env('MAIL_FROM_ADDRESS')
+            ]
         ]);
         return Setting::create($attributes);
     }
@@ -57,7 +65,14 @@ class SettingAll extends Setting
     public function update(array $attributes = [], array $options = [])
     {
         $attributes['data'] = json_encode([
-            'smtp' => $attributes['smtp'] ?? []
+            'smtp' => [
+                'host' => key_exists('host', $attributes['smtp']) ? $attributes['smtp']['host'] ?? null : $this->data->smtp->host,
+                'port' => key_exists('port', $attributes['smtp']) ? $attributes['smtp']['port'] ?? null : $this->data->smtp->port,
+                'username' => key_exists('username', $attributes['smtp']) ? $attributes['smtp']['username'] ?? null : $this->data->smtp->username,
+                'password' => key_exists('password', $attributes['smtp']) ? $attributes['smtp']['password'] ?? null : $this->data->smtp->password,
+                'encryption' => key_exists('encryption', $attributes['smtp']) ? $attributes['smtp']['encryption'] ?? null : $this->data->smtp->encryption,
+                'from' => key_exists('from', $attributes['smtp']) ? $attributes['smtp']['from'] ?? null : $this->data->smtp->from,
+            ]
         ]);
 
         unset($attributes['name']);
@@ -74,7 +89,7 @@ class SettingAll extends Setting
     public function rules()
     {
         return [
-            'smtp' => ['nullable', 'array', 'required_array_keys:host,port,username,password,encryption,from'],
+            'smtp' => ['nullable', 'array'],
             'smtp.host' => ['required_unless:smtp,null', 'string'],
             'smtp.port' => ['required_unless:smtp,null', 'numeric'],
             'smtp.username' => ['required_unless:smtp,null', 'string'],

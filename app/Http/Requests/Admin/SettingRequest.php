@@ -4,6 +4,7 @@ namespace App\Http\Requests\Admin;
 
 use App\Exceptions\InvalidDataException;
 use App\Http\Requests\TraitApiRequest;
+use App\Models\Admin\Setting;
 use Illuminate\Foundation\Http\FormRequest;
 
 class SettingRequest extends FormRequest
@@ -27,9 +28,14 @@ class SettingRequest extends FormRequest
      */
     public function rules()
     {
+        $name = $this->name;
+        if ($this?->id) {
+            $name = Setting::where("id", $this->id)->firstOrFail()->name;
+        }
+
         $rules["app_name"] = ["required"];
-        $rules["name"] = ["required"];
-        return array_merge($rules, $this->getSettingModelInstance($this->name)->rules());
+
+        return array_merge($rules, $this->getSettingModelInstance($name)->rules());
     }
 
     /**

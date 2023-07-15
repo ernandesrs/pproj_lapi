@@ -22,10 +22,20 @@ class SettingResource extends JsonResource
         if (\Auth::user()->isSuperAdmin()) {
             $arr['data'] = $this->data;
 
-            if ($arr['data']?->smtp) {
-                $arr['data']->smtp->port = str_repeat("*", strlen($arr['data']->smtp->port));
-                $arr['data']->smtp->username = str_repeat("*", strlen($arr['data']->smtp->username));
-                $arr['data']->smtp->password = str_repeat("*", strlen($arr['data']->smtp->password));
+            switch ($this->name) {
+                case 'SettingAll':
+                    if ($arr['data']?->smtp) {
+                        $arr['data']->smtp->port = str_repeat("*", strlen($arr['data']->smtp->port));
+                        $arr['data']->smtp->username = str_repeat("*", strlen($arr['data']->smtp->username));
+                        $arr['data']->smtp->password = str_repeat("*", strlen($arr['data']->smtp->password));
+                    }
+                    break;
+                case 'SettingDash':
+                    if ($arr['data']?->gateways) {
+                        $arr['data']->gateways->pagarme->test_api_key = str_repeat("*", strlen($arr['data']->gateways->pagarme->test_api_key));
+                        $arr['data']->gateways->pagarme->live_api_key = str_repeat("*", strlen($arr['data']->gateways->pagarme->live_api_key));
+                    }
+                    break;
             }
         } else {
             $arr['data'] = [];
