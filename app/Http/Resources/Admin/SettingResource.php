@@ -21,6 +21,12 @@ class SettingResource extends JsonResource
 
         if (\Auth::user()->isSuperAdmin()) {
             $arr['data'] = $this->data;
+
+            if ($arr['data']?->smtp) {
+                $arr['data']->smtp->port = str_repeat("*", strlen($arr['data']->smtp->port));
+                $arr['data']->smtp->username = str_repeat("*", strlen($arr['data']->smtp->username));
+                $arr['data']->smtp->password = str_repeat("*", strlen($arr['data']->smtp->password));
+            }
         } else {
             $arr['data'] = [];
         }
