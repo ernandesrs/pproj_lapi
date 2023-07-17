@@ -12,8 +12,6 @@ class StartApp
      */
     public function __construct(string $mail, string $pass)
     {
-        (new StartSetting());
-
         $visitorRole = (new StartRole())->visitor();
         $adminRole = (new StartRole())->admin();
 
