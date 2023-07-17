@@ -123,13 +123,6 @@ Route::group([
              * SUBSCRIPTION CONTROLLER
              */
             Route::apiResource("subscriptions", AdminSubscriptionController::class);
-
-            /**
-             * SETTING CONTROLLER
-             */
-            Route::get("settings", [AdminSettingController::class, "index"]);
-            Route::get("settings/{id}", [AdminSettingController::class, "show"]);
-            Route::put("settings/{id}", [AdminSettingController::class, "update"]);
         }
     );
 
