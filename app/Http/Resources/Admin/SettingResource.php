@@ -15,12 +15,16 @@ class SettingResource extends JsonResource
     public function toArray($request)
     {
         $arr = [
+            'id' => $this->id,
             'app_name' => $this->app_name,
             'name' => $this->name,
         ];
 
         if (\Auth::user()->isSuperAdmin()) {
             $arr['data'] = $this->data;
+            if (is_string($arr['data'])) {
+                $arr['data'] = json_decode($arr['data']);
+            }
 
             switch ($this->name) {
                 case 'SettingAll':

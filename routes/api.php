@@ -128,7 +128,6 @@ Route::group([
              * SETTING CONTROLLER
              */
             Route::get("settings", [AdminSettingController::class, "index"]);
-            Route::post("settings", [AdminSettingController::class, "store"]);
             Route::get("settings/{id}", [AdminSettingController::class, "show"]);
             Route::put("settings/{id}", [AdminSettingController::class, "update"]);
         }

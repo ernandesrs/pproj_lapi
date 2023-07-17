@@ -7,9 +7,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\SettingRequest;
 use App\Http\Resources\Admin\SettingResource;
 use App\Models\Admin\Setting;
-use App\Models\Admin\SettingAll;
-use App\Models\Admin\SettingAdmin;
-use App\Models\Admin\SettingDash;
 
 class SettingController extends Controller
 {
@@ -24,31 +21,7 @@ class SettingController extends Controller
 
         return response()->json([
             "success" => true,
-            "settings" => [
-                "all" => new SettingResource(SettingAll::where('name', 'SettingAll')->first()),
-                "admin" => new SettingResource(SettingAdmin::where('name', 'SettingAdmin')->first()),
-                "dash" => new SettingResource(SettingDash::where('name', 'SettingDash')->first())
-            ]
-        ]);
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function store()
-    {
-        $this->authorize('create', Setting::class);
-
-        $settingAll = SettingAll::create();
-        $settingAdmin = SettingAdmin::create();
-        $settingDash = SettingDash::create();
-        return response()->json([
-            "success" => true,
-            "SettingAll" => $settingAll,
-            "SettingAdmin" => $settingAdmin,
-            "SettingDash" => $settingDash
+            "settings" => SettingResource::collection(Setting::all())
         ]);
     }
 
@@ -66,7 +39,7 @@ class SettingController extends Controller
 
         return response()->json([
             "success" => true,
-            "setting" => $setting
+            "setting" => new SettingResource($setting)
         ]);
     }
 
@@ -93,7 +66,7 @@ class SettingController extends Controller
 
         return response()->json([
             "success" => true,
-            "setting" => $model
+            "setting" => new SettingResource($model)
         ]);
     }
 }
