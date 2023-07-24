@@ -113,16 +113,6 @@ Route::group([
             Route::put("/users/{user}/update-level", [AdminUserController::class, "updateLevel"]);
             Route::put("/users/roles/{user}/{role}", [AdminUserController::class, "roleUpdate"]);
             Route::delete("/users/roles/{user}/{role}", [AdminUserController::class, "roleDelete"]);
-
-            /**
-             * PACKAGE CONTROLLER
-             */
-            Route::apiResource("packages", AdminPackageController::class);
-
-            /**
-             * SUBSCRIPTION CONTROLLER
-             */
-            Route::apiResource("subscriptions", AdminSubscriptionController::class);
         }
     );
 
@@ -135,18 +125,13 @@ Route::group([
             "middleware" => ["auth"]
         ],
         function () {
-            Route::get("/payment-methods", [DashPaymentMethodController::class, "index"]);
-            Route::put("/payment-methods", [DashPaymentMethodController::class, "update"]);
-            Route::middleware(["throttle:card_registration_attempt_limit"])
-                ->post("/payment-methods/cards", [DashCardController::class, "store"]);
-            Route::put("/payment-methods/cards/{id}", [DashCardController::class, "update"]);
-            Route::delete("/payment-methods/cards/{id}", [DashCardController::class, "destroy"]);
 
-            Route::apiResource("subscriptions", DashSubscriptionController::class)->except(["update", "destroy"]);
-            Route::patch("/subscriptions/{subscription_id}/cancel", [DashSubscriptionController::class, "cancel"]);
-            Route::get("/subscriptions/show/active", [DashSubscriptionController::class, "active"]);
+            Route::get("/", function () {
+                return response()->json([
+                    'success' => true
+                ]);
+            });
 
-            Route::apiResource("packages", DashPackageController::class);
         }
     );
 });

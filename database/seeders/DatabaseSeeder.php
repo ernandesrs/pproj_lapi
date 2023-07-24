@@ -14,8 +14,5 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         \App\Models\User::factory(50)->create();
-        $this->call(CardSeeder::class);
-        $this->call(PackageSeeder::class);
-        $this->call(SubscriptionSeeder::class);
     }
 }
