@@ -12,7 +12,7 @@ class AppStart extends Command
      *
      * @var string
      */
-    protected $signature = 'lapi:start {--mail= : The super user email} {--pass= : The superuser password} {--seed}';
+    protected $signature = 'lapi:start {--mail= : The super user email} {--pass= : The superuser password} {--fresh} {--seed}';
 
     /**
      * The console command description.
@@ -28,6 +28,9 @@ class AppStart extends Command
      */
     public function handle()
     {
+        if ($this->option('fresh'))
+            $this->call('migrate:fresh');
+
         if (!$this->option('mail') || !$this->option('pass')) {
             $this->warn('Fail: --mail or --pass is missing.');
             return Command::FAILURE;

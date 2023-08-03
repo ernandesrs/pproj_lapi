@@ -60,11 +60,5 @@ class RouteServiceProvider extends ServiceProvider
         RateLimiter::for('api', function (Request $request) {
             return Limit::perMinute(60)->by(optional($request->user())->id ?: $request->ip());
         });
-
-        RateLimiter::for('card_registration_attempt_limit', function (Request $request) {
-            return Limit::perMinute(3)->by($request->user()->id)->response(function (Request $request, array $headers) {
-                throw new RegisterCardAttemptsLimitException();
-            });
-        });
     }
 }

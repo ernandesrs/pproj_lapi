@@ -13,7 +13,7 @@ class Role extends Model
     /**
      * Default permissions list
      */
-    const DEFAULT_PERMISSIONS = [
+    const DEFAULT_ACTIONS_PERMISSIONS = [
         'viewAny' => true,
         'view' => true,
         'create' => false,
@@ -24,16 +24,15 @@ class Role extends Model
     ];
 
     /**
-     * Permissibles list
+     * PERMISSIBLES LIST
+     * Manageable models class
      */
     const PERMISSIBLES = [
-        Role::class => self::DEFAULT_PERMISSIONS,
-        User::class => self::DEFAULT_PERMISSIONS + [
+        Role::class => self::DEFAULT_ACTIONS_PERMISSIONS,
+        User::class => self::DEFAULT_ACTIONS_PERMISSIONS + [
             'promote' => false,
             'demote' => false
-        ],
-        Package::class => self::DEFAULT_PERMISSIONS,
-        Subscription::class => self::DEFAULT_PERMISSIONS
+        ]
     ];
 
     /**
@@ -102,20 +101,20 @@ class Role extends Model
     }
 
     /**
-     * Allowed permissions
+     * Allowed permissibles
      *
      * @return array
      */
     public static function allowedPermissibles()
     {
-        $p = [];
+        $permissibleNames = [];
 
-        foreach (self::PERMISSIBLES as $k => $v) {
-            $k = str_replace('\\', '_', $k);
-            $p[$k] = $v;
+        foreach (self::PERMISSIBLES as $permissibleKey => $permissibleActions) {
+            $permissibleKey = str_replace('\\', '_', $permissibleKey);
+            $permissibleNames[$permissibleKey] = $permissibleActions;
         }
 
-        return $p;
+        return $permissibleNames;
     }
 
     /**
@@ -129,17 +128,17 @@ class Role extends Model
     }
 
     /**
-     * Has permission
+     * Has action permission
      *
-     * @param string $action
+     * @param string $action the action(viewAny, view, edit...).
      * @param string $modelClass
      * @return boolean
      */
-    public function hasAction(string $action, string $modelClass)
+    public function hasActionPermission(string $action, string $modelClass)
     {
-        $modelClass = str_replace('\\', '_', $modelClass);
+        $permissibleName = str_replace('\\', '_', $modelClass);
 
-        $permissible = $this->permissibles->$modelClass ?? null;
+        $permissible = $this->permissibles->$permissibleName ?? null;
         if (!$permissible || ($permissible->$action ?? null) === null)
             return false;
 

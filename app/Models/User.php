@@ -107,10 +107,20 @@ class User extends Authenticatable implements JWTSubject
     }
 
     /**
-     * Check permission
+     * Is super admin
      *
-     * @param string $action
-     * @param string $modelClass
+     * @return boolean
+     */
+    public function isAdmin()
+    {
+        return $this->level === self::LEVEL_ADMIN;
+    }
+
+    /**
+     * Check if has permission for specified action
+     *
+     * @param string $action (view, viewAny, create, ...)
+     * @param string $modelClass permissible class
      * @return boolean
      */
     public function hasPermission(string $action, string $modelClass)
@@ -120,8 +130,9 @@ class User extends Authenticatable implements JWTSubject
             return false;
 
         $return = false;
+
         $roles->each(function ($role) use ($action, $modelClass, &$return) {
-            $return = $role->hasAction($action, $modelClass);
+            $return = $role->hasActionPermission($action, $modelClass);
             if ($return)
                 return;
         });
