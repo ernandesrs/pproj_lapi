@@ -39,13 +39,7 @@ class Handler extends ExceptionHandler
 
         InvalidDataException::class,
         NotFoundException::class,
-        UnauthorizedException::class,
-
-        ChargebackPaymentException::class,
-        RefundedPaymentException::class,
-        RefusedPaymentException::class,
-        HasActiveSubscriptionException::class,
-        PaymentFailException::class
+        UnauthorizedException::class
     ];
 
     /**
