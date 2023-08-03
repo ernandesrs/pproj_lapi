@@ -2,9 +2,7 @@
 
 namespace App\Http\Resources;
 
-use App\Policies\RolePolicy;
 use Illuminate\Http\Resources\Json\JsonResource;
-use Illuminate\Support\Facades\Auth;
 
 class RoleResource extends JsonResource
 {
@@ -19,11 +17,6 @@ class RoleResource extends JsonResource
         $arr = parent::toArray($request);
 
         return array_merge($arr, [
-            "auth_user_can" => [
-                "view" => (new RolePolicy())->view(Auth::user(), $this->resource),
-                "update" => (new RolePolicy())->update(Auth::user(), $this->resource),
-                "delete" => (new RolePolicy())->delete(Auth::user(), $this->resource),
-            ]
         ]);
     }
 }

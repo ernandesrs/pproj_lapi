@@ -2,9 +2,7 @@
 
 namespace App\Http\Resources;
 
-use App\Policies\UserPolicy;
 use Illuminate\Http\Resources\Json\JsonResource;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
 class UserResource extends JsonResource
@@ -20,12 +18,6 @@ class UserResource extends JsonResource
         $adminArr = [];
 
         if (in_array('admin', $request->route()->middleware())) {
-            $adminArr['auth_user_can'] = [
-                "view" => (new UserPolicy)->view(\Auth::user(), $this->resource),
-                "update" => (new UserPolicy)->update(\Auth::user(), $this->resource),
-                "delete" => (new UserPolicy)->delete(\Auth::user(), $this->resource),
-            ];
-
             $adminArr['roles'] = $this->resource->roles()->get();
         }
 
