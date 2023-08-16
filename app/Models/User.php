@@ -65,6 +65,16 @@ class User extends Authenticatable implements JWTSubject
     ];
 
     /**
+     * Where has admin access
+     *
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function whereHasAdminAccess()
+    {
+        return $this->where('level', self::LEVEL_ADMIN)->orWhere('level', self::LEVEL_SUPER);
+    }
+
+    /**
      * Delete
      *
      * @return bool|null
