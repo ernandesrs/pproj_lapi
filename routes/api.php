@@ -1,16 +1,10 @@
 <?php
 
 use App\Http\Controllers\Admin\AdminController as AdminAdminController;
+use App\Http\Controllers\Admin\NotificationController as AdminNotificationController;
 use App\Http\Controllers\Admin\RoleController as AdminRoleController;
 use App\Http\Controllers\Admin\UserController as AdminUserController;
-use App\Http\Controllers\Admin\PackageController as AdminPackageController;
-use App\Http\Controllers\Admin\SubscriptionController as AdminSubscriptionController;
-use App\Http\Controllers\Admin\SettingController as AdminSettingController;
 use App\Http\Controllers\Auth\AccountController;
-use App\Http\Controllers\Dash\Payment\PaymentMethodController as DashPaymentMethodController;
-use App\Http\Controllers\Dash\Payment\CardController as DashCardController;
-use App\Http\Controllers\Dash\SubscriptionController as DashSubscriptionController;
-use App\Http\Controllers\Dash\PackageController as DashPackageController;
 use App\Http\Controllers\Me\MeController;
 use Illuminate\Support\Facades\Route;
 
@@ -113,6 +107,15 @@ Route::group([
             Route::put("/users/{user}/update-level", [AdminUserController::class, "updateLevel"]);
             Route::put("/users/roles/{user}/{role}", [AdminUserController::class, "roleUpdate"]);
             Route::delete("/users/roles/{user}/{role}", [AdminUserController::class, "roleDelete"]);
+
+            /**
+             * NOTIFICATION CONTROLLER
+             */
+            Route::apiResource("notifications", AdminNotificationController::class)->except([
+                'store',
+                'update'
+            ]);
+            Route::put('/notifications/{id}/mark-as-read', [AdminNotificationController::class, 'markAsRead']);
         }
     );
 
