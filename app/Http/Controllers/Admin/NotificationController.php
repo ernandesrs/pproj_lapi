@@ -33,7 +33,7 @@ class NotificationController extends Controller
         return response()->json([
             'success' => true,
             'total' => \Auth::User()->unreadNotifications()->count(),
-            'notificatins' => NotificationResource::collection(\Auth::user()->unreadNotifications()->get())
+            'notifications' => NotificationResource::collection(\Auth::user()->unreadNotifications()->get())
                 ->response()->getData()
         ]);
     }
