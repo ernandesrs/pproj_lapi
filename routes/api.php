@@ -111,6 +111,7 @@ Route::group([
             /**
              * NOTIFICATION CONTROLLER
              */
+            Route::get('/notifications/unread', [AdminNotificationController::class, 'unread']);
             Route::apiResource("notifications", AdminNotificationController::class)->except([
                 'store',
                 'update'

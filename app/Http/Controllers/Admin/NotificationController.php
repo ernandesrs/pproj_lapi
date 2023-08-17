@@ -9,28 +9,40 @@ use Illuminate\Http\Request;
 class NotificationController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Display a listing of the notifications.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function index()
     {
         return response()->json([
             'success' => true,
-            'unread_total' => \Auth::user()->unreadNotifications()->count(),
             'total' => \Auth::user()->notifications()->count(),
-            'unread_notifications' => NotificationResource::collection(\Auth::user()->unreadNotifications()->get())
-                ->response()->getData(),
             'notifications' => NotificationResource::collection(\Auth::user()->notifications()->limit(50)->get())
                 ->response()->getData()
         ]);
     }
 
     /**
-     * Display the specified resource.
+     * Display a listing of the unread notifications.
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function unread()
+    {
+        return response()->json([
+            'success' => true,
+            'total' => \Auth::User()->unreadNotifications()->count(),
+            'notificatins' => NotificationResource::collection(\Auth::user()->unreadNotifications()->get())
+                ->response()->getData()
+        ]);
+    }
+
+    /**
+     * Display the specified notifiaction.
      *
      * @param  string  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function show($id)
     {
@@ -46,10 +58,10 @@ class NotificationController extends Controller
     }
 
     /**
-     * Mark as read the specified resource in storage.
+     * Mark as read the specified notification in storage.
      *
      * @param  string  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function markAsRead($id)
     {
@@ -67,10 +79,10 @@ class NotificationController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Remove the specified notification from storage.
      *
      * @param  string  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function destroy($id)
     {
