@@ -3,6 +3,7 @@
 use App\Http\Controllers\Auth\AccountController;
 
 use App\Http\Controllers\Me\MeController;
+use App\Http\Controllers\Me\AddressController as MeAddressController;
 
 use App\Http\Controllers\Admin\AdminController as AdminAdminController;
 use App\Http\Controllers\Admin\NotificationController as AdminNotificationController;
@@ -77,11 +78,17 @@ Route::group([
 
             Route::middleware("auth")->group(
                 function () {
+
                     Route::get("/", [MeController::class, "me"]);
                     Route::put("/update", [MeController::class, "update"]);
                     Route::post("/photo-upload", [MeController::class, "photoUpload"]);
                     Route::delete("/photo-delete", [MeController::class, "photoDelete"]);
                     Route::delete("/delete", [MeController::class, "delete"]);
+
+                    /**
+                     * ADDRESSES CONTROLLER
+                     */
+                    Route::apiResource("addresses", MeAddressController::class);
                 }
             );
 

@@ -107,6 +107,16 @@ class User extends Authenticatable implements JWTSubject
     }
 
     /**
+     * Addresses
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function addresses()
+    {
+        return $this->hasMany(Address::class, "user_id", "id");
+    }
+
+    /**
      * Is super admin
      *
      * @return boolean
