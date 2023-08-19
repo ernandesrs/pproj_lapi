@@ -63,6 +63,7 @@ class UserRegisteredNotification extends Notification
     public function toArray($notifiable)
     {
         return [
+            'id' => $this->registeredUser->id,
             'title' => 'Novo usuário registrado',
             'description' => $this->registeredUser->first_name . ' ' . $this->registeredUser->last_name . ' se registrou no sistema',
         ];
