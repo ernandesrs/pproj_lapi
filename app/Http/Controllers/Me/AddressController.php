@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Me;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Me\AddressRequest;
 use App\Http\Resources\AddressResource;
+use App\Models\Address;
 use Illuminate\Http\Request;
 
 class AddressController extends Controller
@@ -44,21 +45,32 @@ class AddressController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\JsonResponse
      */
-    public function show($id)
+    public function show(int $id)
     {
-        //
+        $address = \Auth::user()->addresses()->where("id", $id)->firstOrFail();
+        return response()->json([
+            "success" => true,
+            "address" => new AddressResource($address)
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  AddressRequest  $request
      * @param  int  $id
      * @return \Illuminate\Http\JsonResponse
      */
-    public function update(Request $request, $id)
+    public function update(AddressRequest $request, int $id)
     {
-        //
+        $address = \Auth::user()->addresses()->where("id", $id)->firstOrFail();
+
+        $address->update($request->validated());
+
+        return response()->json([
+            "success" => true,
+            "address" => new AddressResource($address)
+        ]);
     }
 
     /**
@@ -69,6 +81,10 @@ class AddressController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $address = \Auth::user()->addresses()->where("id", $id)->firstOrFail();
+        $address->delete();
+        return response()->json([
+            "success" => true
+        ]);
     }
 }
