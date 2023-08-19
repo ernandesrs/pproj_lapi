@@ -1,11 +1,16 @@
 <?php
 
+use App\Http\Controllers\Auth\AccountController;
+
+use App\Http\Controllers\Me\MeController;
+
 use App\Http\Controllers\Admin\AdminController as AdminAdminController;
 use App\Http\Controllers\Admin\NotificationController as AdminNotificationController;
 use App\Http\Controllers\Admin\RoleController as AdminRoleController;
 use App\Http\Controllers\Admin\UserController as AdminUserController;
-use App\Http\Controllers\Auth\AccountController;
-use App\Http\Controllers\Me\MeController;
+
+use App\Http\Controllers\Dash\DashController as DashDashController;
+
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -28,7 +33,8 @@ Route::group([
 
     Route::get("/", function () {
         return response()->json([
-            "success" => true
+            "success" => true,
+            "status" => "Conected with " . config('app.name') . "! :D"
         ]);
     });
 
@@ -130,11 +136,7 @@ Route::group([
         ],
         function () {
 
-            Route::get("/", function () {
-                return response()->json([
-                    'success' => true
-                ]);
-            });
+            Route::get("/", [DashDashController::class, "index"]);
 
         }
     );
