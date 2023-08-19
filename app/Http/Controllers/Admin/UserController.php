@@ -150,7 +150,7 @@ class UserController extends Controller
      */
     public function roleUpdate(User $user, Role $role)
     {
-        $this->authorize("update", $user);
+        $this->authorize("updateRole", $user);
 
         if (!in_array($user->level, [User::LEVEL_ADMIN, User::LEVEL_SUPER])) {
             throw new NotHaveAdminPanelAcessException();
@@ -174,7 +174,7 @@ class UserController extends Controller
      */
     public function roleDelete(User $user, Role $role)
     {
-        $this->authorize("update", $user);
+        $this->authorize("deleteRole", $user);
 
         if ($user->roles()->where('id', $role->id)->count())
             $user->roles()->detach($role->id);
@@ -194,21 +194,12 @@ class UserController extends Controller
      */
     public function updateLevel(UserLevelRequest $request, User $user)
     {
-        $this->authorize("update", $user);
-
-        /**
-         * @var User
-         */
-        $logged = Auth::user();
-
-        if (!$logged->isSuperadmin() || $logged->id == $user->id) {
-            throw new UnauthorizedActionException();
-        }
+        $this->authorize("updateLevel", $user);
 
         $user->level = $request->validated('level');
         $user->save();
 
-        if (!in_array($user->level, [User::LEVEL_SUPER, User::LEVEL_ADMIN])) {
+        if (!in_array($user->level, [User::LEVEL_ADMIN])) {
             $user->roles()->detach();
         }
 

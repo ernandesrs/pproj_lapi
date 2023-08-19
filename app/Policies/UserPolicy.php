@@ -17,7 +17,8 @@ class UserPolicy
      */
     public function viewAny(User $user)
     {
-        if ($user->isSuperadmin()) return true;
+        if ($user->isSuperadmin())
+            return true;
 
         return $user->hasPermission("viewAny", User::class);
     }
@@ -31,7 +32,8 @@ class UserPolicy
      */
     public function view(User $user, User $model)
     {
-        if ($user->isSuperadmin()) return true;
+        if ($user->isSuperadmin())
+            return true;
 
         return $user->hasPermission("view", User::class);
     }
@@ -45,10 +47,12 @@ class UserPolicy
     public function create(User $user, User $model)
     {
         // superadmin have all permissions
-        if ($user->isSuperadmin()) return true;
+        if ($user->isSuperadmin())
+            return true;
 
         // permission by level
-        if ($user->level <= $model->level) return false;
+        if ($user->level <= $model->level)
+            return false;
 
         // specified permissions
         return $user->hasPermission("create", User::class);
@@ -64,10 +68,12 @@ class UserPolicy
     public function update(User $user, User $model)
     {
         // superadmin have all permissions
-        if ($user->isSuperadmin()) return true;
+        if ($user->isSuperadmin())
+            return true;
 
         // permission by level
-        if ($user->level <= $model->level) return false;
+        if ($user->level <= $model->level)
+            return false;
 
         // specified permissions
         return $user->hasPermission("update", User::class);
@@ -82,13 +88,16 @@ class UserPolicy
      */
     public function delete(User $user, User $model)
     {
-        if ($user->id === $model->id) return false;
+        if ($user->id === $model->id)
+            return false;
 
         // superadmin have all permissions
-        if ($user->isSuperadmin()) return true;
+        if ($user->isSuperadmin())
+            return true;
 
         // permission by level
-        if ($user->level <= $model->level) return false;
+        if ($user->level <= $model->level)
+            return false;
 
         // specified permissions
         return $user->hasPermission("delete", User::class);
@@ -103,10 +112,12 @@ class UserPolicy
      */
     public function restore(User $user, User $model)
     {
-        if ($user->isSuperadmin()) return true;
+        if ($user->isSuperadmin())
+            return true;
 
         // permission by level
-        if ($user->level <= $model->level) return false;
+        if ($user->level <= $model->level)
+            return false;
 
         return $user->hasPermission("restore", User::class);
     }
@@ -120,11 +131,49 @@ class UserPolicy
      */
     public function forceDelete(User $user, User $model)
     {
-        if ($user->isSuperadmin()) return true;
+        if ($user->isSuperadmin())
+            return true;
 
         // permission by level
-        if ($user->level <= $model->level) return false;
+        if ($user->level <= $model->level)
+            return false;
 
         return $user->hasPermission("forceDelete", User::class);
+    }
+
+    /**
+     * Undocumented function
+     *
+     * @param User $user
+     * @param User $model
+     * @return bool
+     */
+    public function updateLevel(User $user, User $model)
+    {
+        return $user->isSuperadmin();
+    }
+
+    /**
+     * Undocumented function
+     *
+     * @param User $user
+     * @param User $model
+     * @return bool
+     */
+    public function updateRole(User $user, User $model)
+    {
+        return $user->isSuperadmin() && $user->id !== $model->id;
+    }
+
+    /**
+     * Undocumented function
+     *
+     * @param User $user
+     * @param User $model
+     * @return bool
+     */
+    public function deleteRole(User $user, User $model)
+    {
+        return $user->isSuperadmin();
     }
 }

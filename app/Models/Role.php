@@ -30,8 +30,8 @@ class Role extends Model
     const PERMISSIBLES = [
         Role::class => self::DEFAULT_ACTIONS_PERMISSIONS,
         User::class => self::DEFAULT_ACTIONS_PERMISSIONS + [
-            'promote' => false,
-            'demote' => false
+            // 'promote' => false,
+            // 'demote' => false
         ]
     ];
 
