@@ -17,7 +17,8 @@ class UserResource extends JsonResource
     {
         $adminArr = [];
 
-        $adminArr['roles'] = $this->resource->roles()->get();
+        $adminArr['roles'] = RoleResource::collection($this->resource->roles()->get());
+        $adminArr['addresses'] = AddressResource::collection($this->resource->addresses()->get());
 
         $arr = parent::toArray($request);
         $arr["photo_url"] = $this->when($this->resource->photo, Storage::url($this->resource->photo));
