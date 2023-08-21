@@ -5,7 +5,6 @@ namespace App\Services;
 use App\Events\UserRegistered;
 use App\Exceptions\Admin\UnauthorizedActionException;
 use App\Models\User;
-use App\Notifications\UserRegisteredNotification;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -30,12 +29,6 @@ class UserService
             'verification_token' => Str::random(50),
             'password' => Hash::make($validated['password']),
         ]);
-
-        // notify admins
-        \Notification::send(
-            (new User)->whereHasAdminAccess()->get(),
-            new UserRegisteredNotification($user)
-        );
 
         if ($emitRegisteredEvent)
             event(new UserRegistered($user));
