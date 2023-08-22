@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Exceptions\Admin\NotHaveAdminPanelAcessException;
-use App\Exceptions\Admin\UnauthorizedActionException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\UserLevelRequest;
 use App\Http\Requests\Admin\UserRequest;
@@ -13,7 +12,6 @@ use App\Models\User;
 use App\Services\FilterService;
 use App\Services\UserService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {

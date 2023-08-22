@@ -5,8 +5,6 @@ namespace App\Http\Controllers\Auth;
 use App\Events\ForgetPassword;
 use App\Events\UserRegistered;
 use App\Exceptions\Account\LoginFailException;
-use App\Exceptions\Account\UpdatePasswordTokenInvalidException;
-use App\Exceptions\Account\VerificationTokenInvalidException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Account\ForgetRequest;
 use App\Http\Requests\Account\LoginRequest;
