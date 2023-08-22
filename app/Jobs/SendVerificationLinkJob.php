@@ -11,7 +11,7 @@ use Illuminate\Queue\SerializesModels;
 use App\Mail\UserVerify;
 use Illuminate\Support\Facades\Mail;
 
-class RegisteredUserVerificationLinkJob implements ShouldQueue
+class SendVerificationLinkJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 

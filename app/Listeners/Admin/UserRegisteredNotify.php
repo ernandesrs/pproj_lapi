@@ -4,11 +4,11 @@ namespace App\Listeners\Admin;
 
 use App\Events\UserRegistered;
 use App\Models\User;
-use App\Notifications\UserRegisteredNotification as NewUserRegisteredNotification;
+use App\Notifications\UserRegisteredNotification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 
-class UserRegisteredNotification
+class UserRegisteredNotify
 {
     /**
      * Create the event listener.
@@ -30,7 +30,7 @@ class UserRegisteredNotification
     {
         \Notification::send(
             (new User)->whereHasAdminAccess()->get(),
-            new NewUserRegisteredNotification($event->user)
+            new UserRegisteredNotification($event->user)
         );
     }
 }

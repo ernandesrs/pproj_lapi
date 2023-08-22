@@ -3,11 +3,11 @@
 namespace App\Listeners;
 
 use App\Events\UserRegistered;
-use App\Jobs\RegisteredUserVerificationLinkJob;
+use App\Jobs\SendVerificationLinkJob;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 
-class SendUserVerificationLink
+class SendVerificationLink
 {
     /**
      * Create the event listener.
@@ -27,6 +27,6 @@ class SendUserVerificationLink
      */
     public function handle(UserRegistered $event)
     {
-        RegisteredUserVerificationLinkJob::dispatch($event->user);
+        SendVerificationLinkJob::dispatch($event->user);
     }
 }

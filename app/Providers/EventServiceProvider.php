@@ -4,9 +4,9 @@ namespace App\Providers;
 
 use App\Events\ForgetPassword;
 use App\Events\UserRegistered;
-use App\Listeners\Admin\UserRegisteredNotification as UserRegisteredNotificationListener;
+use App\Listeners\Admin\UserRegisteredNotify;
 use App\Listeners\SendResetPasswordLink;
-use App\Listeners\SendUserVerificationLink;
+use App\Listeners\SendVerificationLink;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 
 class EventServiceProvider extends ServiceProvider
@@ -21,8 +21,8 @@ class EventServiceProvider extends ServiceProvider
         //     SendEmailVerificationNotification::class,
         // ],
         UserRegistered::class => [
-            SendUserVerificationLink::class,
-            UserRegisteredNotificationListener::class
+            SendVerificationLink::class,
+            UserRegisteredNotify::class
         ],
         ForgetPassword::class => [
             SendResetPasswordLink::class
