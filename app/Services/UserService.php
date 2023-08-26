@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Events\EmailUpdateRequested;
 use App\Events\UserRegistered;
+use App\Exceptions\Account\EmailUpdateTokenInvalidException;
 use App\Exceptions\Admin\UnauthorizedActionException;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
@@ -74,6 +75,29 @@ class UserService
         ]);
 
         event(new EmailUpdateRequested($emailUpdate));
+
+        return true;
+    }
+
+    /**
+     * User email update
+     *
+     * @param User $user
+     * @param string $token
+     * @return bool
+     * @throws EmailUpdateTokenInvalidException
+     */
+    public function emailUpdate(User $user, string $token)
+    {
+        $emailUpdate = $user->emailUpdate()->where("token", $token)->first();
+        if (!$emailUpdate) {
+            throw new EmailUpdateTokenInvalidException;
+        }
+
+        $user->email = $emailUpdate->new_email;
+        $user->save();
+
+        $emailUpdate->delete();
 
         return true;
     }

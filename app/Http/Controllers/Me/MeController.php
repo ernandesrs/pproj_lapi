@@ -54,7 +54,7 @@ class MeController extends Controller
     }
 
     /**
-     * Update the authenticated user email
+     * User email update request link
      *
      * @param MeUpdateRequest $request
      * @return \Illuminate\Http\JsonResponse
@@ -62,6 +62,20 @@ class MeController extends Controller
     public function requestEmailUpdate(UserUpdateEmailRequest $request)
     {
         $this->userService->requestEmailUpdate(Auth::user(), $request->validated());
+        return response()->json([
+            "success" => true
+        ]);
+    }
+
+    /**
+     * User email update
+     *
+     * @param string $token
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function emailUpdate(string $token)
+    {
+        $this->userService->emailUpdate(Auth::user(), $token);
         return response()->json([
             "success" => true
         ]);
