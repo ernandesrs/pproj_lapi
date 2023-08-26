@@ -47,7 +47,7 @@ class VerifyRequest extends FormRequest
         return [
             "token" => [
                 function ($attr, $val, $fail) {
-                    if (User::where("verification_token", $val ?? "")->count() === 0) {
+                    if (\Auth::user()->where("verification_token", $val ?? "")->count() === 0) {
                         throw new VerificationTokenInvalidException();
                     }
                 }
