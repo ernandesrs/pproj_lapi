@@ -81,6 +81,8 @@ Route::group([
 
                     Route::get("/", [MeController::class, "me"]);
                     Route::put("/update", [MeController::class, "update"]);
+                    Route::get("/update/email", [MeController::class, "requestEmailUpdate"]);
+                    Route::put("/update/email", [MeController::class, "emailUpdate"]);
                     Route::post("/photo-upload", [MeController::class, "photoUpload"]);
                     Route::delete("/photo-delete", [MeController::class, "photoDelete"]);
                     Route::delete("/delete", [MeController::class, "delete"]);

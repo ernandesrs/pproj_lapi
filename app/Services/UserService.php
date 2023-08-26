@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Events\EmailUpdateRequested;
 use App\Events\UserRegistered;
 use App\Exceptions\Admin\UnauthorizedActionException;
 use App\Models\User;
@@ -51,6 +52,30 @@ class UserService
         $user->update($validated);
 
         return $user;
+    }
+
+    /**
+     * Update user email
+     *
+     * @param User $user
+     * @param array $validated
+     * @return bool
+     */
+    public function requestEmailUpdate(User $user, array $validated)
+    {
+        $emailUpdate = $user->emailUpdate()->first();
+        if ($emailUpdate) {
+            $emailUpdate->delete();
+        }
+
+        $emailUpdate = $user->emailUpdate()->create([
+            "new_email" => $validated["new_email"],
+            "token" => Str::random(49)
+        ]);
+
+        event(new EmailUpdateRequested($emailUpdate));
+
+        return true;
     }
 
     /**

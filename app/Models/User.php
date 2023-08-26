@@ -117,6 +117,16 @@ class User extends Authenticatable implements JWTSubject
     }
 
     /**
+     * Email update
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function emailUpdate()
+    {
+        return $this->hasOne(UserEmailUpdate::class, "user_id", "id");
+    }
+
+    /**
      * Is super admin
      *
      * @return boolean
