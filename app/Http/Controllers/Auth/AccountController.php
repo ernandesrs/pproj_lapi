@@ -149,7 +149,7 @@ class AccountController extends Controller
      */
     public function verifyAccount(VerifyRequest $request)
     {
-        $user = \Auth::user()->where("verification_token", $request->get("token"))->first();
+        $user = \Auth::user();
 
         $user->verification_token = null;
         $user->email_verified_at = now();
