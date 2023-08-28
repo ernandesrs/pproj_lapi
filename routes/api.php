@@ -50,9 +50,9 @@ Route::group([
             Route::middleware("guest")->group(
                 function () {
                     Route::post("/login", [AccountController::class, "login"]);
-                    Route::post("/forget-password", [AccountController::class, "forgetPassword"]);
+                    Route::post("/forget-password", [AccountController::class, "forgetPassword"])->middleware(['demo_disable_resource']);
                     Route::put("/update-password", [AccountController::class, "updatePassword"]);
-                    Route::post("/register", [AccountController::class, "register"]);
+                    Route::post("/register", [AccountController::class, "register"])->middleware(['demo_disable_resource']);
                 }
             );
 
