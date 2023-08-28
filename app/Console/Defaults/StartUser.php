@@ -2,6 +2,7 @@
 
 namespace App\Console\Defaults;
 
+use Illuminate\Support\Carbon;
 use App\Models\Role;
 use App\Models\User;
 use App\Services\UserService;
@@ -26,6 +27,7 @@ class StartUser
             'password' => $pass
         ], false);
         $user->level = User::LEVEL_SUPER;
+        $user->email_verified_at = Carbon::now();
         $user->save();
 
         return $user;
@@ -49,6 +51,7 @@ class StartUser
         ], false);
 
         $user->level = User::LEVEL_ADMIN;
+        $user->email_verified_at = Carbon::now();
         $user->save();
         $user->roles()->attach($role->id);
 
@@ -73,6 +76,7 @@ class StartUser
         ], false);
 
         $user->level = User::LEVEL_ADMIN;
+        $user->email_verified_at = Carbon::now();
         $user->save();
         $user->roles()->attach($role->id);
 
