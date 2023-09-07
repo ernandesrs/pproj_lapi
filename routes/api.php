@@ -56,10 +56,10 @@ Route::group([
                 }
             );
 
-            Route::get("/verify-account", [AccountController::class, "verifyAccount"]);
-
+            
             Route::middleware("auth")->group(
                 function () {
+                    Route::get("/verify-account", [AccountController::class, "verifyAccount"]);
                     Route::get("/logout", [AccountController::class, "logout"]);
                     Route::get("/resend-verification", [AccountController::class, "resendVerification"]);
                 }
