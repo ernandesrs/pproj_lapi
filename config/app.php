@@ -55,6 +55,36 @@ return [
     'url' => env('APP_URL', 'http://localhost'),
     'url_front' => env('APP_URL_FRONT', 'http://localhost'),
 
+    /**
+     * 
+     * URL(frontend) for password update.
+     * A verification token will be attached to this URL and emailed to the user.
+     * 
+     * It will be something like this: https://frontend.com/auth/update-password?token=0vds09dsd90s
+     * 
+     */
+    'url_front_password_reset' => env('APP_URL_FRONT') . '/auth/update-password',
+
+    /**
+     * 
+     * URL(frontend) for user account verify.
+     * A verification token will be attached to this URL and emailed to the user.
+     * 
+     * It will be something like this: https://frontend.com/auth/verify-account?token=0vds09dsd90s
+     * 
+     */
+    'url_front_user_verify' => env('APP_URL_FRONT') . '/auth/verify-account',
+
+    /**
+     * 
+     * URL(frontend) for email update.
+     * A verification token will be attached to this URL and emailed to the user.
+     * 
+     * It will be something like this: https://frontend.com/me/update/email?token=0vds09dsd90s
+     * 
+     */
+    'url_front_user_email_update' => env('APP_URL_FRONT') . '/me/update/email',
+
     'asset_url' => env('ASSET_URL', null),
 
     /*
@@ -137,9 +167,9 @@ return [
 
     'providers' => [
 
-        /*
-         * Laravel Framework Service Providers...
-         */
+            /*
+             * Laravel Framework Service Providers...
+             */
         Illuminate\Auth\AuthServiceProvider::class,
         Illuminate\Broadcasting\BroadcastServiceProvider::class,
         Illuminate\Bus\BusServiceProvider::class,
@@ -163,16 +193,16 @@ return [
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
 
-        /*
-         * Package Service Providers...
-         */
+            /*
+             * Package Service Providers...
+             */
 
-        /*
-         * Application Service Providers...
-         */
+            /*
+             * Application Service Providers...
+             */
         App\Providers\AppServiceProvider::class,
         App\Providers\AuthServiceProvider::class,
-        // App\Providers\BroadcastServiceProvider::class,
+            // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class
     ],
