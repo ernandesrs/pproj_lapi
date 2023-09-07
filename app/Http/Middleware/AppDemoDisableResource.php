@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Exceptions\AppDemoException;
 use Closure;
 use Illuminate\Http\Request;
 
@@ -16,8 +17,8 @@ class AppDemoDisableResource
      */
     public function handle(Request $request, Closure $next)
     {
-        if (env('APP_IS_DEMO') && env('APP_ENV') == 'production') {
-            throw new \Exception('Disabled resource on app demo.');
+        if (env('APP_IS_DEMO')) {
+            throw new AppDemoException();
         }
 
         return $next($request);

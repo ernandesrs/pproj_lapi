@@ -27,6 +27,8 @@ class Handler extends ExceptionHandler
      * @var array<int, class-string<Throwable>>
      */
     protected $dontReport = [
+        AppDemoException::class,
+
         VerificationTokenInvalidException::class,
         LoginFailException::class,
         UpdatePasswordTokenInvalidException::class,
