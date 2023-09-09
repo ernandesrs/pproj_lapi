@@ -8,12 +8,9 @@ use App\Exceptions\Account\VerificationTokenInvalidException;
 use App\Exceptions\Admin\HasDependentsException;
 use App\Exceptions\Admin\NotHaveAdminPanelAcessException;
 use App\Exceptions\Admin\UnauthorizedActionException;
+use App\Exceptions\Auth\LoginWithGoogleFailException;
+use App\Exceptions\Auth\SocialLoginEmailAlreadyRegisteredException;
 use App\Exceptions\Auth\UnauthenticatedException;
-use App\Exceptions\Dash\HasActiveSubscriptionException;
-use App\Exceptions\Dash\Pagarme\ChargebackPaymentException;
-use App\Exceptions\Dash\Pagarme\RefundedPaymentException;
-use App\Exceptions\Dash\Pagarme\RefusedPaymentException;
-use App\Exceptions\Dash\PaymentFailException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -30,7 +27,11 @@ class Handler extends ExceptionHandler
         AppDemoException::class,
 
         VerificationTokenInvalidException::class,
+
         LoginFailException::class,
+        LoginWithGoogleFailException::class,
+        SocialLoginEmailAlreadyRegisteredException::class,
+
         UpdatePasswordTokenInvalidException::class,
 
         NotHaveAdminPanelAcessException::class,
@@ -72,6 +73,20 @@ class Handler extends ExceptionHandler
             if ($request->is('api/*')) {
                 throw new UnauthorizedActionException();
             }
+        });
+
+        $this->renderable(function (LoginWithGoogleFailException $e, $request) {
+            return response()
+                ->redirectTo(
+                    config('lapi.url_front_social_login_callback') . '?error=' . 'LoginWithGoogleFailException'
+                );
+        });
+
+        $this->renderable(function (SocialLoginEmailAlreadyRegisteredException $e, $request) {
+            return response()
+                ->redirectTo(
+                    config('lapi.url_front_social_login_callback') . '?error=' . 'SocialLoginEmailAlreadyRegisteredException'
+                );
         });
 
         $this->reportable(function (Throwable $e) {

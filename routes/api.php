@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Auth\AccountController;
 
+use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Me\MeController;
 use App\Http\Controllers\Me\AddressController as MeAddressController;
 
@@ -50,13 +51,25 @@ Route::group([
             Route::middleware("guest")->group(
                 function () {
                     Route::post("/login", [AccountController::class, "login"]);
+
+                    /**
+                     * get uris to authorization
+                     */
+                    Route::get("/login/social-uris", [LoginController::class, "getSocialAuthorizationUris"]);
+
+                    /**
+                     * google callback
+                     */
+                    Route::get("/login/social/google-callback", [LoginController::class, "loginWithGoogle"])
+                        ->middleware(['demo_disable_resource'])->name('auth.social.googleCallback');
+
                     Route::post("/forget-password", [AccountController::class, "forgetPassword"])->middleware(['demo_disable_resource']);
                     Route::put("/update-password", [AccountController::class, "updatePassword"]);
                     Route::post("/register", [AccountController::class, "register"])->middleware(['demo_disable_resource']);
                 }
             );
 
-            
+
             Route::middleware("auth")->group(
                 function () {
                     Route::get("/verify-account", [AccountController::class, "verifyAccount"]);

@@ -4,14 +4,11 @@ namespace App\Http\Controllers\Auth;
 
 use App\Events\ForgetPassword;
 use App\Events\UserRegistered;
-use App\Exceptions\Account\LoginFailException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Account\ForgetRequest;
-use App\Http\Requests\Account\LoginRequest;
 use App\Http\Requests\Account\UpdatePasswordRequest;
 use App\Http\Requests\Account\VerifyRequest;
 use App\Http\Requests\Account\AccountRequest;
-use App\Http\Resources\UserResource;
 use App\Models\PasswordReset;
 use App\Models\User;
 use App\Services\UserService;
@@ -32,37 +29,6 @@ class AccountController extends Controller
     public function __construct()
     {
         $this->userService = new UserService();
-    }
-
-    /**
-     * Login
-     *
-     * @param LoginRequest $request
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function login(LoginRequest $request)
-    {
-        $validated = $request->validated();
-
-        $token = Auth::attempt([
-            "email" => $validated["email"],
-            "password" => $validated["password"]
-        ]);
-
-        if (!$token) {
-            throw new LoginFailException();
-        }
-
-        return response()->json([
-            "success" => true,
-            "user" => new UserResource(Auth::user()),
-            "access" => [
-                "token" => $token,
-                "type" => "Bearer",
-                "full" => "Bearer " . $token,
-                "expire_in_minutes" => config("jwt.ttl")
-            ]
-        ]);
     }
 
     /**
@@ -122,20 +88,6 @@ class AccountController extends Controller
     public function register(AccountRequest $request)
     {
         $this->userService->register($request->validated());
-
-        return response()->json([
-            "success" => true
-        ]);
-    }
-
-    /**
-     * Logout
-     * 
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function logout()
-    {
-        Auth::logout();
 
         return response()->json([
             "success" => true

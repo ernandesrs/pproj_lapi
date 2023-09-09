@@ -41,7 +41,7 @@ class UserEmailUpdate extends Mailable
             'name' => $user->first_name . ' ' . $user->last_name,
             'old_email' => $user->email,
             'new_email' => $this->emailUpdate->new_email,
-            'verification_url' => config('app.url_front_user_email_update') . '?token=' . $this->emailUpdate->token
+            'verification_url' => config('lapi.url_front_user_email_update') . '?token=' . $this->emailUpdate->token
         ])->subject('[' . config('app.name') . '] Confirme a atualização de email da sua conta');
     }
 
