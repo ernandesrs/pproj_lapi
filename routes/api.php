@@ -50,7 +50,7 @@ Route::group([
         function () {
             Route::middleware("guest")->group(
                 function () {
-                    Route::post("/login", [AccountController::class, "login"]);
+                    Route::post("/login", [LoginController::class, "login"]);
 
                     /**
                      * get uris to authorization
