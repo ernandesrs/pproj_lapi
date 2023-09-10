@@ -29,7 +29,7 @@ class UserService
             'email' => $validated['email'],
             'gender' => $validated['gender'],
             'verification_token' => Str::random(50),
-            'password' => $validated['passwrod'] ? Hash::make($validated['password']) : null,
+            'password' => $validated['password'] ?? null ? Hash::make($validated['password']) : null,
         ]);
 
         if ($emitRegisteredEvent)
