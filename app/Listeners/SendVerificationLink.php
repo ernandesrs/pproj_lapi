@@ -27,6 +27,13 @@ class SendVerificationLink
      */
     public function handle(UserRegistered $event)
     {
-        SendVerificationLinkJob::dispatch($event->user);
+        /**
+         * 
+         * Send verification link if user is not verified
+         * 
+         */
+        if (!$event->user->email_verified_at) {
+            SendVerificationLinkJob::dispatch($event->user);
+        }
     }
 }
