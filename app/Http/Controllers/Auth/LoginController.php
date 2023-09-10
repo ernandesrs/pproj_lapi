@@ -35,7 +35,7 @@ class LoginController extends Controller
     {
         $this->userService = new UserService();
 
-        if (env('OAUTH2_GOOGLE_CLIENT_ID')) {
+        if (env('OAUTH2_GOOGLE_CLIENT_ID') && env('OAUTH2_GOOGLE_CLIENT_SECRET')) {
             $this->google = new \League\OAuth2\Client\Provider\Google([
                 'clientId' => env('OAUTH2_GOOGLE_CLIENT_ID'),
                 'clientSecret' => env('OAUTH2_GOOGLE_CLIENT_SECRET'),
@@ -86,7 +86,8 @@ class LoginController extends Controller
     }
 
     /**
-     * Login with Google
+     * Login with Google callback: this method handles the Google call
+     * with the access authorization response
      *
      * @param Request $request
      * @return null|\Illuminate\Http\JsonResponse
@@ -101,8 +102,8 @@ class LoginController extends Controller
             throw new LoginWithGoogleFailException;
         }
 
-        $token = $this->google->getAccessToken('authorization_code', ['code' => $request->get('code')]);
-        $googleUser = $this->google->getResourceOwner($token);
+        $googleToken = $this->google->getAccessToken('authorization_code', ['code' => $request->get('code')]);
+        $googleUser = $this->google->getResourceOwner($googleToken);
 
         $user = User::where('email', $googleUser->getEmail())->first();
         if (!$user) {
