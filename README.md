@@ -21,11 +21,22 @@ Atualização, Upload de foto, Exclusão de foto, Exclusão de conta e Recupera�
 Algumas configurações deverão ser feitas e alguns comandos deverão ser executados para rodar o projeto.
 
 ## Configurações do .env
-Copie e renomeie o arquivo .env.example para .env e então faça as seguintes alterações:
+Copie e renomeie o arquivo .env.example para .env e então faça as alterações, de acordo com o nível de importância mostrada na tabela abaixo:
+| Variável | Nível de importância | Descrição |
+| APP_URL_FRONT | Alta | Url do frontend. Necessário, pois apenas requisições desta URL será aceita. |
+| DAYS_TO_DELETE_UNVERIFIED_USER | Baixo | Dias para excluir usuários não verificados. Se nulo, os usuários não serão excluídos. |
+| OAUTH2_GOOGLE_CLIENT_ID | Baixo | ID da aplicação no Google. Quando nulo, o login via Google será desabilitada. |
+| OAUTH2_GOOGLE_CLIENT_SECRET | Baixo | Chave secreta da aplicação no Google. Quando nulo, o login via Google será desabilitada. |
+| DB_* | Alta | Variáveis de banco de dados devem ser configurados. |
+| MAIL_* | Alta | Variáveis de email devem ser configurados. |
 
-    * Informações para acesso ao banco de dados(Necessário);
-    * Dados para envio de e-mails(Necessário);
-    * Além de definir o nome e url do projeto(Opcional, o padrão Laravel está definido).
+## Configurações do config/lapi.php
+Algumas variáveis do arquivo de configuração em <b>/config/lapi.php</b> podem ser configuradas, veja:
+| Variável | Nível de importância | Descrição |
+| url_front_password_reset | Alta | Esta URL será enviada por e-mail quando o usuário solicitar um link de atualização de senha e possuirá o parâmetro <b>token</b> contendo o token de atualização. |
+| url_front_user_verify | Alta | Esta URL será enviada por e-mail quando um usuário se registrar, será um link verificação e possuirá o parâmetro <b>token</b> contendo o token de verificação. |
+| url_front_user_email_update | Alta | Será enviada quando o usuário solicitar atualização de e-mail da conta. O link possuirá um parâmetro <b>token</b> contendo o token de atualização. |
+| url_front_social_login_callback | Baixa | Obrigatório quando um login via rede social estiver habilitada. Esta url será chamada(em caso de sucesso ou falha) em login com rede social. O link possuirá os parâmetros <b>token</b>, <b>type</b>, <b>full</b> e <b>expire_in_minutes</b>. |
 
 ## Instalação dos pacotes
 > composer install
