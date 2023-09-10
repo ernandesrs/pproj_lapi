@@ -113,7 +113,7 @@ class LoginController extends Controller
                 'username' => $googleUser->getName() . '_' . uniqid(),
                 'gender' => 'n',
                 'email' => $googleUser->getEmail()
-            ]);
+            ], false);
 
             $user->google_id = $googleUser->getId();
             $user->verification_token = null;
