@@ -24,6 +24,7 @@ Algumas configurações deverão ser feitas e alguns comandos deverão ser execu
 Copie e renomeie o arquivo .env.example para .env e então faça as alterações, de acordo com o nível de importância mostrada na tabela abaixo:
 
 | Variável | Nível de importância | Descrição |
+| --- | --- | --- |
 | APP_URL_FRONT | Alta | Url do frontend. Necessário, pois apenas requisições desta URL será aceita. |
 | DAYS_TO_DELETE_UNVERIFIED_USER | Baixo | Dias para excluir usuários não verificados. Se nulo, os usuários não serão excluídos. |
 | OAUTH2_GOOGLE_CLIENT_ID | Baixo | ID da aplicação no Google. Quando nulo, o login via Google será desabilitada. |
@@ -35,6 +36,7 @@ Copie e renomeie o arquivo .env.example para .env e então faça as alterações
 Algumas variáveis do arquivo de configuração em <b>/config/lapi.php</b> podem ser configuradas, veja:
 
 | Variável | Nível de importância | Descrição |
+| --- | --- | --- |
 | url_front_password_reset | Alta | Esta URL será enviada por e-mail quando o usuário solicitar um link de atualização de senha e possuirá o parâmetro <b>token</b> contendo o token de atualização. |
 | url_front_user_verify | Alta | Esta URL será enviada por e-mail quando um usuário se registrar, será um link verificação e possuirá o parâmetro <b>token</b> contendo o token de verificação. |
 | url_front_user_email_update | Alta | Será enviada quando o usuário solicitar atualização de e-mail da conta. O link possuirá um parâmetro <b>token</b> contendo o token de atualização. |
