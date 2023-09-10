@@ -81,12 +81,7 @@ class LoginController extends Controller
         return response()->json([
             "success" => true,
             "user" => new UserResource(\Auth::user()),
-            "access" => [
-                "token" => $token,
-                "type" => "Bearer",
-                "full" => "Bearer " . $token,
-                "expire_in_minutes" => config("jwt.ttl")
-            ]
+            "access" => $this->access($token)
         ]);
     }
 
@@ -131,10 +126,37 @@ class LoginController extends Controller
 
         $token = \Auth::login($user);
 
+        return $this->loginSocialAccess($token);
+    }
+
+    /**
+     * Login with social network redirect with autorization data
+     *
+     * @param string $token
+     * @return \Illuminate\Http\JsonResponse
+     */
+    private function loginSocialAccess($token)
+    {
         return response()
             ->redirectTo(
-                config('lapi.url_front_social_login_callback') . '?token=Bearer ' . $token . '&expire_in_minutes=' . config("jwt.ttl")
+                config('lapi.url_front_social_login_callback') . '?' . http_build_query($this->access($token))
             );
+    }
+
+    /**
+     * Authorization data access
+     *
+     * @param string $token
+     * @return array
+     */
+    private function access(string $token)
+    {
+        return [
+            "token" => $token,
+            "type" => "Bearer",
+            "full" => "Bearer " . $token,
+            "expire_in_minutes" => config("jwt.ttl")
+        ];
     }
 
     /**

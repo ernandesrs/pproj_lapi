@@ -73,7 +73,7 @@ Route::group([
             Route::middleware("auth")->group(
                 function () {
                     Route::get("/verify-account", [AccountController::class, "verifyAccount"]);
-                    Route::get("/logout", [AccountController::class, "logout"]);
+                    Route::get("/logout", [LoginController::class, "logout"]);
                     Route::get("/resend-verification", [AccountController::class, "resendVerification"])->middleware(['demo_disable_resource']);
                 }
             );
