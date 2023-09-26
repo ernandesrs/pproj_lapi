@@ -18,7 +18,7 @@ class NotificationController extends Controller
         return response()->json([
             'success' => true,
             'total' => \Auth::user()->notifications()->count(),
-            'notifications' => NotificationResource::collection(\Auth::user()->notifications()->limit(50)->get())
+            'notifications' => NotificationResource::collection(\Auth::user()->notifications()->limit(1000)->get())
                 ->response()->getData()
         ]);
     }
