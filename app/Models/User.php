@@ -158,18 +158,15 @@ class User extends Authenticatable implements JWTSubject
     public function hasPermission(string $action, string $modelClass)
     {
         $roles = $this->roles()->get();
+
         if (!$roles->count())
             return false;
 
-        $return = false;
-
-        $roles->each(function ($role) use ($action, $modelClass, &$return) {
-            $return = $role->hasActionPermission($action, $modelClass);
-            if ($return)
-                return;
+        $filtered = $roles->first(function ($role) use ($action, $modelClass) {
+            return $role->hasActionPermission($action, $modelClass);
         });
 
-        return $return;
+        return $filtered ? true : false;
     }
 
     /**
