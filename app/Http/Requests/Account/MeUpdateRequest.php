@@ -32,8 +32,7 @@ class MeUpdateRequest extends FormRequest
             "first_name" => ["required", "max:50"],
             "last_name" => ["required", "max:100"],
             "username" => ["required", "max:50", "unique:users,username," . Auth::user()->id],
-            "gender" => ["required", Rule::in(["n", "m", "f"])],
-            "password" => ["nullable", "confirmed", "min:6", "max:12"]
+            "gender" => ["required", Rule::in(["n", "m", "f"])]
         ];
     }
 }
