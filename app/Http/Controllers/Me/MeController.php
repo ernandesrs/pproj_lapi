@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Account\MePhotoUploadRequest;
 use App\Http\Requests\Account\MeUpdateRequest;
 use App\Http\Requests\Account\RecoveryRequest;
-use App\Http\Requests\UserUpdateEmailRequest;
 use App\Http\Resources\UserResource;
 use App\Models\User;
 use App\Services\UserService;
@@ -50,34 +49,6 @@ class MeController extends Controller
         return response()->json([
             "success" => true,
             "user" => new UserResource($user),
-        ]);
-    }
-
-    /**
-     * User email update request link
-     *
-     * @param MeUpdateRequest $request
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function requestEmailUpdate(UserUpdateEmailRequest $request)
-    {
-        $this->userService->requestEmailUpdate(Auth::user(), $request->validated());
-        return response()->json([
-            "success" => true
-        ]);
-    }
-
-    /**
-     * User email update
-     *
-     * @param string $token
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function emailUpdate(string $token)
-    {
-        $this->userService->emailUpdate(Auth::user(), $token);
-        return response()->json([
-            "success" => true
         ]);
     }
 

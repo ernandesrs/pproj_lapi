@@ -58,7 +58,7 @@ class UserService
     /**
      * Update user email
      *
-     * @param User $user
+     * @param User|\Illuminate\Contracts\Auth\Authenticatable $user
      * @param array $validated
      * @return bool
      */
@@ -82,7 +82,7 @@ class UserService
     /**
      * User email update
      *
-     * @param User $user
+     * @param User|\Illuminate\Contracts\Auth\Authenticatable $user
      * @param string $token
      * @return bool
      * @throws EmailUpdateTokenInvalidException

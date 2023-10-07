@@ -5,6 +5,7 @@ use App\Http\Controllers\Auth\AccountController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\VerificationController;
+use App\Http\Controllers\Me\EmailUpdateController;
 use App\Http\Controllers\Me\MeController;
 use App\Http\Controllers\Me\AddressController as MeAddressController;
 
@@ -126,11 +127,17 @@ Route::group([
 
                     Route::get("/", [MeController::class, "me"]);
                     Route::put("/update", [MeController::class, "update"]);
-                    Route::post("/update/email", [MeController::class, "requestEmailUpdate"]);
-                    Route::patch("/update/email/{token}", [MeController::class, "emailUpdate"]);
                     Route::post("/photo-upload", [MeController::class, "photoUpload"]);
                     Route::delete("/photo-delete", [MeController::class, "photoDelete"]);
                     Route::delete("/delete", [MeController::class, "delete"]);
+
+                    /**
+                     * 
+                     * EMAIL UPDATE
+                     * 
+                     */
+                    Route::post("/update/email", [EmailUpdateController::class, "requestEmailUpdate"]);
+                    Route::patch("/update/email/{token}", [EmailUpdateController::class, "emailUpdate"]);
 
                     /**
                      * ADDRESSES CONTROLLER
