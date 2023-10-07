@@ -3,6 +3,8 @@
 use App\Http\Controllers\Auth\AccountController;
 
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Auth\ForgotPasswordController;
+use App\Http\Controllers\Auth\VerificationController;
 use App\Http\Controllers\Me\MeController;
 use App\Http\Controllers\Me\AddressController as MeAddressController;
 
@@ -50,6 +52,15 @@ Route::group([
         function () {
             Route::middleware("guest")->group(
                 function () {
+                    /**
+                     * 
+                     * * LOGIN
+                     * 
+                     */
+
+                    /**
+                     * login with email and password
+                     */
                     Route::post("/login", [LoginController::class, "login"]);
 
                     /**
@@ -63,18 +74,39 @@ Route::group([
                     Route::get("/login/social/google-callback", [LoginController::class, "loginWithGoogle"])
                         ->middleware(['demo_disable_resource'])->name('auth.social.googleCallback');
 
-                    Route::post("/forget-password", [AccountController::class, "forgetPassword"])->middleware(['demo_disable_resource']);
-                    Route::put("/update-password", [AccountController::class, "updatePassword"]);
+                    /**
+                     * 
+                     * * FORGOT PASSWORD
+                     * 
+                     */
+                    Route::post("/forget-password", [ForgotPasswordController::class, "forgetPassword"])->middleware(['demo_disable_resource']);
+                    Route::put("/update-password", [ForgotPasswordController::class, "updatePassword"]);
+
+                    /**
+                     * 
+                     * ACCOUNT
+                     * 
+                     */
                     Route::post("/register", [AccountController::class, "register"])->middleware(['demo_disable_resource']);
                 }
             );
 
-
             Route::middleware("auth")->group(
                 function () {
-                    Route::get("/verify-account", [AccountController::class, "verifyAccount"]);
+                    /**
+                     * 
+                     * VERIFICATION
+                     * 
+                     */
+                    Route::get("/verify-account", [VerificationController::class, "verifyAccount"]);
+                    Route::get("/resend-verification", [VerificationController::class, "resendVerification"])->middleware(['demo_disable_resource']);
+
+                    /**
+                     * 
+                     * LOGOUT
+                     * 
+                     */
                     Route::get("/logout", [LoginController::class, "logout"]);
-                    Route::get("/resend-verification", [AccountController::class, "resendVerification"])->middleware(['demo_disable_resource']);
                 }
             );
         }
