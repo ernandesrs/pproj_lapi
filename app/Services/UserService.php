@@ -41,7 +41,7 @@ class UserService
     /**
      * Update user
      *
-     * @param User $user
+     * @param User|\Illuminate\Contracts\Auth\Authenticatable $user
      * @param array $validated
      * @return User
      */
@@ -49,6 +49,22 @@ class UserService
     {
         if ($validated['password'] ?? null)
             $validated['password'] = Hash::make($validated['password']);
+
+        $user->update($validated);
+
+        return $user;
+    }
+
+    /**
+     * Update the user password
+     *
+     * @param User|\Illuminate\Contracts\Auth\Authenticatable $user
+     * @param array $validated
+     * @return User
+     */
+    public function updatePassword(User $user, array $validated)
+    {
+        $validated['password'] = Hash::make($validated['password']);
 
         $user->update($validated);
 

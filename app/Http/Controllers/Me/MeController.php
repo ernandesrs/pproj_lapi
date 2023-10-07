@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Account\MePhotoUploadRequest;
 use App\Http\Requests\Account\MeUpdateRequest;
 use App\Http\Requests\Account\RecoveryRequest;
+use App\Http\Requests\PasswordRequest;
 use App\Http\Resources\UserResource;
 use App\Models\User;
 use App\Services\UserService;
@@ -49,6 +50,21 @@ class MeController extends Controller
         return response()->json([
             "success" => true,
             "user" => new UserResource($user),
+        ]);
+    }
+
+    /**
+     * Update the authenticated user password
+     *
+     * @param PasswordRequest $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function updatePassword(PasswordRequest $request)
+    {
+        $this->userService->updatePassword(\Auth::user(), $request->validated());
+
+        return response()->json([
+            "success" => true
         ]);
     }
 
