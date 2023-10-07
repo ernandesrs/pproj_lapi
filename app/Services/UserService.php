@@ -45,7 +45,7 @@ class UserService
      * @param array $validated
      * @return User
      */
-    public function update(User $user, array $validated)
+    public function update(User|\Illuminate\Contracts\Auth\Authenticatable $user, array $validated)
     {
         if ($validated['password'] ?? null)
             $validated['password'] = Hash::make($validated['password']);
@@ -62,7 +62,7 @@ class UserService
      * @param array $validated
      * @return User
      */
-    public function updatePassword(User $user, array $validated)
+    public function updatePassword(User|\Illuminate\Contracts\Auth\Authenticatable $user, array $validated)
     {
         $validated['password'] = Hash::make($validated['password']);
 
@@ -78,7 +78,7 @@ class UserService
      * @param array $validated
      * @return bool
      */
-    public function requestEmailUpdate(User $user, array $validated)
+    public function requestEmailUpdate(User|\Illuminate\Contracts\Auth\Authenticatable $user, array $validated)
     {
         $emailUpdate = $user->emailUpdate()->first();
         if ($emailUpdate) {
@@ -103,7 +103,7 @@ class UserService
      * @return bool
      * @throws EmailUpdateTokenInvalidException
      */
-    public function emailUpdate(User $user, string $token)
+    public function emailUpdate(User|\Illuminate\Contracts\Auth\Authenticatable $user, string $token)
     {
         $emailUpdate = $user->emailUpdate()->where("token", $token)->first();
         if (!$emailUpdate) {
@@ -121,10 +121,10 @@ class UserService
     /**
      * Set status deleted to user
      *
-     * @param User $user
+     * @param User|\Illuminate\Contracts\Auth\Authenticatable $user
      * @return bool
      */
-    public function remove(User $user)
+    public function remove(User|\Illuminate\Contracts\Auth\Authenticatable $user)
     {
         if ($user->isSuperadmin() && User::where("level", User::LEVEL_SUPER)->count() === 1) {
             throw new UnauthorizedActionException("You are the last super administrator of the system");
@@ -152,10 +152,10 @@ class UserService
     /**
      * Delete user foto from disk and save user with null in photo field
      *
-     * @param User $user
+     * @param User|\Illuminate\Contracts\Auth\Authenticatable $user
      * @return User
      */
-    public function photoDelete(User $user)
+    public function photoDelete(User|\Illuminate\Contracts\Auth\Authenticatable $user)
     {
         if ($user->photo) {
             Storage::delete("" . $user->photo);

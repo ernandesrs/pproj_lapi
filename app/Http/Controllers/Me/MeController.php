@@ -78,7 +78,7 @@ class MeController extends Controller
     {
         $validated = $request->validated();
 
-        $user = $this->userService->photoDelete(Auth::user());
+        $user = $this->userService->photoDelete(\Auth::user());
 
         $user->update([
             "photo" => $validated["photo"]->store("users/profile", "public")
@@ -111,7 +111,7 @@ class MeController extends Controller
      */
     public function delete()
     {
-        $this->userService->remove(Auth::user());
+        $this->userService->remove(\Auth::user());
 
         return response()->json([
             "success" => true
